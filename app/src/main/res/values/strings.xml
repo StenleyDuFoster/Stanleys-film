@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Stanley`s film</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="nav_1" translatable="false">Главная</string>
+    <string name="nav_2" translatable="false">Поиск</string>
+    <string name="nav_3" translatable="false">Настройки</string>
 </resources>
