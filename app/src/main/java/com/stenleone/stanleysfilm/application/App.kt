@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.stenleone.stanleysfilm.di.applicationComponent
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class App : MultiDexApplication() {
@@ -21,7 +22,8 @@ class App : MultiDexApplication() {
 
     private fun setupKoin() {
         startKoin {
-            applicationComponent
+            androidContext(applicationContext)
+            modules(applicationComponent)
         }
     }
 }

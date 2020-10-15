@@ -1,26 +1,28 @@
 package com.stenleone.stanleysfilm.di
 
 import android.content.Context
+import com.readystatesoftware.chuck.ChuckInterceptor
 import com.stenleone.stanleysfilm.network.ApiService
-import com.stenleone.stanleysfilm.network.NetworkConstant.BASE_URL
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.BASE_URL
 import io.reactivex.schedulers.Schedulers
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
-    single { getListInterceptor() }
-    single { getOkkHttp(get(), get()) }
+    single { getListInterceptor(androidContext()) }
+    single { getOkkHttp(get(), androidContext()) }
     single { getRetrofit(get()) }
     single { getApiService(get()) }
 }
 
-private fun getListInterceptor(): List<Interceptor> {
+private fun getListInterceptor(context: Context): List<Interceptor> {
 
     val interceptorDebug = HttpLoggingInterceptor()
     interceptorDebug.level = HttpLoggingInterceptor.Level.BODY
@@ -28,6 +30,7 @@ private fun getListInterceptor(): List<Interceptor> {
 
     return listOf(
         interceptorDebug,
+        ChuckInterceptor(context)
 //        cashInterceptor
     )
 }
