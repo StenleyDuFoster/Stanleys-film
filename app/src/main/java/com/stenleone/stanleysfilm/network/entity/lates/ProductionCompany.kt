@@ -1,8 +1,12 @@
 package com.stenleone.stanleysfilm.network.entity.lates
 
+import com.google.gson.annotations.SerializedName
+
 data class ProductionCompany(
     val id: Int,
-    val logo_path: Any,
+    @SerializedName("logo_path")
+    val logoPath: Any,
     val name: String,
-    val origin_country: String
+    @SerializedName("origin_country")
+    val originCountry: String
 )

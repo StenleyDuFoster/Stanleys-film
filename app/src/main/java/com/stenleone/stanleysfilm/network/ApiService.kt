@@ -9,7 +9,7 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_LATES
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.POST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
-import com.stenleone.stanleysfilm.network.entity.movie.MovieEntity
+import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.*
@@ -22,7 +22,7 @@ interface ApiService {
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): Single<Response<MovieEntity>>
+    ): Single<Response<MoviesEntity>>
 
     @GET(LIST_MOVIE)
     fun getLatesMovie(

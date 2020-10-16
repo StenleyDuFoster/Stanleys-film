@@ -1,11 +1,10 @@
 package com.stenleone.stanleysfilm.di
 
-import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.viewModel.network.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { MainViewModel(get() as ApiService) }
+    viewModel { MainViewModel(get(), get()) }
 }
