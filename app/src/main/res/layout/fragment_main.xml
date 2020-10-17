@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -18,13 +19,13 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                app:cardBackgroundColor="@color/chuck_colorAccent"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="5dp"
                 android:id="@+id/latesCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="@color/chuck_colorAccent"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="5dp">
 
             </androidx.cardview.widget.CardView>
 
@@ -38,7 +39,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerNowPlaying"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_card_movie_small" />
 
             <TextView
                 android:id="@+id/popularText"
@@ -50,7 +55,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerPopular"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_card_movie_small" />
 
             <TextView
                 android:id="@+id/topRatedText"
@@ -62,7 +71,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerTopRated"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_card_movie_small" />
 
             <TextView
                 android:id="@+id/upcomingText"
@@ -74,7 +87,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerUpcoming"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_card_movie_small" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
