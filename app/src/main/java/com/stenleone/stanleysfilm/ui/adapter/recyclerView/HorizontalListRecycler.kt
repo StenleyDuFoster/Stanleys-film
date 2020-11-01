@@ -26,7 +26,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
     lateinit var listener: ItemClick
 
     override fun getItemViewType(position: Int): Int {
-        return if (position <= itemList.size) {
+        return if (position < itemList.size) {
             typeHolder
         } else {
             TYPE_MORE_INFO
@@ -37,13 +37,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
         return when (viewType) {
             TYPE_SMALL -> SmallMovieHolder(ItemCardMovieSmallBinding.inflate(LayoutInflater.from(parent.context)))
             TYPE_LARGE -> LargeMovieHolder(ItemCardMovieSmallBinding.inflate(LayoutInflater.from(parent.context)))
-            else -> WatchMoreMovieHolder(
-                ItemCardMovieSmallBinding.inflate(
-                    LayoutInflater.from(
-                        parent.context
-                    )
-                )
-            )
+            else -> WatchMoreMovieHolder(ItemCardMovieSmallBinding.inflate(LayoutInflater.from(parent.context)))
         }
     }
 
@@ -103,7 +97,6 @@ class HorizontalListRecycler : BaseRecyclerView() {
         RecyclerView.ViewHolder(binding.root), RecyclerViewInterface {
 
         override fun bind() {
-            binding.movie = itemList[adapterPosition]
             setupClicks()
         }
 

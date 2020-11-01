@@ -36,14 +36,10 @@ class MainFragment : BaseFragment() {
 
     private fun setupRecyclerView() {
         binding.apply {
-            recyclerNowPlaying.layoutManager =
-                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            recyclerPopular.layoutManager =
-                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            recyclerTopRated.layoutManager =
-                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            recyclerUpcoming.layoutManager =
-                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            recyclerNowPlaying.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            recyclerPopular.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            recyclerTopRated.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            recyclerUpcoming.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             recyclerNowPlaying.adapter = nowPlayingAdapter
             recyclerPopular.adapter = popularAdapter
             recyclerTopRated.adapter = topRatedAdapter

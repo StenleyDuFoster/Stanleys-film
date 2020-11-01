@@ -6,7 +6,7 @@ import androidx.core.content.edit
 class SharedPreferencesManager(context: Context) {
 
     companion object {
-        const val SHARED_PREFERENCES_NAME = "stanley`s_film"
+        const val SHARED_PREFERENCES_NAME = "stanley`s_film.sPref"
 
         const val LANGUAGE = "language"
     }
