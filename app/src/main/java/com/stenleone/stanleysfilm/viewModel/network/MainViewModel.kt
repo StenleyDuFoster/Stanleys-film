@@ -11,13 +11,10 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_TOP_UPC
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(
-    val apiService: ApiService,
-    val sharedPreferencesManager: SharedPreferencesManager
+    private val apiService: ApiService,
+    private val sharedPreferencesManager: SharedPreferencesManager
 ) : BaseViewModel() {
 
     val movieLatesLiveData = MutableLiveData<LatesEntity>()
@@ -28,8 +25,8 @@ class MainViewModel(
 
     val errorLiveData = MutableLiveData<RequestError>()
 
-    val isFailure: (it: String) -> Unit = {
-        errorLiveData.postValue(RequestError(RequestError.REQUEST_ERROR, message = it))
+    val isFailure: (errorMessage: String, type: String) -> Unit = { errorMessage: String, type: String ->
+        errorLiveData.postValue(RequestError(type = type, message = errorMessage))
     }
 
     init {
@@ -44,51 +41,49 @@ class MainViewModel(
         getListMovie(LIST_MOVIE_TOP_UPCOMING)
     }
 
-    fun getLatesMovie(page: Int = 1) {
-        apiService.getLatesMovie(
-            language = sharedPreferencesManager.language,
-            page = page
-        )
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { response ->
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-                            movieLatesLiveData.postValue(it)
-                        }
-                    } else {
-                        isFailure(response.body().toString())
+    private fun getLatesMovie(page: Int = 1) {
+        doWork {
+            try {
+                val response = apiService.getLatesMovieAsync(
+                    language = sharedPreferencesManager.language,
+                    page = page
+                )
+                    .await()
+
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        movieLatesLiveData.postValue(it)
                     }
-                }, {
-                    isFailure(it.message.toString())
+                } else {
+                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
                 }
-            )
-            .addTo(compositeDisposable)
+            } catch (e: Exception) {
+                isFailure(RequestError.REQUEST_ERROR, e.toString())
+            }
+        }
     }
 
-    fun getListMovie(typeList: String, page: Int = 1) {
-        apiService.getListMovie(
-            typeList,
-            language = sharedPreferencesManager.language,
-            page = page
-        )
-            .observeOn(Schedulers.io())
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { response ->
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-                            postValue(typeList, it)
-                        }
-                    } else {
-                        isFailure(response.body().toString())
+    private fun getListMovie(typeList: String, page: Int = 1) {
+        doWork {
+            try {
+                val response = apiService.getListMovieAsync(
+                    typeList,
+                    language = sharedPreferencesManager.language,
+                    page = page
+                )
+                    .await()
+
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        postValue(typeList, it)
                     }
-                }, {
-                    isFailure(it.message.toString())
+                } else {
+                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
                 }
-            )
-            .addTo(compositeDisposable)
+            } catch (e: Exception) {
+                isFailure(RequestError.REQUEST_ERROR, e.toString())
+            }
+        }
     }
 
     private fun postValue(

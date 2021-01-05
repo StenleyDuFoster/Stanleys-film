@@ -3,9 +3,9 @@ package com.stenleone.stanleysfilm.ui.adapter.viewPager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.stenleone.stanleysfilm.ui.fragment.MainFragment
-import com.stenleone.stanleysfilm.ui.fragment.SearchFragment
-import com.stenleone.stanleysfilm.ui.fragment.SettingsFragment
+import com.stenleone.stanleysfilm.ui.fragment.main.MainFragment
+import com.stenleone.stanleysfilm.ui.fragment.search.SearchFragment
+import com.stenleone.stanleysfilm.ui.fragment.settings.SettingsFragment
 
 class FragmentViewPagerAdapter(
     supportFragmentManager: FragmentManager

@@ -11,8 +11,7 @@ class SharedPreferencesManager(context: Context) {
         const val LANGUAGE = "language"
     }
 
-    val sharedPreferences =
-        context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     var language: String
         get() {

@@ -2,12 +2,14 @@ package com.stenleone.stanleysfilm.ui.adapter.recyclerView.base
 
 import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
-import com.stenleone.stanleysfilm.util.extencial.disposeWithCheck
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 abstract class BaseRecyclerView : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    protected val compositeDisposable = CompositeDisposable()
+    protected val recyclerJob = Job()
+    protected val recyclerScope = CoroutineScope(Dispatchers.Main + recyclerJob)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as RecyclerViewInterface).bind()
@@ -19,7 +21,7 @@ abstract class BaseRecyclerView : RecyclerView.Adapter<RecyclerView.ViewHolder>(
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        compositeDisposable.disposeWithCheck()
+        recyclerJob.cancel()
         super.onDetachedFromRecyclerView(recyclerView)
     }
 }

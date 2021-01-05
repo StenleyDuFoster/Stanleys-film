@@ -13,5 +13,6 @@ class RequestError(
     companion object {
         const val CONNECTION_ERROR = "CONNECTION_ERROR"
         const val REQUEST_ERROR = "REQUEST_ERROR"
+        const val UNSUCCESS_STATUS = "REQUEST_ERROR"
     }
 }

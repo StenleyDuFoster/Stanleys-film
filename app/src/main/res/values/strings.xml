@@ -6,4 +6,10 @@
     <string name="nav_3" translatable="false">Настройки</string>
 
     <string name="font_main" translatable="false">sans-serif</string>
+
+    <string name="now_playing">Сейчас в прокате</string>
+    <string name="popular">Популярные</string>
+    <string name="top_rated">Лучшие оценки</string>
+    <string name="upcoming">Недавние</string>
+    <string name="latest_episodes">Недавно анонсирован</string>
 </resources>

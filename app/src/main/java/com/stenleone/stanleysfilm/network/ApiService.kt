@@ -10,55 +10,55 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_LATES
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.POST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
-import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
 
     @GET(LIST_MOVIE)
-    fun getListMovie(
+    fun getListMovieAsync(
         @Path("search") search: String,
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): Single<Response<MoviesEntity>>
+    ): Deferred<Response<MoviesEntity>>
 
     @GET(LIST_MOVIE)
-    fun getLatesMovie(
+    fun getLatesMovieAsync(
         @Path("search") search: String = LIST_MOVIE_LATES,
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,
         @Query("page") page: Int = 1
-    ): Single<Response<LatesEntity>>
+    ): Deferred<Response<LatesEntity>>
 
     @GET(LIST_LIKE_MOVIE)
-    fun getLikeMovie(
+    fun getLikeMovieAsync(
         @Path("session_id") session_id: String,
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,
         @Query("page") page: Int,
         @Query("sort_by") sort_by: String = API_SORT
-    ): Single<Response<String>>
+    ): Deferred<Response<String>>
 
     @GET(GET_SESSION)
-    fun getSession(
+    fun getSessionAsync(
         @Query("api_key") api_key: String = API_V3
-    ): Single<Response<String>>
+    ): Deferred<Response<String>>
 
     @POST(POST_LIKE_MOVIE)
-    fun postLikeMovie(
+    fun postLikeMovieAsync(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String = API_V3,
         @Query("guest_session_id") guest_session_id: String,
         @Body userData: String
-    ): Single<Response<String>>
+    ): Deferred<Response<String>>
 
     @DELETE(DELETE_LIKE_MOVIE)
-    fun deleteLikeMovie(
+    fun deleteLikeMovieAsync(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String = API_V3,
         @Query("guest_session_id") guest_session_id: String
-    ): Single<Response<String>>
+    ): Deferred<Response<String>>
 
 }

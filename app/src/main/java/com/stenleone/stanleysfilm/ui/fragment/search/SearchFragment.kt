@@ -1,4 +1,4 @@
-package com.stenleone.stanleysfilm.ui.fragment
+package com.stenleone.stanleysfilm.ui.fragment.search
 
 import android.view.LayoutInflater
 import android.view.View
