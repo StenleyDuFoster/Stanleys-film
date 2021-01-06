@@ -1,16 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="movie"
+            type="com.stenleone.stanleysfilm.network.entity.movie.Movie" />
+
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/container"
+        android:background="@color/gray"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize">
+        android:fitsSystemWindows="true">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:background="@color/gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/toolbarLay"
+                layout="@layout/toolbar"
+                app:image="@{movie.backdropPath == null ? movie.posterPath : movie.backdropPath}"
+                app:title="@{movie.title == null ? movie.originalTitle : movie.title}" />
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:layout_margin="20dp"
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:strokeColor="@color/colorPrimary"
+                        app:strokeWidth="1dp">
+
+                        <ImageView
+                            app:loadImage="@{movie.posterPath}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.core.widget.NestedScrollView>
+        </com.google.android.material.appbar.AppBarLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

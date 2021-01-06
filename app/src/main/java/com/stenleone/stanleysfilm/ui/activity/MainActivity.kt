@@ -1,8 +1,10 @@
 package com.stenleone.stanleysfilm.ui.activity
 
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.ActivityMainBinding
+import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
 import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
@@ -34,15 +36,14 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         binding.apply {
-            if (fragmentPager.getChildAt())
+            if (!(viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).navController.navigateUp()) {
                 if (fragmentPager.currentItem == 0) {
                     super.onBackPressed()
                 } else {
                     fragmentPager.currentItem = 0
                 }
+            }
         }
-
     }
-
 
 }

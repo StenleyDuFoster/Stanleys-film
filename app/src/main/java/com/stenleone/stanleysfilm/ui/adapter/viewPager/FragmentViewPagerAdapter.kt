@@ -17,7 +17,7 @@ class FragmentViewPagerAdapter(
         const val SETTINGS_FRAGMENT = 2
     }
 
-    private val listFragments = arrayListOf(
+    val listFragments: ArrayList<Fragment> = arrayListOf(
         MainNavHostFragment(),
         SearchNavHostFragment(),
         SettingsNavHostFragment()
