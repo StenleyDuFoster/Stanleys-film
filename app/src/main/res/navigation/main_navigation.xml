@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main" />
+
+    <fragment
+        android:id="@+id/actorFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.ActorFragment"
+        android:label="ActorFragment"
+        tools:layout="@layout/fragment_actor" />
+
+    <fragment
+        android:id="@+id/filmFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.FilmFragment"
+        android:label="FilmFragment"
+        tools:layout="@layout/fragment_film" >
+        <argument
+            android:name="movie"
+            app:argType="com.stenleone.stanleysfilm.network.entity.movie.Movie"
+            app:nullable="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_filmFragment"
+        app:destination="@id/filmFragment" />
+
+</navigation>

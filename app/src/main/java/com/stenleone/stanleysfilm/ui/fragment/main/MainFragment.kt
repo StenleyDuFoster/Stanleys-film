@@ -1,17 +1,26 @@
 package com.stenleone.stanleysfilm.ui.fragment.main
 
+import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentMainBinding
+import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
+import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListRecycler
+import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
+import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
 import com.stenleone.stanleysfilm.viewModel.network.MainViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -21,6 +30,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.ldralighieri.corbind.view.clicks
 
 class MainFragment : BaseFragment() {
+
+    companion object {
+        const val VERTICAL_SCROLL_POSITION = "vertical_scroll"
+    }
 
     private lateinit var binding: FragmentMainBinding
     private val viewModel: MainViewModel by viewModel()
@@ -36,11 +49,15 @@ class MainFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun setup() {
+    override fun setup(savedInstanceState: Bundle?) {
         setupRecyclerView()
         setupViewModelCallBack()
         setupSwipeToRefresh()
         setupSortButtons()
+
+        savedInstanceState?.getInt(VERTICAL_SCROLL_POSITION)?.let {
+            binding.scrollContainerLay.scrollTo(0, it)
+        }
     }
 
     private fun setupSwipeToRefresh() {
@@ -54,7 +71,7 @@ class MainFragment : BaseFragment() {
     private fun setupSortButtons() {
         binding.apply {
             nowPlayingSortSmall.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.nowPlayiningSortSmall = true
                     nowPlayingAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
@@ -62,7 +79,7 @@ class MainFragment : BaseFragment() {
                 }
                 .launchIn(lifecycleScope)
             nowPlayingSortBig.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.nowPlayiningSortSmall = false
                     nowPlayingAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
@@ -71,7 +88,7 @@ class MainFragment : BaseFragment() {
                 .launchIn(lifecycleScope)
 
             popularSortSmall.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.popularSmallSort = true
                     popularAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
@@ -79,7 +96,7 @@ class MainFragment : BaseFragment() {
                 }
                 .launchIn(lifecycleScope)
             popularSortBig.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.popularSmallSort = false
                     popularAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
@@ -88,7 +105,7 @@ class MainFragment : BaseFragment() {
                 .launchIn(lifecycleScope)
 
             topRatedSortSmall.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.topMovieSortSmall = true
                     topRatedAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
@@ -96,7 +113,7 @@ class MainFragment : BaseFragment() {
                 }
                 .launchIn(lifecycleScope)
             topRatedSortBig.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.topMovieSortSmall = false
                     topRatedAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
@@ -105,7 +122,7 @@ class MainFragment : BaseFragment() {
                 .launchIn(lifecycleScope)
 
             upcomingSortSmall.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.upcomingSortSmall = true
                     upComingAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
@@ -113,7 +130,7 @@ class MainFragment : BaseFragment() {
                 }
                 .launchIn(lifecycleScope)
             upcomingSortBig.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.upcomingSortSmall = false
                     upComingAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
@@ -133,6 +150,21 @@ class MainFragment : BaseFragment() {
             recyclerPopular.adapter = popularAdapter
             recyclerTopRated.adapter = topRatedAdapter
             recyclerUpcoming.adapter = upComingAdapter
+
+            val clickListener = object : ItemClick {
+                override fun click(item: Parcelable) {
+                    if (item is Movie) {
+                        findNavController().navigate(
+                            FilmFragmentDirections.actionGlobalFilmFragment(item)
+                        )
+                    }
+                }
+            }
+
+            nowPlayingAdapter.listener = clickListener
+            popularAdapter.listener = clickListener
+            topRatedAdapter.listener = clickListener
+            upComingAdapter.listener = clickListener
 
             nowPlayingAdapter.typeHolder = if (sharedPreferencesSortMainManager.nowPlayiningSortSmall) {
                 HorizontalListRecycler.TYPE_SMALL
@@ -193,4 +225,8 @@ class MainFragment : BaseFragment() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(VERTICAL_SCROLL_POSITION, binding.scrollContainerLay.verticalScrollbarPosition)
+    }
 }

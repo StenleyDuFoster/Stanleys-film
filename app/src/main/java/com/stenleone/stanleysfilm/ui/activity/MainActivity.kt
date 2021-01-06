@@ -33,10 +33,16 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (binding.fragmentPager.currentItem == 0) {
-            super.onBackPressed()
-        } else {
-            binding.fragmentPager.currentItem = 0
+        binding.apply {
+            if (fragmentPager.getChildAt())
+                if (fragmentPager.currentItem == 0) {
+                    super.onBackPressed()
+                } else {
+                    fragmentPager.currentItem = 0
+                }
         }
+
     }
+
+
 }

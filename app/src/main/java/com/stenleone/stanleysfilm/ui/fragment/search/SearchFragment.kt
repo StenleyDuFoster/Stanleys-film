@@ -1,5 +1,6 @@
 package com.stenleone.stanleysfilm.ui.fragment.search
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ class SearchFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun setup() {
+    override fun setup(savedInstanceState: Bundle?) {
 
     }
 

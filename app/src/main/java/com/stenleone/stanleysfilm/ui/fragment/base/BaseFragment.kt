@@ -19,9 +19,9 @@ abstract class BaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setup()
+        setup(savedInstanceState)
     }
 
     protected abstract fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View
-    protected abstract fun setup()
+    protected abstract fun setup(savedInstanceState: Bundle?)
 }

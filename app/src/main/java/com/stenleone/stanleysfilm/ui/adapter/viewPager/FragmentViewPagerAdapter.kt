@@ -3,9 +3,9 @@ package com.stenleone.stanleysfilm.ui.adapter.viewPager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.stenleone.stanleysfilm.ui.fragment.main.MainFragment
-import com.stenleone.stanleysfilm.ui.fragment.search.SearchFragment
-import com.stenleone.stanleysfilm.ui.fragment.settings.SettingsFragment
+import com.stenleone.stanleysfilm.ui.fragment.base.MainNavHostFragment
+import com.stenleone.stanleysfilm.ui.fragment.base.SearchNavHostFragment
+import com.stenleone.stanleysfilm.ui.fragment.base.SettingsNavHostFragment
 
 class FragmentViewPagerAdapter(
     supportFragmentManager: FragmentManager
@@ -18,9 +18,9 @@ class FragmentViewPagerAdapter(
     }
 
     private val listFragments = arrayListOf(
-        MainFragment(),
-        SearchFragment(),
-        SettingsFragment()
+        MainNavHostFragment(),
+        SearchNavHostFragment(),
+        SettingsNavHostFragment()
     )
 
     override fun getItem(position: Int): Fragment {

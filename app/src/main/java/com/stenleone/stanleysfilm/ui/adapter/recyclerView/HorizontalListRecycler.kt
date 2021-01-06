@@ -9,6 +9,7 @@ import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
+import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -67,7 +68,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
 
         private fun setupClicks() {
             binding.card.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     if (this@HorizontalListRecycler::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
@@ -95,7 +96,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
 
         private fun setupClicks() {
             binding.card.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     if (this@HorizontalListRecycler::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
@@ -118,7 +119,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
 
         private fun setupClicks() {
             binding.card.clicks()
-                .throttleFirst(100)
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     if (this@HorizontalListRecycler::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
