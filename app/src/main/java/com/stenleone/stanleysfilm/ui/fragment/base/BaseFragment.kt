@@ -13,6 +13,7 @@ abstract class BaseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setRetainInstance(true)
         return setupBinding(inflater, container)
     }
 

@@ -5,7 +5,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,8 +15,7 @@ import com.stenleone.stanleysfilm.databinding.FragmentMainBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
-import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
-import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListRecycler
+import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
 import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
@@ -39,10 +37,10 @@ class MainFragment : BaseFragment() {
     private val viewModel: MainViewModel by viewModel()
 
     private val sharedPreferencesSortMainManager: SharedPreferencesSortMainManager by inject()
-    private val nowPlayingAdapter: HorizontalListRecycler by inject()
-    private val popularAdapter: HorizontalListRecycler by inject()
-    private val topRatedAdapter: HorizontalListRecycler by inject()
-    private val upComingAdapter: HorizontalListRecycler by inject()
+    private val nowPlayingAdapter: HorizontalListMovie by inject()
+    private val popularAdapter: HorizontalListMovie by inject()
+    private val topRatedAdapter: HorizontalListMovie by inject()
+    private val upComingAdapter: HorizontalListMovie by inject()
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
@@ -74,7 +72,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.nowPlayiningSortSmall = true
-                    nowPlayingAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
+                    nowPlayingAdapter.typeHolder = HorizontalListMovie.TYPE_SMALL
                     nowPlayingAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -82,7 +80,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.nowPlayiningSortSmall = false
-                    nowPlayingAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
+                    nowPlayingAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
                     nowPlayingAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -91,7 +89,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.popularSmallSort = true
-                    popularAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
+                    popularAdapter.typeHolder = HorizontalListMovie.TYPE_SMALL
                     popularAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -99,7 +97,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.popularSmallSort = false
-                    popularAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
+                    popularAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
                     popularAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -108,7 +106,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.topMovieSortSmall = true
-                    topRatedAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
+                    topRatedAdapter.typeHolder = HorizontalListMovie.TYPE_SMALL
                     topRatedAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -116,7 +114,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.topMovieSortSmall = false
-                    topRatedAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
+                    topRatedAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
                     topRatedAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -125,7 +123,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.upcomingSortSmall = true
-                    upComingAdapter.typeHolder = HorizontalListRecycler.TYPE_SMALL
+                    upComingAdapter.typeHolder = HorizontalListMovie.TYPE_SMALL
                     upComingAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -133,7 +131,7 @@ class MainFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.upcomingSortSmall = false
-                    upComingAdapter.typeHolder = HorizontalListRecycler.TYPE_LARGE
+                    upComingAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
                     upComingAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
@@ -167,24 +165,24 @@ class MainFragment : BaseFragment() {
             upComingAdapter.listener = clickListener
 
             nowPlayingAdapter.typeHolder = if (sharedPreferencesSortMainManager.nowPlayiningSortSmall) {
-                HorizontalListRecycler.TYPE_SMALL
+                HorizontalListMovie.TYPE_SMALL
             } else {
-                HorizontalListRecycler.TYPE_LARGE
+                HorizontalListMovie.TYPE_LARGE
             }
             popularAdapter.typeHolder = if (sharedPreferencesSortMainManager.popularSmallSort) {
-                HorizontalListRecycler.TYPE_SMALL
+                HorizontalListMovie.TYPE_SMALL
             } else {
-                HorizontalListRecycler.TYPE_LARGE
+                HorizontalListMovie.TYPE_LARGE
             }
             topRatedAdapter.typeHolder = if (sharedPreferencesSortMainManager.topMovieSortSmall) {
-                HorizontalListRecycler.TYPE_SMALL
+                HorizontalListMovie.TYPE_SMALL
             } else {
-                HorizontalListRecycler.TYPE_LARGE
+                HorizontalListMovie.TYPE_LARGE
             }
             upComingAdapter.typeHolder = if (sharedPreferencesSortMainManager.upcomingSortSmall) {
-                HorizontalListRecycler.TYPE_SMALL
+                HorizontalListMovie.TYPE_SMALL
             } else {
-                HorizontalListRecycler.TYPE_LARGE
+                HorizontalListMovie.TYPE_LARGE
             }
         }
     }
@@ -227,6 +225,8 @@ class MainFragment : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(VERTICAL_SCROLL_POSITION, binding.scrollContainerLay.verticalScrollbarPosition)
+        if (this::binding.isInitialized) {
+            outState.putInt(VERTICAL_SCROLL_POSITION, binding.scrollContainerLay.verticalScrollbarPosition)
+        }
     }
 }

@@ -13,8 +13,15 @@ import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
 
 class SearchNavHostFragment : BaseFragment(), FragmentWithNavController {
 
+    companion object {
+        lateinit var navController: NavController
+    }
+
+    override fun getNavController(): NavController{
+        return navController
+    }
+
     private lateinit var binding: FragmentSearchNavHostBinding
-    override lateinit var navController: NavController
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search_nav_host, container, false)

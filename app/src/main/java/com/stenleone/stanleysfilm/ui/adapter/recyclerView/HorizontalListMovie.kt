@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
 import java.util.ArrayList
 
-class HorizontalListRecycler : BaseRecyclerView() {
+class HorizontalListMovie : BaseRecyclerView() {
 
     companion object {
         const val TYPE_SMALL = 0
@@ -70,7 +70,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
             binding.card.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (this@HorizontalListRecycler::listener.isInitialized) {
+                    if (this@HorizontalListMovie::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
                     }
                 }
@@ -98,7 +98,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
             binding.card.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (this@HorizontalListRecycler::listener.isInitialized) {
+                    if (this@HorizontalListMovie::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
                     }
                 }
@@ -121,7 +121,7 @@ class HorizontalListRecycler : BaseRecyclerView() {
             binding.card.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (this@HorizontalListRecycler::listener.isInitialized) {
+                    if (this@HorizontalListMovie::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
                     }
                 }

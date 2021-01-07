@@ -1,4 +1,4 @@
-package com.stenleone.stanleysfilm.network.entity.lates
+package com.stenleone.stanleysfilm.network.entity.movie
 
 data class Genre(
     val id: Int,

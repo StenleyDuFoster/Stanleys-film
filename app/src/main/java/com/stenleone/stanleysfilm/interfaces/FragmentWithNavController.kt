@@ -4,5 +4,6 @@ import androidx.navigation.NavController
 
 interface FragmentWithNavController {
 
-    var navController: NavController
+    fun getNavController(): NavController
+
 }

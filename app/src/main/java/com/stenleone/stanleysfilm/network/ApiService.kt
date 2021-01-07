@@ -7,8 +7,11 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_SESSION
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_LATES
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RECOMENDED
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.MOVIE_DETAILS
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.POST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
+import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
@@ -31,6 +34,20 @@ interface ApiService {
         @Query("language") language: String,
         @Query("page") page: Int = 1
     ): Deferred<Response<LatesEntity>>
+
+    @GET(MOVIE_DETAILS)
+    fun getMovieDetails(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") api_key: String = API_V3,
+        @Query("language") language: String
+    ): Deferred<Response<MovieDetailsEntity>>
+
+    @GET(LIST_RECOMENDED)
+    fun getRecomendedList(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") api_key: String = API_V3,
+        @Query("language") language: String
+    ): Deferred<Response<MoviesEntity>>
 
     @GET(LIST_LIKE_MOVIE)
     fun getLikeMovieAsync(

@@ -36,7 +36,7 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         binding.apply {
-            if (!(viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).navController.navigateUp()) {
+            if (!(viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavController().navigateUp()) {
                 if (fragmentPager.currentItem == 0) {
                     super.onBackPressed()
                 } else {

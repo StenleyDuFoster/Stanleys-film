@@ -94,4 +94,6 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.5.0'//-------------------------------------------Shimmer
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"//-------------------------Swipe to refresh
+
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'//---------------------------------------Progress bars
 }
