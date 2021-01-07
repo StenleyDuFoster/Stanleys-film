@@ -13,6 +13,7 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.POST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.network.entity.tmdb_auth.GuestSessionEntity
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
@@ -61,7 +62,7 @@ interface ApiService {
     @GET(GET_SESSION)
     fun getSessionAsync(
         @Query("api_key") api_key: String = API_V3
-    ): Deferred<Response<String>>
+    ): Deferred<Response<GuestSessionEntity>>
 
     @POST(POST_LIKE_MOVIE)
     fun postLikeMovieAsync(

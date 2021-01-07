@@ -1,5 +1,6 @@
 package com.stenleone.stanleysfilm.viewModel.network
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
@@ -11,6 +12,9 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_TOP_UPC
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class MainViewModel(
     private val apiService: ApiService,
@@ -30,6 +34,7 @@ class MainViewModel(
     }
 
     init {
+        setupGuestSessionToken()
         loadContent()
     }
 
@@ -102,6 +107,46 @@ class MainViewModel(
             }
             LIST_MOVIE_TOP_UPCOMING -> {
                 movieUpcomingLiveData.postValue(movies)
+            }
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun setupGuestSessionToken() {
+
+        val sdf = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
+        val currentDate = sdf.format(Date())
+
+        if (sharedPreferencesManager.expiresGuestTokenAt != null) {
+            val tokenDate = sdf.format(sdf.parse(sharedPreferencesManager.expiresGuestTokenAt ?: "0"))
+
+            if (currentDate < tokenDate){
+                getNewGuestToken()
+            }
+        } else {
+            getNewGuestToken()
+        }
+
+    }
+
+    private fun getNewGuestToken() {
+        doWork {
+            try {
+                val response = apiService.getSessionAsync()
+                    .await()
+
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        if (it.success) {
+                            sharedPreferencesManager.guestSessionToken = it.guestSessionId //2021-01-08 17:53:54 UTC
+                            sharedPreferencesManager.expiresGuestTokenAt = it.expiresAt
+                        }
+                    }
+                } else {
+                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
+                }
+            } catch (e: Exception) {
+                isFailure(RequestError.REQUEST_ERROR, e.toString())
             }
         }
     }

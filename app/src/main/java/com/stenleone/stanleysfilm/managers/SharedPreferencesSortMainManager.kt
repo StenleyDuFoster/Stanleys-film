@@ -10,6 +10,7 @@ class SharedPreferencesSortMainManager(context: Context) {
         const val POPULAR = "popular_sort"
         const val UPCOMING = "upcoming_sort"
         const val NOW_PLAYING = "now_playing_sort"
+        const val RECOMENDED = "recomended_sort"
     }
 
     val sharedPreferences = context.getSharedPreferences(SharedPreferencesManager.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -51,6 +52,16 @@ class SharedPreferencesSortMainManager(context: Context) {
         set(value) {
             sharedPreferences.edit {
                 putBoolean(NOW_PLAYING, value)
+            }
+        }
+
+    var recomendedSortSmall: Boolean
+        get() {
+            return sharedPreferences.getBoolean(RECOMENDED, true)
+        }
+        set(value) {
+            sharedPreferences.edit {
+                putBoolean(RECOMENDED, value)
             }
         }
 }

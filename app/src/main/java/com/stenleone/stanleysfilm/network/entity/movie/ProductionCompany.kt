@@ -1,7 +1,10 @@
 package com.stenleone.stanleysfilm.network.entity.movie
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ProductionCompany(
     val id: Int,
     @SerializedName("logo_path")
@@ -9,4 +12,4 @@ data class ProductionCompany(
     val name: String,
     @SerializedName("origin_country")
     val originCountry: String
-)
+): Parcelable

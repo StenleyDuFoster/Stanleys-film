@@ -1,16 +1,10 @@
 package com.stenleone.stanleysfilm.ui.fragment
 
-import android.R.attr.label
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,11 +14,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
+import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
+import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
+import com.stenleone.stanleysfilm.util.extencial.copyToClipBoard
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
 import com.stenleone.stanleysfilm.viewModel.network.FilmViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -38,7 +35,6 @@ class FilmFragment : BaseFragment() {
 
     companion object {
         const val VERTICAL_SCROLL_POSITION = "vertical_scroll"
-        const val COPY_LABEL = "label"
     }
 
     private lateinit var binding: FragmentFilmBinding
@@ -47,6 +43,8 @@ class FilmFragment : BaseFragment() {
 
     private val genreAdapter: GenreListRecycler by inject()
     private val recomendedMovieAdapter: HorizontalListMovie by inject()
+    private val studioAdapter: StudiosListRecycler by inject()
+    private val sharedPreferencesSortMainManager: SharedPreferencesSortMainManager by inject()
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_film, container, false)
@@ -93,6 +91,14 @@ class FilmFragment : BaseFragment() {
             recomendedMovieAdapter.listener = filmClickListener
             recyclerRecomendedList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             recyclerRecomendedList.adapter = recomendedMovieAdapter
+            recyclerStudioList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            recyclerStudioList.adapter = studioAdapter
+
+            recomendedMovieAdapter.typeHolder = if (sharedPreferencesSortMainManager.recomendedSortSmall) {
+                HorizontalListMovie.TYPE_SMALL
+            } else {
+                HorizontalListMovie.TYPE_LARGE
+            }
         }
     }
 
@@ -104,7 +110,12 @@ class FilmFragment : BaseFragment() {
             binding.movieDetails = it
             genreAdapter.itemList.clear()
             genreAdapter.itemList.addAll(it.genres)
+
+            studioAdapter.itemList.clear()
+            studioAdapter.itemList.addAll(it.productionCompanies)
+
             binding.genreRecycler.adapter?.notifyDataSetChanged()
+            binding.recyclerStudioList.adapter?.notifyDataSetChanged()
             binding.genreRecycler.visibility = View.VISIBLE
         })
         viewModel.recomendedMovieList.observe(viewLifecycleOwner, {
@@ -135,20 +146,32 @@ class FilmFragment : BaseFragment() {
             textOriginalTitle.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText(COPY_LABEL, navArgs.movie?.originalTitle)
-                    clipboard.setPrimaryClip(clip)
-                    Toast.makeText(requireContext(), getString(R.string.content_copy_to_clip_board), Toast.LENGTH_SHORT).show()
+                    requireActivity().copyToClipBoard(navArgs.movie?.originalTitle)
                 }
                 .launchIn(lifecycleScope)
 
             textTitle.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText(COPY_LABEL, navArgs.movie?.title)
-                    clipboard.setPrimaryClip(clip)
-                    Toast.makeText(requireContext(), getString(R.string.content_copy_to_clip_board), Toast.LENGTH_SHORT).show()
+                    requireActivity().copyToClipBoard(navArgs.movie?.title)
+                }
+                .launchIn(lifecycleScope)
+
+            recomendedSortSmall.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    sharedPreferencesSortMainManager.recomendedSortSmall = true
+                    recomendedMovieAdapter.typeHolder = HorizontalListMovie.TYPE_SMALL
+                    recomendedMovieAdapter.notifyDataSetChanged()
+                }
+                .launchIn(lifecycleScope)
+
+            recomendedSortBig.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    sharedPreferencesSortMainManager.recomendedSortSmall = false
+                    recomendedMovieAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
+                    recomendedMovieAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
         }

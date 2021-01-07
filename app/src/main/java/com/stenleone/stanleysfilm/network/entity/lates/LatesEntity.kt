@@ -2,6 +2,8 @@ package com.stenleone.stanleysfilm.network.entity.lates
 
 import com.google.gson.annotations.SerializedName
 import com.stenleone.stanleysfilm.network.entity.movie.Genre
+import com.stenleone.stanleysfilm.network.entity.movie.ProductionCompany
+import com.stenleone.stanleysfilm.network.entity.movie.ProductionCountry
 
 data class LatesEntity(
     val adult: Boolean,

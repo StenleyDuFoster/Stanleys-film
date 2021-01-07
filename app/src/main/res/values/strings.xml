@@ -26,6 +26,9 @@
 
     <string name="no_info">Неизвестно</string>
     <string name="actors">Актёры</string>
+    <string name="reviews">Отзывы</string>
+    <string name="rate_movie">Оценить фильм</string>
+    <string name="favorites">Добавить в изобранное</string>
     <string name="studios">Создано студиями</string>
 
     <string name="content_copy_to_clip_board">Скориповано в буфер обмена</string>
