@@ -17,7 +17,7 @@ class SearchNavHostFragment : BaseFragment(), FragmentWithNavController {
         lateinit var navController: NavController
     }
 
-    override fun getNavController(): NavController{
+    override fun getNavController(): NavController {
         return navController
     }
 

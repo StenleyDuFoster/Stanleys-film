@@ -15,6 +15,7 @@ import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
@@ -172,6 +173,21 @@ class FilmFragment : BaseFragment() {
                     sharedPreferencesSortMainManager.recomendedSortSmall = false
                     recomendedMovieAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
                     recomendedMovieAdapter.notifyDataSetChanged()
+                }
+                .launchIn(lifecycleScope)
+
+            recomendedText.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    findNavController().navigate(
+                        MoreMovieFragmentDirections.actionGlobalMoreMovieFragment(
+                            viewModel.recomendedMovieList.value,
+                            TmdbNetworkConstant.LIST_RECOMENDED,
+                            navArgs.movie?.id.toString(),
+                            (recyclerRecomendedList.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            "${getString(R.string.recomended_listtitle)} \"${navArgs.movie?.title}\""
+                        )
+                    )
                 }
                 .launchIn(lifecycleScope)
         }

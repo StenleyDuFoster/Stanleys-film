@@ -14,9 +14,11 @@ import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentMainBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
 import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
+import com.stenleone.stanleysfilm.ui.fragment.MoreMovieFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
@@ -133,6 +135,66 @@ class MainFragment : BaseFragment() {
                     sharedPreferencesSortMainManager.upcomingSortSmall = false
                     upComingAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
                     upComingAdapter.notifyDataSetChanged()
+                }
+                .launchIn(lifecycleScope)
+
+            popularText.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    findNavController().navigate(
+                        MoreMovieFragmentDirections.actionGlobalMoreMovieFragment(
+                            viewModel.moviePopularLiveData.value,
+                            TmdbNetworkConstant.LIST_MOVIE_POPULAR,
+                            null,
+                            (recyclerPopular.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            getString(R.string.popular)
+                        )
+                    )
+                }
+                .launchIn(lifecycleScope)
+
+            nowPlayingText.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    findNavController().navigate(
+                        MoreMovieFragmentDirections.actionGlobalMoreMovieFragment(
+                            viewModel.movieNowPlayingLiveData.value,
+                            TmdbNetworkConstant.LIST_MOVIE_NOW_PLAYING,
+                            null,
+                            (recyclerNowPlaying.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            getString(R.string.now_playing)
+                        )
+                    )
+                }
+                .launchIn(lifecycleScope)
+
+            topRatedText.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    findNavController().navigate(
+                        MoreMovieFragmentDirections.actionGlobalMoreMovieFragment(
+                            viewModel.movieTopRatedLiveData.value,
+                            TmdbNetworkConstant.LIST_MOVIE_TOP_RATED,
+                            null,
+                            (recyclerTopRated.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            getString(R.string.top_rated)
+                        )
+                    )
+                }
+                .launchIn(lifecycleScope)
+
+            upcomingText.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    findNavController().navigate(
+                        MoreMovieFragmentDirections.actionGlobalMoreMovieFragment(
+                            viewModel.movieUpcomingLiveData.value,
+                            TmdbNetworkConstant.LIST_MOVIE_TOP_UPCOMING,
+                            null,
+                            (recyclerUpcoming.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            getString(R.string.upcoming)
+                        )
+                    )
                 }
                 .launchIn(lifecycleScope)
         }

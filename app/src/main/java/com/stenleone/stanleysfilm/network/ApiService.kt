@@ -47,7 +47,8 @@ interface ApiService {
     fun getRecomendedList(
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = API_V3,
-        @Query("language") language: String
+        @Query("language") language: String,
+        @Query("page") page: Int = 1
     ): Deferred<Response<MoviesEntity>>
 
     @GET(LIST_LIKE_MOVIE)

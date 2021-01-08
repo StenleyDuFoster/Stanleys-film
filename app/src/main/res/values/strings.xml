@@ -24,6 +24,8 @@
     <string name="budget">Бюджет</string>
     <string name="recomended_list">Вам может понравится</string>
 
+    <string name="recomended_listtitle">Похожие на</string>
+
     <string name="no_info">Неизвестно</string>
     <string name="actors">Актёры</string>
     <string name="reviews">Отзывы</string>
