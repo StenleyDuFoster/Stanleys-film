@@ -8,12 +8,12 @@ class SharedPreferencesManager(context: Context) {
     companion object {
         const val SHARED_PREFERENCES_NAME = "stanley`s_film.sPref"
 
-        const val LANGUAGE = "language"
-        const val GUEST_SESSION_TOKEN = "guest_session_token"
-        const val GUEST_EXPIRES_TOKEN = "guest_expires_token"
+        private const val LANGUAGE = "language"
+        private const val GUEST_SESSION_TOKEN = "guest_session_token"
+        private const val GUEST_EXPIRES_TOKEN = "guest_expires_token"
     }
 
-    val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     var language: String
         get() {

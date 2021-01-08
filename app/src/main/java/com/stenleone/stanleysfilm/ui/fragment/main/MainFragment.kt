@@ -73,7 +73,7 @@ class MainFragment : BaseFragment() {
             nowPlayingSortSmall.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    sharedPreferencesSortMainManager.nowPlayiningSortSmall = true
+                    sharedPreferencesSortMainManager.nowPlayingSortSmall = true
                     nowPlayingAdapter.typeHolder = HorizontalListMovie.TYPE_SMALL
                     nowPlayingAdapter.notifyDataSetChanged()
                 }
@@ -81,7 +81,7 @@ class MainFragment : BaseFragment() {
             nowPlayingSortBig.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    sharedPreferencesSortMainManager.nowPlayiningSortSmall = false
+                    sharedPreferencesSortMainManager.nowPlayingSortSmall = false
                     nowPlayingAdapter.typeHolder = HorizontalListMovie.TYPE_LARGE
                     nowPlayingAdapter.notifyDataSetChanged()
                 }
@@ -226,7 +226,7 @@ class MainFragment : BaseFragment() {
             topRatedAdapter.listener = clickListener
             upComingAdapter.listener = clickListener
 
-            nowPlayingAdapter.typeHolder = if (sharedPreferencesSortMainManager.nowPlayiningSortSmall) {
+            nowPlayingAdapter.typeHolder = if (sharedPreferencesSortMainManager.nowPlayingSortSmall) {
                 HorizontalListMovie.TYPE_SMALL
             } else {
                 HorizontalListMovie.TYPE_LARGE

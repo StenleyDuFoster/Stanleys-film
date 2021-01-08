@@ -17,6 +17,7 @@ import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.ui.activity.MainActivity
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
@@ -140,7 +141,7 @@ class FilmFragment : BaseFragment() {
             watchButton.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-
+                    (requireActivity() as MainActivity).openVideoFragment()
                 }
                 .launchIn(lifecycleScope)
 

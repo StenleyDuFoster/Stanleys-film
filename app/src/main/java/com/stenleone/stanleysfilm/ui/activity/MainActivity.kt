@@ -12,7 +12,7 @@ import com.stenleone.stanleysfilm.util.bind.BindViewPager
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
 
     private lateinit var videoFragment: VideoFragment
@@ -44,6 +44,12 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    fun openVideoFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, VideoFragment.newInstance(""))
+            .commit()
     }
 
 }

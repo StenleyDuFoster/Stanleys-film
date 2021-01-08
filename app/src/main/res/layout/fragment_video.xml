@@ -6,10 +6,63 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
+    <com.stenleone.stanleysfilm.util.customView.SingleViewTouchableMotionLayout
+        android:id="@+id/videoMotionLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        app:layoutDescription="@xml/player_scene"
+        app:layout_collapseMode="parallax">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/videoViewContainer"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/videoView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="0dp"
+            android:scaleType="centerCrop"
+            android:elevation="10dp"
+            android:paddingEnd="250dp"
+            android:src="@drawable/ic_18_ege"
+            app:layout_constraintBottom_toBottomOf="@+id/videoViewContainer"
+            app:layout_constraintEnd_toEndOf="@+id/videoViewContainer"
+            app:layout_constraintStart_toStartOf="@+id/videoViewContainer"
+            app:layout_constraintTop_toTopOf="@+id/videoViewContainer" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:background="@color/colorPrimaryDark"
+            android:clickable="true"
+            android:elevation="10dp"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/videoViewContainer">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.stenleone.stanleysfilm.util.customView.SingleViewTouchableMotionLayout>
 </layout>

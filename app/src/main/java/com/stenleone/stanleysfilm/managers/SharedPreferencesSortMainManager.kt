@@ -6,14 +6,14 @@ import androidx.core.content.edit
 class SharedPreferencesSortMainManager(context: Context) {
 
     companion object {
-        const val TOP_RATED = "top_rated_sort"
-        const val POPULAR = "popular_sort"
-        const val UPCOMING = "upcoming_sort"
-        const val NOW_PLAYING = "now_playing_sort"
-        const val RECOMENDED = "recomended_sort"
+        private const val TOP_RATED = "top_rated_sort"
+        private const val POPULAR = "popular_sort"
+        private const val UPCOMING = "upcoming_sort"
+        private const val NOW_PLAYING = "now_playing_sort"
+        private const val RECOMENDED = "recomended_sort"
     }
 
-    val sharedPreferences = context.getSharedPreferences(SharedPreferencesManager.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences(SharedPreferencesManager.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     var topMovieSortSmall: Boolean
         get() {
@@ -45,7 +45,7 @@ class SharedPreferencesSortMainManager(context: Context) {
             }
         }
 
-    var nowPlayiningSortSmall: Boolean
+    var nowPlayingSortSmall: Boolean
         get() {
             return sharedPreferences.getBoolean(NOW_PLAYING, true)
         }
