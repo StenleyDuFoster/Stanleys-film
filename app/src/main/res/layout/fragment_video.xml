@@ -14,8 +14,8 @@
         app:layoutDescription="@xml/player_scene"
         app:layout_collapseMode="parallax">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/videoViewContainer"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/videoViewCardContainer"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             app:cardCornerRadius="0dp"
@@ -24,19 +24,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/videoView"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/videoViewLay"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="0dp"
-            android:scaleType="centerCrop"
             android:elevation="10dp"
-            android:paddingEnd="250dp"
-            android:src="@drawable/ic_18_ege"
-            app:layout_constraintBottom_toBottomOf="@+id/videoViewContainer"
-            app:layout_constraintEnd_toEndOf="@+id/videoViewContainer"
-            app:layout_constraintStart_toStartOf="@+id/videoViewContainer"
-            app:layout_constraintTop_toTopOf="@+id/videoViewContainer" />
+            app:layout_constraintBottom_toBottomOf="@+id/videoViewCardContainer"
+            app:layout_constraintEnd_toEndOf="@+id/videoViewCardContainer"
+            app:layout_constraintStart_toStartOf="@+id/videoViewCardContainer"
+            app:layout_constraintTop_toTopOf="@+id/videoViewCardContainer">
+            <!--android:paddingEnd="250dp"-->
+            <VideoView
+                android:id="@+id/videoView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/closeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/transparent"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_close" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
@@ -50,7 +81,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoViewContainer">
+            app:layout_constraintTop_toBottomOf="@+id/videoViewCardContainer">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

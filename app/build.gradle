@@ -96,4 +96,6 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"//-------------------------Swipe to refresh
 
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'//---------------------------------------Progress bars
+
+//    implementation 'com.google.android.exoplayer:exoplayer:' + project.ext.exoPlayerVersion
 }

@@ -146,7 +146,7 @@ class MainFragment : BaseFragment() {
                             viewModel.moviePopularLiveData.value,
                             TmdbNetworkConstant.LIST_MOVIE_POPULAR,
                             null,
-                            (recyclerPopular.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            (recyclerPopular.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
                             getString(R.string.popular)
                         )
                     )
@@ -161,7 +161,7 @@ class MainFragment : BaseFragment() {
                             viewModel.movieNowPlayingLiveData.value,
                             TmdbNetworkConstant.LIST_MOVIE_NOW_PLAYING,
                             null,
-                            (recyclerNowPlaying.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            (recyclerNowPlaying.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
                             getString(R.string.now_playing)
                         )
                     )
@@ -176,7 +176,7 @@ class MainFragment : BaseFragment() {
                             viewModel.movieTopRatedLiveData.value,
                             TmdbNetworkConstant.LIST_MOVIE_TOP_RATED,
                             null,
-                            (recyclerTopRated.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            (recyclerTopRated.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
                             getString(R.string.top_rated)
                         )
                     )
@@ -191,7 +191,7 @@ class MainFragment : BaseFragment() {
                             viewModel.movieUpcomingLiveData.value,
                             TmdbNetworkConstant.LIST_MOVIE_TOP_UPCOMING,
                             null,
-                            (recyclerUpcoming.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
+                            (recyclerUpcoming.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
                             getString(R.string.upcoming)
                         )
                     )

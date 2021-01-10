@@ -11,13 +11,13 @@
         <OnSwipe
             app:dragDirection="dragUp"
             app:maxAcceleration="200"
-            app:touchAnchorId="@+id/videoViewContainer"
+            app:touchAnchorId="@+id/videoViewCardContainer"
             app:touchAnchorSide="top" />
 
         <KeyFrameSet>
             <KeyAttribute
                 app:framePosition="0"
-                app:motionTarget="@id/videoView">
+                app:motionTarget="@id/videoViewLay">
                 <CustomAttribute
                     app:attributeName="EndPadding"
                     app:customDimension="250dp" />
@@ -25,7 +25,7 @@
 
             <KeyAttribute
                 app:framePosition="20"
-                app:motionTarget="@id/videoView">
+                app:motionTarget="@id/videoViewLay">
                 <CustomAttribute
                     app:attributeName="EndPadding"
                     app:customDimension="0dp" />
@@ -43,7 +43,7 @@
 
             <KeyAttribute
                 app:framePosition="0"
-                app:motionTarget="@id/videoViewContainer">
+                app:motionTarget="@id/videoViewCardContainer">
                 <CustomAttribute
                     app:attributeName="cardElevation"
                     app:customDimension="5dp" />
@@ -51,7 +51,7 @@
 
             <KeyAttribute
                 app:framePosition="3"
-                app:motionTarget="@id/videoViewContainer">
+                app:motionTarget="@id/videoViewCardContainer">
                 <CustomAttribute
                     app:attributeName="cardElevation"
                     app:customDimension="0dp" />
@@ -63,7 +63,7 @@
     <ConstraintSet android:id="@+id/expanded">
 
         <Constraint
-            android:id="@id/videoViewContainer"
+            android:id="@id/videoViewCardContainer"
             android:layout_height="250dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
@@ -81,14 +81,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoViewContainer" />
+            app:layout_constraintTop_toBottomOf="@+id/videoViewCardContainer" />
+        <Constraint
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@+id/videoViewCardContainer"
+            app:layout_constraintBottom_toBottomOf="@+id/videoViewCardContainer"
+            android:layout_width="0dp"
+            app:layout_constraintStart_toStartOf="@+id/videoViewCardContainer"
+            android:id="@+id/videoViewLay"
+            app:layout_constraintEnd_toEndOf="@+id/videoViewCardContainer" />
 
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/collapsed">
 
         <Constraint
-            android:id="@id/videoViewContainer"
+            android:id="@id/videoViewCardContainer"
             android:layout_height="55dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
@@ -107,7 +115,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/videoViewContainer" />
+            app:layout_constraintTop_toBottomOf="@+id/videoViewCardContainer" />
 
     </ConstraintSet>
 

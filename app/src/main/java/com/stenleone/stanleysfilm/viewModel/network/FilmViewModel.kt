@@ -13,6 +13,7 @@ class FilmViewModel(
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : BaseViewModel() {
 
+    val movieUrl = MutableLiveData<String?>()
     val movieDetails = MutableLiveData<MovieDetailsEntity>()
     val recomendedMovieList = MutableLiveData<MoviesEntity>()
 
@@ -44,7 +45,7 @@ class FilmViewModel(
                     isFailure(RequestError.UNSUCCESS_STATUS, response.message())
                 }
             } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.toString())
+                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             }
         }
     }
@@ -66,7 +67,7 @@ class FilmViewModel(
                     isFailure(RequestError.UNSUCCESS_STATUS, response.message())
                 }
             } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.toString())
+                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             }
         }
     }
