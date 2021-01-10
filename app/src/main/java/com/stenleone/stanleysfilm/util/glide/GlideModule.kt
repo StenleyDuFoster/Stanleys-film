@@ -16,6 +16,7 @@ class GlideModule : AppGlideModule() {
     companion object {
         private const val IMAGE_CACHE_SIZE = 70L * 1024 * 1024
         private const val IMAGE_FOLDER = "/stanley`s-film/images"
+        const val IMAGE_ANIM_DURUTATION = 400
     }
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {

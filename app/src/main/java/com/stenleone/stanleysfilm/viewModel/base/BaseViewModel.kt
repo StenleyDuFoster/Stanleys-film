@@ -12,20 +12,14 @@ abstract class BaseViewModel : ViewModel() {
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
     private var isActive = true
 
-    // Do work in IO
     fun <P> doWork(doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, IO)
     }
 
-    // Do work in Main
-    // doWorkInMainThread {...}
     fun <P> doWorkInMainThread(doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, Main)
     }
 
-    // Do work in IO repeately
-    // doRepeatWork(1000) {...}
-    // then we need to stop it calling stopRepeatWork()
     fun <P> doRepeatWork(delay: Long, doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         isActive = true
         viewModelScope.launch {
@@ -44,12 +38,6 @@ abstract class BaseViewModel : ViewModel() {
         isActive = false
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        isActive = false
-        viewModelJob.cancel()
-    }
-
     private inline fun <P> doCoroutineWork(
         crossinline doOnAsyncBlock: suspend CoroutineScope.() -> P,
         coroutineScope: CoroutineScope,
@@ -60,5 +48,11 @@ abstract class BaseViewModel : ViewModel() {
                 doOnAsyncBlock.invoke(this)
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        isActive = false
+        viewModelJob.cancel()
     }
 }

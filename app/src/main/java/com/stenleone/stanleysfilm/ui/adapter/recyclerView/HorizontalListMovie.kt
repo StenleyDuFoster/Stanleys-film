@@ -122,7 +122,11 @@ class HorizontalListMovie : BaseRecyclerView() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     if (this@HorizontalListMovie::listener.isInitialized) {
-                        listener.click(itemList[adapterPosition])
+                        try {
+                            listener.click(itemList[adapterPosition])
+                        } catch (e: IndexOutOfBoundsException) {
+
+                        }
                     }
                 }
                 .launchIn(recyclerScope)

@@ -12,17 +12,16 @@ import com.stenleone.stanleysfilm.util.bind.BindViewPager
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
 
-    private lateinit var videoFragment: VideoFragment
+    private var videoFragment: VideoFragment? = null
 
     override fun setup() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        videoFragment = VideoFragment()
-
         setupViewPager()
+        setupVideoFragment()
     }
 
     private fun setupViewPager() {
@@ -46,4 +45,29 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    private fun setupVideoFragment() {
+
+    }
+
+    fun openVideoFragment(videoUrl: String) {
+        if (videoFragment != null) {
+            videoFragment?.updateVideoUrl(videoUrl)
+        } else {
+            videoFragment = VideoFragment.newInstance(videoUrl).also {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, it)
+                    .commit()
+            }
+        }
+    }
+
+    fun closeVideoFragment() {
+        videoFragment?.let {
+            supportFragmentManager.beginTransaction()
+                .remove(it)
+                .commit()
+        }
+        videoFragment = null
+        binding.mainMotionLayout.progress = 0f
+    }
 }

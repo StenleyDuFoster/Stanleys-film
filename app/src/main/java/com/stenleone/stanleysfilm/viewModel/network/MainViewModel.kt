@@ -63,7 +63,7 @@ class MainViewModel(
                     isFailure(RequestError.UNSUCCESS_STATUS, response.message())
                 }
             } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.toString())
+                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             }
         }
     }
@@ -86,7 +86,7 @@ class MainViewModel(
                     isFailure(RequestError.UNSUCCESS_STATUS, response.message())
                 }
             } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.toString())
+                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             }
         }
     }
@@ -146,7 +146,7 @@ class MainViewModel(
                     isFailure(RequestError.UNSUCCESS_STATUS, response.message())
                 }
             } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.toString())
+                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             }
         }
     }

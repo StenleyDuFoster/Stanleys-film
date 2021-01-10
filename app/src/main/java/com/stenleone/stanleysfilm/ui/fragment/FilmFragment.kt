@@ -2,6 +2,7 @@ package com.stenleone.stanleysfilm.ui.fragment
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,16 +18,19 @@ import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.ui.activity.MainActivity
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
+import com.stenleone.stanleysfilm.util.filmFinders.FindFilmController
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.copyToClipBoard
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
 import com.stenleone.stanleysfilm.viewModel.network.FilmViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.ldralighieri.corbind.view.clicks
@@ -47,6 +51,8 @@ class FilmFragment : BaseFragment() {
     private val studioAdapter: StudiosListRecycler by inject()
     private val sharedPreferencesSortMainManager: SharedPreferencesSortMainManager by inject()
 
+    private var findFilmController: FindFilmController? = null
+
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_film, container, false)
         return binding.root
@@ -58,6 +64,7 @@ class FilmFragment : BaseFragment() {
         setupClicks()
         setupViewModelCallBack()
         setupRecyclerView()
+        searchVideoUrl()
 
         savedInstanceState?.getInt(VERTICAL_SCROLL_POSITION)?.let {
             binding.nestedScrollContainer.scrollTo(0, it)
@@ -126,6 +133,9 @@ class FilmFragment : BaseFragment() {
             binding.recyclerRecomendedList.adapter?.notifyDataSetChanged()
             binding.genreRecycler.visibility = View.VISIBLE
         })
+        viewModel.movieUrl.observe(viewLifecycleOwner, {
+            Log.v("112233", it.toString())
+        })
     }
 
     private fun setupClicks() {
@@ -140,7 +150,9 @@ class FilmFragment : BaseFragment() {
             watchButton.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-
+                    viewModel.movieUrl.value?.let {
+                        (requireActivity() as MainActivity).openVideoFragment(it)
+                    }
                 }
                 .launchIn(lifecycleScope)
 
@@ -184,12 +196,36 @@ class FilmFragment : BaseFragment() {
                             viewModel.recomendedMovieList.value,
                             TmdbNetworkConstant.LIST_RECOMENDED,
                             navArgs.movie?.id.toString(),
-                            (recyclerRecomendedList.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition(),
-                            "${getString(R.string.recomended_listtitle)} \"${navArgs.movie?.title}\""
+                            (recyclerRecomendedList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
+                            "${getString(R.string.recomended_listtitle)} \"${navArgs.movie?.title ?: navArgs.movie?.originalTitle}\""
                         )
                     )
                 }
                 .launchIn(lifecycleScope)
+        }
+    }
+
+    private fun searchVideoUrl() {
+        if (viewModel.movieUrl.value.isNullOrEmpty()) {
+            findFilmController = FindFilmController(
+                requireActivity(),
+                binding.webView,
+                navArgs.movie?.title ?: navArgs.movie?.originalTitle.toString(),
+                navArgs.movie?.releaseDate ?: "0000",
+                object : CallBackVideoFromParser {
+                    override fun onVideoFind(link: String) {
+                        viewModel.movieUrl.postValue(link)
+                        binding.watchButtonText.text = getString(R.string.watch_online)
+                    }
+                }
+            )
+
+            findFilmController?.progress?.observe(viewLifecycleOwner, {
+
+            })
+            findFilmController?.status?.observe(viewLifecycleOwner, {
+                binding.watchButtonText.text = it
+            })
         }
     }
 
@@ -200,4 +236,9 @@ class FilmFragment : BaseFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        findFilmController?.onDestroy()
+        findFilmController = null
+        super.onDestroyView()
+    }
 }

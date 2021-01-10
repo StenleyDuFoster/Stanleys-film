@@ -68,7 +68,7 @@ class MoreMovieViewModel(
                 }
             } catch (e: Exception) {
                 inProgress.postValue(false)
-                isFailure(RequestError.REQUEST_ERROR, e.toString())
+                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             }
         }
     }
@@ -95,7 +95,7 @@ class MoreMovieViewModel(
                 }
             } catch (e: Exception) {
                 inProgress.postValue(false)
-                isFailure(RequestError.REQUEST_ERROR, e.toString())
+                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             }
         }
     }
