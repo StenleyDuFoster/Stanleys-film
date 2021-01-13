@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,12 +24,13 @@ import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
 import com.stenleone.stanleysfilm.viewModel.network.MoreMovieViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.ldralighieri.corbind.view.clicks
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MoreMovieFragment : BaseFragment() {
 
     companion object {
@@ -39,8 +42,8 @@ class MoreMovieFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMoreMovieBinding
     private val navArgs: MoreMovieFragmentArgs by navArgs()
-    private val viewModel: MoreMovieViewModel by viewModel()
-    private val adapter: HorizontalListMovie by inject()
+    private val viewModel: MoreMovieViewModel by viewModels()
+    @Inject lateinit var adapter: HorizontalListMovie
 
     private var lastLoadedPage = 1
 
@@ -78,11 +81,11 @@ class MoreMovieFragment : BaseFragment() {
         viewModel.getPage(navArgs.searchType ?: "", 2)
         lastLoadedPage = 2
 
-        viewModel.movieList.observe(viewLifecycleOwner, {
+        viewModel.movieList.observe(viewLifecycleOwner) {
             val oldLastPosition = adapter.itemList.size
             adapter.itemList.addAll(it.movies)
             binding.recycler.adapter?.notifyItemRangeInserted(oldLastPosition, adapter.itemList.size - 1)
-        })
+        }
     }
 
     private fun setupRecyclerView() {

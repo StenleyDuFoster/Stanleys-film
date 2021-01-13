@@ -2,8 +2,12 @@ package com.stenleone.stanleysfilm.managers
 
 import android.content.Context
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SharedPreferencesSortMainManager(context: Context) {
+@Singleton
+class SharedPreferencesSortMainManager @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
         private const val TOP_RATED = "top_rated_sort"

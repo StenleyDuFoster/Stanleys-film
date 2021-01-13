@@ -2,8 +2,12 @@ package com.stenleone.stanleysfilm.managers
 
 import android.content.Context
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SharedPreferencesManager(context: Context) {
+@Singleton
+class SharedPreferencesManager @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
         const val SHARED_PREFERENCES_NAME = "stanley`s_film.sPref"

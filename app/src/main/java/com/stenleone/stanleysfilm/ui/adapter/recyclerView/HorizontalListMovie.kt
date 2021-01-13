@@ -11,12 +11,14 @@ import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
+import dagger.Component
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
 import java.util.ArrayList
+import javax.inject.Inject
 
-class HorizontalListMovie : BaseRecyclerView() {
+class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
 
     companion object {
         const val TYPE_SMALL = 0

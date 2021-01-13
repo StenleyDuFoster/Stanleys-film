@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,12 +25,13 @@ import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
 import com.stenleone.stanleysfilm.viewModel.network.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.ldralighieri.corbind.view.clicks
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainFragment : BaseFragment() {
 
     companion object {
@@ -36,13 +39,13 @@ class MainFragment : BaseFragment() {
     }
 
     private lateinit var binding: FragmentMainBinding
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModels()
 
-    private val sharedPreferencesSortMainManager: SharedPreferencesSortMainManager by inject()
-    private val nowPlayingAdapter: HorizontalListMovie by inject()
-    private val popularAdapter: HorizontalListMovie by inject()
-    private val topRatedAdapter: HorizontalListMovie by inject()
-    private val upComingAdapter: HorizontalListMovie by inject()
+    @Inject lateinit var sharedPreferencesSortMainManager: SharedPreferencesSortMainManager
+    @Inject lateinit var nowPlayingAdapter: HorizontalListMovie
+    @Inject lateinit var popularAdapter: HorizontalListMovie
+    @Inject lateinit var topRatedAdapter: HorizontalListMovie
+    @Inject lateinit var upComingAdapter: HorizontalListMovie
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
@@ -252,35 +255,35 @@ class MainFragment : BaseFragment() {
     private fun setupViewModelCallBack() {
         binding.apply {
             viewModel.apply {
-                movieLatesLiveData.observe(viewLifecycleOwner, {
+                movieLatesLiveData.observe(viewLifecycleOwner) {
                     swipeToRefresh.isRefreshing = false
                     latestShimmerViewContainer.hideShimmer()
                     latestEpisode = it
-                })
-                movieNowPlayingLiveData.observe(viewLifecycleOwner, {
+                }
+                movieNowPlayingLiveData.observe(viewLifecycleOwner) {
                     swipeToRefresh.isRefreshing = false
                     nowPlayingAdapter.itemList.clear()
                     nowPlayingAdapter.itemList.addAll(it.movies)
                     nowPlayingAdapter.notifyDataSetChanged()
-                })
-                moviePopularLiveData.observe(viewLifecycleOwner, {
+                }
+                moviePopularLiveData.observe(viewLifecycleOwner) {
                     swipeToRefresh.isRefreshing = false
                     popularAdapter.itemList.clear()
                     popularAdapter.itemList.addAll(it.movies)
                     popularAdapter.notifyDataSetChanged()
-                })
-                movieTopRatedLiveData.observe(viewLifecycleOwner, {
+                }
+                movieTopRatedLiveData.observe(viewLifecycleOwner) {
                     swipeToRefresh.isRefreshing = false
                     topRatedAdapter.itemList.clear()
                     topRatedAdapter.itemList.addAll(it.movies)
                     topRatedAdapter.notifyDataSetChanged()
-                })
-                movieUpcomingLiveData.observe(viewLifecycleOwner, {
+                }
+                movieUpcomingLiveData.observe(viewLifecycleOwner) {
                     swipeToRefresh.isRefreshing = false
                     upComingAdapter.itemList.clear()
                     upComingAdapter.itemList.addAll(it.movies)
                     upComingAdapter.notifyDataSetChanged()
-                })
+                }
             }
         }
     }

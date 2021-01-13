@@ -1,61 +1,73 @@
 package com.stenleone.stanleysfilm.di
 
 import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.stenleone.stanleysfilm.network.ApiService
-import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.BASE_URL
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.Cache
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ua.oleksii.fitplantest.model.network.cache.OfflineCacheInterceptor
+import ua.oleksii.fitplantest.model.network.cache.OnlineCacheInterceptor
+import java.util.concurrent.TimeUnit
 
-val networkModule = module {
-    single { getListInterceptor(androidContext()) }
-    single { getOkkHttp(get(), androidContext()) }
-    single { getRetrofit(get()) }
-    single { getApiService(get()) }
-}
+@Module
+@InstallIn(ApplicationComponent::class)
+class NetworkModule {
 
-private fun getListInterceptor(context: Context): List<Interceptor> {
-
-    val interceptorDebug = HttpLoggingInterceptor()
-    interceptorDebug.level = HttpLoggingInterceptor.Level.BODY
-//    val cashInterceptor = CashInterceptor()
-
-    return listOf(
-        interceptorDebug,
-        ChuckInterceptor(context)
-//        cashInterceptor
-    )
-}
-
-private fun getOkkHttp(listInterceptor: List<Interceptor>, context: Context): OkHttpClient {
-    val client = OkHttpClient.Builder()
-    val cacheSize = (5 * 1024 * 1024).toLong()
-    val myCache = Cache(context.cacheDir, cacheSize)
-    client.cache(myCache)
-
-    for (interceptor in listInterceptor) {
-        client.addInterceptor(interceptor)
+    companion object {
+        private const val GENERAL_TIMEOUT = 25L
+        private const val CONNECT_TIMEOUT = GENERAL_TIMEOUT
+        private const val WRITE_TIMEOUT = GENERAL_TIMEOUT
+        private const val READ_TIMEOUT = GENERAL_TIMEOUT
+        private const val CACHE_SIZE = 20L * 1024 * 1024
     }
 
-    return client.build()
-}
+    @Provides
+    fun provideCache(@ApplicationContext context: Context): Cache = Cache(context.cacheDir, CACHE_SIZE)
 
-private fun getRetrofit(client: OkHttpClient): Retrofit {
-    return Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .client(client)
-        .build()
-}
+    @Provides
+    fun provideOkHttpClient(
+        @ApplicationContext context: Context,
+        cache: Cache,
+//        authInterceptor: AuthInterceptor,
+        onlineCacheInterceptor: OnlineCacheInterceptor,
+        offlineCacheInterceptor: OfflineCacheInterceptor
+    ): OkHttpClient =
+        OkHttpClient.Builder()
+            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+//            .addNetworkInterceptor(authInterceptor)
+            .addInterceptor(offlineCacheInterceptor)
+            .addNetworkInterceptor(onlineCacheInterceptor)
+            .addNetworkInterceptor(ChuckInterceptor(context))
+            .cache(cache)
+            .build()
 
-private fun getApiService(retrofit: Retrofit): ApiService {
-    return retrofit.create(ApiService::class.java)
+    @Provides
+    fun provideGson(): Gson = GsonBuilder().setLenient().create()
+
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit =
+        Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(TmdbNetworkConstant.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
+
+    @Provides
+    fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
+
 }

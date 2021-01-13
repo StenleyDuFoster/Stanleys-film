@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,14 +30,14 @@ import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.copyToClipBoard
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
 import com.stenleone.stanleysfilm.viewModel.network.FilmViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.ldralighieri.corbind.view.clicks
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class FilmFragment : BaseFragment() {
 
     companion object {
@@ -44,12 +46,12 @@ class FilmFragment : BaseFragment() {
 
     private lateinit var binding: FragmentFilmBinding
     private val navArgs: FilmFragmentArgs by navArgs()
-    private val viewModel: FilmViewModel by viewModel()
+    private val viewModel: FilmViewModel by viewModels()
 
-    private val genreAdapter: GenreListRecycler by inject()
-    private val recomendedMovieAdapter: HorizontalListMovie by inject()
-    private val studioAdapter: StudiosListRecycler by inject()
-    private val sharedPreferencesSortMainManager: SharedPreferencesSortMainManager by inject()
+    @Inject lateinit var genreAdapter: GenreListRecycler
+    @Inject lateinit var recomendedMovieAdapter: HorizontalListMovie
+    @Inject lateinit var studioAdapter: StudiosListRecycler
+    @Inject lateinit var sharedPreferencesSortMainManager: SharedPreferencesSortMainManager
 
     private var findFilmController: FindFilmController? = null
 
@@ -114,7 +116,7 @@ class FilmFragment : BaseFragment() {
         navArgs.movie?.id?.let {
             viewModel.getPageData(it)
         }
-        viewModel.movieDetails.observe(viewLifecycleOwner, {
+        viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.movieDetails = it
             genreAdapter.itemList.clear()
             genreAdapter.itemList.addAll(it.genres)
@@ -125,17 +127,17 @@ class FilmFragment : BaseFragment() {
             binding.genreRecycler.adapter?.notifyDataSetChanged()
             binding.recyclerStudioList.adapter?.notifyDataSetChanged()
             binding.genreRecycler.visibility = View.VISIBLE
-        })
-        viewModel.recomendedMovieList.observe(viewLifecycleOwner, {
+        }
+        viewModel.recomendedMovieList.observe(viewLifecycleOwner) {
 
             recomendedMovieAdapter.itemList.clear()
             recomendedMovieAdapter.itemList.addAll(it.movies)
             binding.recyclerRecomendedList.adapter?.notifyDataSetChanged()
             binding.genreRecycler.visibility = View.VISIBLE
-        })
-        viewModel.movieUrl.observe(viewLifecycleOwner, {
+        }
+        viewModel.movieUrl.observe(viewLifecycleOwner) {
             Log.v("112233", it.toString())
-        })
+        }
     }
 
     private fun setupClicks() {
@@ -220,12 +222,12 @@ class FilmFragment : BaseFragment() {
                 }
             )
 
-            findFilmController?.progress?.observe(viewLifecycleOwner, {
+            findFilmController?.progress?.observe(viewLifecycleOwner) {
 
-            })
-            findFilmController?.status?.observe(viewLifecycleOwner, {
+            }
+            findFilmController?.status?.observe(viewLifecycleOwner) {
                 binding.watchButtonText.text = it
-            })
+            }
         }
     }
 

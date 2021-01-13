@@ -9,7 +9,9 @@ import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     lateinit var binding: ActivityMainBinding

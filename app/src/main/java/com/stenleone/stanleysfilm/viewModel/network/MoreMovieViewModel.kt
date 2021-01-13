@@ -1,5 +1,6 @@
 package com.stenleone.stanleysfilm.viewModel.network
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
@@ -9,7 +10,7 @@ import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 
-class MoreMovieViewModel(
+class MoreMovieViewModel @ViewModelInject constructor(
     private val apiService: ApiService,
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : BaseViewModel() {

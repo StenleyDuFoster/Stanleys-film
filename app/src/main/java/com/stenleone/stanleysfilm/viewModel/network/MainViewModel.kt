@@ -1,6 +1,7 @@
 package com.stenleone.stanleysfilm.viewModel.network
 
 import android.annotation.SuppressLint
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class MainViewModel(
+class MainViewModel @ViewModelInject constructor(
     private val apiService: ApiService,
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : BaseViewModel() {

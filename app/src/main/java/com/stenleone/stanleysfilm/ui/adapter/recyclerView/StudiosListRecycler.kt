@@ -11,13 +11,15 @@ import com.stenleone.stanleysfilm.network.entity.movie.ProductionCompany
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
+import dagger.Component
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
 import java.lang.IndexOutOfBoundsException
 import java.util.ArrayList
+import javax.inject.Inject
 
-class StudiosListRecycler : BaseRecyclerView() {
+class StudiosListRecycler @Inject constructor() : BaseRecyclerView() {
 
     val itemList: ArrayList<ProductionCompany> = arrayListOf()
     lateinit var listener: ItemClick
