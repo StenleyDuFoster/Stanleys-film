@@ -2,12 +2,15 @@ package com.stenleone.stanleysfilm.viewModel.network
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.stenleone.stanleysfilm.managers.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
+import kotlinx.coroutines.launch
 
 class FilmViewModel @ViewModelInject constructor(
     private var apiService: ApiService,
@@ -30,6 +33,9 @@ class FilmViewModel @ViewModelInject constructor(
     }
 
     private fun getMovieDetails(id: Int) {
+        viewModelScope.launch() {
+
+        }
         doWork {
             try {
                 val response = apiService.getMovieDetails(

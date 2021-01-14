@@ -1,5 +1,6 @@
 package com.stenleone.stanleysfilm.util.extencial
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*

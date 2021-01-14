@@ -48,10 +48,14 @@ class FilmFragment : BaseFragment() {
     private val navArgs: FilmFragmentArgs by navArgs()
     private val viewModel: FilmViewModel by viewModels()
 
-    @Inject lateinit var genreAdapter: GenreListRecycler
-    @Inject lateinit var recomendedMovieAdapter: HorizontalListMovie
-    @Inject lateinit var studioAdapter: StudiosListRecycler
-    @Inject lateinit var sharedPreferencesSortMainManager: SharedPreferencesSortMainManager
+    @Inject
+    lateinit var genreAdapter: GenreListRecycler
+    @Inject
+    lateinit var recomendedMovieAdapter: HorizontalListMovie
+    @Inject
+    lateinit var studioAdapter: StudiosListRecycler
+    @Inject
+    lateinit var sharedPreferencesSortMainManager: SharedPreferencesSortMainManager
 
     private var findFilmController: FindFilmController? = null
 
@@ -217,7 +221,9 @@ class FilmFragment : BaseFragment() {
                 object : CallBackVideoFromParser {
                     override fun onVideoFind(link: String) {
                         viewModel.movieUrl.postValue(link)
-                        binding.watchButtonText.text = getString(R.string.watch_online)
+                        requireActivity().runOnUiThread {
+                            binding.watchButtonText.text = getString(R.string.watch_online)
+                        }
                     }
                 }
             )

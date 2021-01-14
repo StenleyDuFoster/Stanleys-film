@@ -1,7 +1,7 @@
 package com.stenleone.stanleysfilm.ui.activity
 
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.ActivityMainBinding
 import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
@@ -17,13 +17,10 @@ class MainActivity : BaseActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
 
-    private var videoFragment: VideoFragment? = null
-
     override fun setup() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setupViewPager()
-        setupVideoFragment()
     }
 
     private fun setupViewPager() {
@@ -37,7 +34,11 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         binding.apply {
-            if (!(viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavController().navigateUp()) {
+            if (!Navigation.findNavController(
+                    this@MainActivity,
+                    (viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavControllerId()
+                ).navigateUp()
+            ) {
                 if (fragmentPager.currentItem == 0) {
                     super.onBackPressed()
                 } else {
@@ -47,29 +48,21 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun setupVideoFragment() {
-
-    }
-
     fun openVideoFragment(videoUrl: String) {
-        if (videoFragment != null) {
-            videoFragment?.updateVideoUrl(videoUrl)
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            (supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as VideoFragment).updateVideoUrl(videoUrl)
         } else {
-            videoFragment = VideoFragment.newInstance(videoUrl).also {
+            VideoFragment.newInstance(videoUrl).also {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, it)
+                    .replace(R.id.fragmentContainer, it, VideoFragment.TAG)
+                    .addToBackStack(VideoFragment.TAG)
                     .commit()
             }
         }
     }
 
     fun closeVideoFragment() {
-        videoFragment?.let {
-            supportFragmentManager.beginTransaction()
-                .remove(it)
-                .commit()
-        }
-        videoFragment = null
+        supportFragmentManager.popBackStack()
         binding.mainMotionLayout.progress = 0f
     }
 }
