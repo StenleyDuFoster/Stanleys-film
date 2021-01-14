@@ -13,12 +13,8 @@ import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
 
 class SettingsNavHostFragment : BaseFragment(), FragmentWithNavController {
 
-    companion object {
-        lateinit var navController: NavController
-    }
-
-    override fun getNavController(): NavController {
-        return navController
+    override fun getNavControllerId(): Int {
+        return R.id.navHostSettingsFragment
     }
 
     private lateinit var binding: FragmentSettingsNavHostBinding
@@ -30,7 +26,7 @@ class SettingsNavHostFragment : BaseFragment(), FragmentWithNavController {
 
     override fun setup(savedInstanceState: Bundle?) {
         binding.apply {
-            navController = Navigation.findNavController(requireActivity(), R.id.navHostSettingsFragment)
+//            navController = Navigation.findNavController(requireActivity(), R.id.navHostSettingsFragment)
         }
     }
 }

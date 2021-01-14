@@ -13,12 +13,8 @@ import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
 
 class SearchNavHostFragment : BaseFragment(), FragmentWithNavController {
 
-    companion object {
-        lateinit var navController: NavController
-    }
-
-    override fun getNavController(): NavController {
-        return navController
+    override fun getNavControllerId(): Int {
+        return R.id.navHostSearchFragment
     }
 
     private lateinit var binding: FragmentSearchNavHostBinding
@@ -30,7 +26,7 @@ class SearchNavHostFragment : BaseFragment(), FragmentWithNavController {
 
     override fun setup(savedInstanceState: Bundle?) {
         binding.apply {
-            navController = Navigation.findNavController(requireActivity(), R.id.navHostSearchFragment)
+//            navController = Navigation.findNavController(requireActivity(), R.id.navHostSearchFragment)
         }
     }
 }

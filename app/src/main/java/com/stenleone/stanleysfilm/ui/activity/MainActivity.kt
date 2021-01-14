@@ -1,7 +1,7 @@
 package com.stenleone.stanleysfilm.ui.activity
 
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.ActivityMainBinding
 import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
@@ -21,7 +21,6 @@ class MainActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setupViewPager()
-        setupVideoFragment()
     }
 
     private fun setupViewPager() {
@@ -35,7 +34,11 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         binding.apply {
-            if (!(viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavController().navigateUp()) {
+            if (!Navigation.findNavController(
+                    this@MainActivity,
+                    (viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavControllerId()
+                ).navigateUp()
+            ) {
                 if (fragmentPager.currentItem == 0) {
                     super.onBackPressed()
                 } else {
@@ -43,10 +46,6 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    private fun setupVideoFragment() {
-
     }
 
     fun openVideoFragment(videoUrl: String) {
@@ -64,7 +63,6 @@ class MainActivity : BaseActivity() {
 
     fun closeVideoFragment() {
         supportFragmentManager.popBackStack()
-
         binding.mainMotionLayout.progress = 0f
     }
 }
