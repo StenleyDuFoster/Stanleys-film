@@ -17,8 +17,6 @@ class MainActivity : BaseActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
 
-    private var videoFragment: VideoFragment? = null
-
     override fun setup() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
@@ -52,24 +50,21 @@ class MainActivity : BaseActivity() {
     }
 
     fun openVideoFragment(videoUrl: String) {
-        if (videoFragment != null) {
-            videoFragment?.updateVideoUrl(videoUrl)
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            (supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as VideoFragment).updateVideoUrl(videoUrl)
         } else {
-            videoFragment = VideoFragment.newInstance(videoUrl).also {
+            VideoFragment.newInstance(videoUrl).also {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, it)
+                    .replace(R.id.fragmentContainer, it, VideoFragment.TAG)
+                    .addToBackStack(VideoFragment.TAG)
                     .commit()
             }
         }
     }
 
     fun closeVideoFragment() {
-        videoFragment?.let {
-            supportFragmentManager.beginTransaction()
-                .remove(it)
-                .commit()
-        }
-        videoFragment = null
+        supportFragmentManager.popBackStack()
+
         binding.mainMotionLayout.progress = 0f
     }
 }

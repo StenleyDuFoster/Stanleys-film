@@ -61,7 +61,7 @@ dependencies {
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
 
-//    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'//-------------------------------------------rx
+//    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'//-----------------------------------------rx
 //    implementation 'com.jakewharton.rxbinding3:rxbinding:3.1.0'
 //    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 //    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
@@ -103,6 +103,11 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"//-------------------------Swipe to refresh
 
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'//---------------------------------------Progress bars
+
+    implementation "com.google.android.exoplayer:exoplayer:2.11.3"//--------------------------------Exo Player
+    implementation "com.google.android.exoplayer:extension-okhttp:2.11.3"
+
+    implementation 'com.github.vkay94:DoubleTapPlayerView:0.7.0'//----------------------------------Exo player double tap
 
 //    implementation 'com.google.android.exoplayer:exoplayer:' + project.ext.exoPlayerVersion
 }

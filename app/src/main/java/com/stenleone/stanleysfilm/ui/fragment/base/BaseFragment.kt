@@ -14,7 +14,6 @@ abstract class BaseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        retainInstance = true
         return setupBinding(inflater, container)
     }
 
