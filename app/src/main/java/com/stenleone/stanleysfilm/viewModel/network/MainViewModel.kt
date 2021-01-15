@@ -3,7 +3,8 @@ package com.stenleone.stanleysfilm.viewModel.network
 import android.annotation.SuppressLint
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
-import com.stenleone.stanleysfilm.managers.SharedPreferencesManager
+import com.stenleone.stanleysfilm.managers.ConnectionManager
+import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_NOW_PLAYING
@@ -12,27 +13,23 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_TOP_RAT
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_TOP_UPCOMING
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class MainViewModel @ViewModelInject constructor(
-    private val apiService: ApiService,
-    private val sharedPreferencesManager: SharedPreferencesManager
-) : BaseViewModel() {
+    apiService: ApiService,
+    sharedPreferencesManager: SharedPreferencesManager,
+    connectionManager: ConnectionManager
+) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
     val movieLatesLiveData = MutableLiveData<LatesEntity>()
     val movieNowPlayingLiveData = MutableLiveData<MoviesEntity>()
     val moviePopularLiveData = MutableLiveData<MoviesEntity>()
     val movieTopRatedLiveData = MutableLiveData<MoviesEntity>()
     val movieUpcomingLiveData = MutableLiveData<MoviesEntity>()
-
-    val errorLiveData = MutableLiveData<RequestError>()
-
-    val isFailure: (errorMessage: String, type: String) -> Unit = { errorMessage: String, type: String ->
-        errorLiveData.postValue(RequestError(type = type, message = errorMessage))
-    }
 
     init {
         setupGuestSessionToken()
@@ -48,47 +45,37 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     private fun getLatesMovie(page: Int = 1) {
-        doWork {
-            try {
-                val response = apiService.getLatesMovieAsync(
-                    language = sharedPreferencesManager.language,
-                    page = page
-                )
-                    .await()
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
+        doAsyncRequest {
+            apiService.getLatesMovieAsync(
+                language = sharedPreferencesManager.language,
+                page = page
+            )
+                .await()
+                .successOrError(
+                    success = {
                         movieLatesLiveData.postValue(it)
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
-                } else {
-                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
-                }
-            } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
-            }
+                )
         }
     }
 
     private fun getListMovie(typeList: String, page: Int = 1) {
-        doWork {
-            try {
-                val response = apiService.getListMovieAsync(
-                    typeList,
-                    language = sharedPreferencesManager.language,
-                    page = page
-                )
-                    .await()
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
+        doAsyncRequest {
+            apiService.getListMovieAsync(
+                typeList,
+                language = sharedPreferencesManager.language,
+                page = page
+            )
+                .await()
+                .successOrError(
+                    success = {
                         postValue(typeList, it)
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
-                } else {
-                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
-                }
-            } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
-            }
+                )
         }
     }
 
@@ -121,7 +108,7 @@ class MainViewModel @ViewModelInject constructor(
         if (sharedPreferencesManager.expiresGuestTokenAt != null) {
             val tokenDate = sdf.format(sdf.parse(sharedPreferencesManager.expiresGuestTokenAt ?: "0"))
 
-            if (currentDate < tokenDate){
+            if (currentDate < tokenDate) {
                 getNewGuestToken()
             }
         } else {
@@ -131,24 +118,19 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     private fun getNewGuestToken() {
-        doWork {
-            try {
-                val response = apiService.getSessionAsync()
-                    .await()
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
+        doAsyncRequest {
+            apiService.getSessionAsync()
+                .await()
+                .successOrError(
+                    success = {
                         if (it.success) {
                             sharedPreferencesManager.guestSessionToken = it.guestSessionId //2021-01-08 17:53:54 UTC
                             sharedPreferencesManager.expiresGuestTokenAt = it.expiresAt
                         }
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
-                } else {
-                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
-                }
-            } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
-            }
+                )
         }
     }
 }

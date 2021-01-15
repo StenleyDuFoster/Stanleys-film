@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentMainBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
-import com.stenleone.stanleysfilm.managers.SharedPreferencesSortMainManager
+import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie

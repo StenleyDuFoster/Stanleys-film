@@ -1,4 +1,4 @@
-package com.stenleone.stanleysfilm.managers
+package com.stenleone.stanleysfilm.managers.sharedPrefs
 
 import android.content.Context
 import androidx.core.content.edit

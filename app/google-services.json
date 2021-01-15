@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "133138103554",
+    "project_id": "stanleys-film",
+    "storage_bucket": "stanleys-film.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133138103554:android:4770fd0db9eff55130161b",
+        "android_client_info": {
+          "package_name": "com.stenleone.stanleysfilm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "133138103554-b4q1vtueehke5ggoiheqo7gsogfg0p9i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.stenleone.stanleysfilm",
+            "certificate_hash": "420f7d1cbc6193967ed534f84e89d7d0824ab316"
+          }
+        },
+        {
+          "client_id": "133138103554-cmldcijdski5vbmtv92gb54ln0cnqu44.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLydHuBihgCz8vmG_JDUAl84iHoWVy8SI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "133138103554-cmldcijdski5vbmtv92gb54ln0cnqu44.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

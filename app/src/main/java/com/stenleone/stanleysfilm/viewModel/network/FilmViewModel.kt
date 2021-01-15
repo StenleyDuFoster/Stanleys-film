@@ -2,30 +2,24 @@ package com.stenleone.stanleysfilm.viewModel.network
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.stenleone.stanleysfilm.managers.SharedPreferencesManager
+import com.stenleone.stanleysfilm.managers.ConnectionManager
+import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
-import kotlinx.coroutines.launch
 
 class FilmViewModel @ViewModelInject constructor(
-    private var apiService: ApiService,
-    private var sharedPreferencesManager: SharedPreferencesManager
-) : BaseViewModel() {
+    apiService: ApiService,
+    sharedPreferencesManager: SharedPreferencesManager,
+    connectionManager: ConnectionManager
+) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
     val movieUrl = MutableLiveData<String?>()
     val movieDetails = MutableLiveData<MovieDetailsEntity>()
     val recomendedMovieList = MutableLiveData<MoviesEntity>()
-
-    val errorLiveData = MutableLiveData<RequestError>()
-
-    val isFailure: (errorMessage: String, type: String) -> Unit = { errorMessage: String, type: String ->
-        errorLiveData.postValue(RequestError(type = type, message = errorMessage))
-    }
 
     fun getPageData(id: Int) {
         getMovieDetails(id)
@@ -33,49 +27,36 @@ class FilmViewModel @ViewModelInject constructor(
     }
 
     private fun getMovieDetails(id: Int) {
-        viewModelScope.launch() {
-
-        }
-        doWork {
-            try {
-                val response = apiService.getMovieDetails(
-                    language = sharedPreferencesManager.language,
-                    movieId = id
-                )
-                    .await()
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
+        doAsyncRequest {
+            apiService.getMovieDetails(
+                language = sharedPreferencesManager.language,
+                movieId = id
+            )
+                .await()
+                .successOrError(
+                    success = {
                         movieDetails.postValue(it)
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
-                } else {
-                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
-                }
-            } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
-            }
+                )
         }
     }
 
     private fun getRecomendedMovieList(id: Int) {
-        doWork {
-            try {
-                val response = apiService.getRecomendedList(
-                    language = sharedPreferencesManager.language,
-                    movieId = id
-                )
-                    .await()
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
+        doAsyncRequest {
+           apiService.getRecomendedList(
+                language = sharedPreferencesManager.language,
+                movieId = id
+            )
+                .await()
+                .successOrError(
+                    success = {
                         recomendedMovieList.postValue(it)
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
-                } else {
-                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
-                }
-            } catch (e: Exception) {
-                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
-            }
+                )
         }
     }
 }

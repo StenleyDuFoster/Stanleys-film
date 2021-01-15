@@ -2,27 +2,22 @@ package com.stenleone.stanleysfilm.viewModel.network
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
-import com.stenleone.stanleysfilm.managers.SharedPreferencesManager
+import com.stenleone.stanleysfilm.managers.ConnectionManager
+import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
-import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 
 class MoreMovieViewModel @ViewModelInject constructor(
-    private val apiService: ApiService,
-    private val sharedPreferencesManager: SharedPreferencesManager
-) : BaseViewModel() {
+    apiService: ApiService,
+    sharedPreferencesManager: SharedPreferencesManager,
+    connectionManager: ConnectionManager
+) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
     val movieList = MutableLiveData<MoviesEntity>()
-
-    val inProgress = MutableLiveData<Boolean>()
-    val errorLiveData = MutableLiveData<RequestError>()
-
-    val isFailure: (errorMessage: String, type: String) -> Unit = { errorMessage: String, type: String ->
-        errorLiveData.postValue(RequestError(type = type, message = errorMessage))
-    }
 
     fun getPage(typeList: String, page: Int, movieId: String? = null) {
         when (typeList) {
@@ -48,56 +43,38 @@ class MoreMovieViewModel @ViewModelInject constructor(
     }
 
     private fun getMovieList(typeList: String, page: Int) {
-        doWork {
-            inProgress.postValue(true)
-            try {
-                val response = apiService.getListMovieAsync(
-                    typeList,
-                    language = sharedPreferencesManager.language,
-                    page = page
-                )
-                    .await()
-
-                if (response.isSuccessful) {
-                    inProgress.postValue(false)
-                    response.body()?.let {
+        doAsyncRequest {
+            apiService.getListMovieAsync(
+                typeList,
+                language = sharedPreferencesManager.language,
+                page = page
+            )
+                .await()
+                .successOrError(
+                    success = {
                         movieList.postValue(it)
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
-                } else {
-                    inProgress.postValue(false)
-                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
-                }
-            } catch (e: Exception) {
-                inProgress.postValue(false)
-                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
-            }
+                )
         }
     }
 
     private fun getRecomendedMovieList(id: Int, page: Int) {
-        doWork {
-            inProgress.postValue(true)
-            try {
-                val response = apiService.getRecomendedList(
-                    language = sharedPreferencesManager.language,
-                    movieId = id,
-                    page = page
-                )
-                    .await()
-
-                if (response.isSuccessful) {
-                    inProgress.postValue(false)
-                    response.body()?.let {
+        doAsyncRequest {
+            apiService.getRecomendedList(
+                language = sharedPreferencesManager.language,
+                movieId = id,
+                page = page
+            )
+                .await()
+                .successOrError(
+                    success = {
                         movieList.postValue(it)
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
-                } else {
-                    inProgress.postValue(false)
-                    isFailure(RequestError.UNSUCCESS_STATUS, response.message())
-                }
-            } catch (e: Exception) {
-                inProgress.postValue(false)
-                isFailure(RequestError.REQUEST_ERROR, e.message.toString())
-            }
+                )
         }
     }
 }

@@ -2,25 +2,31 @@ package com.stenleone.stanleysfilm.ui.activity
 
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
+import com.stenleone.stanleysfilm.BuildConfig
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.ActivityMainBinding
 import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
+import com.stenleone.stanleysfilm.managers.firebase.FirebaseRemoteConfigManager
+import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
+    @Inject lateinit var firebaseConfig: FirebaseRemoteConfigManager
 
     override fun setup() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         setupViewPager()
+        checkAppVersionFromConfig()
     }
 
     private fun setupViewPager() {
@@ -48,6 +54,12 @@ class MainActivity : BaseActivity() {
 
     fun closeVideoFragment() {
         supportFragmentManager.popBackStack()
+    }
+
+    private fun checkAppVersionFromConfig() {
+        if (BuildConfig.VERSION_CODE != firebaseConfig.getInt(FirebaseConfigsEnum.APP_VERSION_CODE)) {
+
+        }
     }
 
     override fun onBackPressed() {
