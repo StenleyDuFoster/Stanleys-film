@@ -231,4 +231,11 @@ class VideoFragment : BaseFragment() {
             videoView.player?.seekTo(savedInstanceState?.getLong(SAVE_POSITION_VIDEO) ?: 0)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity).also {
+            it.binding.mainMotionLayout.progress = 1f
+        }
+    }
 }

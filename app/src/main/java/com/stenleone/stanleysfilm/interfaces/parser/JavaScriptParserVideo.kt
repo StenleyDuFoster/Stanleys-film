@@ -1,4 +1,4 @@
-package lampa.test.tmdblib.model.viewmodel.repository.internet.parser
+package com.stenleone.stanleysfilm.interfaces.parser
 
 import android.webkit.JavascriptInterface
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser

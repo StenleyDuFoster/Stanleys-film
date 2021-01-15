@@ -8,8 +8,8 @@ import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.lifecycle.MutableLiveData
-import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.JavaScriptParserPage
-import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.JavaScriptParserVideo
+import com.stenleone.stanleysfilm.interfaces.parser.JavaScriptParserPage
+import com.stenleone.stanleysfilm.interfaces.parser.JavaScriptParserVideo
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackPageFromParser
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 import kotlin.random.Random

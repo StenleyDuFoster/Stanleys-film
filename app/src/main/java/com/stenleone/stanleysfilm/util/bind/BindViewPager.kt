@@ -3,8 +3,15 @@ package com.stenleone.stanleysfilm.util.bind
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.stenleone.stanleysfilm.R
+import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 
 class BindViewPager(private val pager: ViewPager) {
+
+    init {
+        if (pager.adapter !is FragmentViewPagerAdapter) {
+            throw RuntimeException("not support view pager")
+        }
+    }
 
     fun withBottomNav(nav: BottomNavigationView) {
 
@@ -30,11 +37,11 @@ class BindViewPager(private val pager: ViewPager) {
 
     private fun converterViewPagerAndBottomNavPosition(positionOrId: Int): Int {
         return when (positionOrId) {
-            R.id.navigation_dashboard -> 1
-            R.id.navigation_notifications -> 2
-            R.id.navigation_home -> 0
-            1 -> R.id.navigation_dashboard
-            2 -> R.id.navigation_notifications
+            R.id.navigation_dashboard -> FragmentViewPagerAdapter.SETTINGS_FRAGMENT
+            R.id.navigation_notifications -> FragmentViewPagerAdapter.SEARCH_FRAGMENT
+            R.id.navigation_home -> FragmentViewPagerAdapter.MAIN_FRAGMENT
+            FragmentViewPagerAdapter.SEARCH_FRAGMENT -> R.id.navigation_dashboard
+            FragmentViewPagerAdapter.SETTINGS_FRAGMENT -> R.id.navigation_notifications
             else -> R.id.navigation_home
         }
     }

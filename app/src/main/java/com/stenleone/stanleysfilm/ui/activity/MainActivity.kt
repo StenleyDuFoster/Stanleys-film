@@ -28,23 +28,8 @@ class MainActivity : BaseActivity() {
         binding.apply {
             fragmentPager.adapter = viewPagerAdapter
             fragmentPager.offscreenPageLimit = 3
-            BindViewPager(fragmentPager).withBottomNav(bottomNavView)
-        }
-    }
 
-    override fun onBackPressed() {
-        binding.apply {
-            if (!Navigation.findNavController(
-                    this@MainActivity,
-                    (viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavControllerId()
-                ).navigateUp()
-            ) {
-                if (fragmentPager.currentItem == 0) {
-                    super.onBackPressed()
-                } else {
-                    fragmentPager.currentItem = 0
-                }
-            }
+            BindViewPager(fragmentPager).withBottomNav(bottomNavView)
         }
     }
 
@@ -63,6 +48,25 @@ class MainActivity : BaseActivity() {
 
     fun closeVideoFragment() {
         supportFragmentManager.popBackStack()
-        binding.mainMotionLayout.progress = 0f
+    }
+
+    override fun onBackPressed() {
+        binding.apply {
+            if (supportFragmentManager.backStackEntryCount == 0) {
+                if (!Navigation.findNavController(
+                        this@MainActivity,
+                        (viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavControllerId()
+                    ).navigateUp()
+                ) {
+                    if (fragmentPager.currentItem == 0) {
+                        super.onBackPressed()
+                    } else {
+                        fragmentPager.currentItem = 0
+                    }
+                }
+            } else {
+                supportFragmentManager.popBackStack()
+            }
+        }
     }
 }

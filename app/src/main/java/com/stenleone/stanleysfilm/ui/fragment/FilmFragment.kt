@@ -213,20 +213,22 @@ class FilmFragment : BaseFragment() {
 
     private fun searchVideoUrl() {
         if (viewModel.movieUrl.value.isNullOrEmpty()) {
-            findFilmController = FindFilmController(
-                requireActivity(),
-                binding.webView,
-                navArgs.movie?.title ?: navArgs.movie?.originalTitle.toString(),
-                navArgs.movie?.releaseDate ?: "0000",
-                object : CallBackVideoFromParser {
-                    override fun onVideoFind(link: String) {
-                        viewModel.movieUrl.postValue(link)
-                        requireActivity().runOnUiThread {
-                            binding.watchButtonText.text = getString(R.string.watch_online)
+            if (findFilmController == null) {
+                findFilmController = FindFilmController(
+                    requireActivity(),
+                    binding.webView,
+                    navArgs.movie?.title ?: navArgs.movie?.originalTitle.toString(),
+                    navArgs.movie?.releaseDate ?: "0000",
+                    object : CallBackVideoFromParser {
+                        override fun onVideoFind(link: String) {
+                            viewModel.movieUrl.postValue(link)
+                            requireActivity().runOnUiThread {
+                                binding.watchButtonText.text = getString(R.string.watch_online)
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
 
             findFilmController?.progress?.observe(viewLifecycleOwner) {
 
@@ -245,8 +247,6 @@ class FilmFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        findFilmController?.onDestroy()
-        findFilmController = null
         super.onDestroyView()
     }
 }
