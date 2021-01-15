@@ -1,7 +1,6 @@
 package com.stenleone.stanleysfilm.ui.fragment
 
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,20 +13,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.ExoPlayerFactory.newSimpleInstance
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
-import com.google.android.exoplayer2.video.VideoListener
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentVideoBinding
 import com.stenleone.stanleysfilm.ui.activity.MainActivity
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
-import com.stenleone.stanleysfilm.util.extencial.throttleFirst
+import com.stenleone.stanleysfilm.util.extencial.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
@@ -62,10 +56,23 @@ class VideoFragment : BaseFragment() {
             videoUrl = it.getString(SAVE_VIDEO_URL)
         }
 
+        configurationWindow()
         setupMotionLay()
         setupDoubleClick()
         setupVideoView()
         setupClicks()
+    }
+
+    private fun configurationWindow() {
+        requireActivity().apply {
+            if (getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                hideStatusBar()
+                hideSystemButtons()
+            } else {
+                showStatusBar()
+                showSystemButtons()
+            }
+        }
     }
 
     private fun setupMotionLay() {
@@ -157,7 +164,7 @@ class VideoFragment : BaseFragment() {
             fullScreenButtonControls.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (resources.configuration.screenWidthDp < resources.configuration.screenHeightDp) {
+                    if (requireActivity().getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
                         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                     } else {
                         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -186,14 +193,14 @@ class VideoFragment : BaseFragment() {
     private fun reSetupPlayer() {
         binding.apply {
             val userAgent = Util.getUserAgent(requireContext(), requireContext().getString(R.string.app_name))
-            //2
             val mediaSource = ProgressiveMediaSource
                 .Factory(DefaultDataSourceFactory(context, userAgent))
                 .createMediaSource(Uri.parse(videoUrl))
-            //3
-            (videoView.player as SimpleExoPlayer).prepare(mediaSource)
-            //4
-            (videoView.player as SimpleExoPlayer).playWhenReady = true
+
+            (videoView.player as SimpleExoPlayer).apply {
+                prepare(mediaSource)
+                playWhenReady = true
+            }
         }
     }
 
@@ -212,7 +219,7 @@ class VideoFragment : BaseFragment() {
         videoUrl?.let {
             outState.putString(SAVE_VIDEO_URL, it)
         }
-        (binding.videoView.player as SimpleExoPlayer)?.let {
+        (binding.videoView.player as SimpleExoPlayer).let {
             outState.putLong(SAVE_POSITION_VIDEO, it.contentPosition)
             outState.putInt(SAVE_WINDOW_INDEX_VIDEO, it.currentWindowIndex)
         }

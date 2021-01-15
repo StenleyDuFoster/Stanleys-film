@@ -114,7 +114,6 @@ class FindFilmController(
 
     override fun onPageNotFound() {
 
-
         activity.runOnUiThread {
             countFoundTry++
 
@@ -132,11 +131,5 @@ class FindFilmController(
                 status.postValue("не удалось найти страницу")
             }
         }
-
     }
-
-    fun onDestroy() {
-
-    }
-
 }
