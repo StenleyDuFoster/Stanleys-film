@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
+import com.stenleone.stanleysfilm.managers.firebase.FirebaseAnalyticsManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
@@ -56,6 +57,8 @@ class FilmFragment : BaseFragment() {
     lateinit var studioAdapter: StudiosListRecycler
     @Inject
     lateinit var sharedPreferencesSortMainManager: SharedPreferencesSortMainManager
+    @Inject
+    lateinit var analyticsManagers: FirebaseAnalyticsManagers
 
     private var findFilmController: FindFilmController? = null
 
@@ -157,6 +160,7 @@ class FilmFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     viewModel.movieUrl.value?.let {
+                        analyticsManagers.openFilm(navArgs.movie?.title ?: "")
                         (requireActivity() as MainActivity).openVideoFragment(it)
                     }
                 }

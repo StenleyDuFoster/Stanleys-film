@@ -20,7 +20,8 @@ class MainActivity : BaseActivity() {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
-    @Inject lateinit var firebaseConfig: FirebaseRemoteConfigManager
+    @Inject
+    lateinit var firebaseConfig: FirebaseRemoteConfigManager
 
     override fun setup() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -57,9 +58,13 @@ class MainActivity : BaseActivity() {
     }
 
     private fun checkAppVersionFromConfig() {
-        if (BuildConfig.VERSION_CODE != firebaseConfig.getInt(FirebaseConfigsEnum.APP_VERSION_CODE)) {
+        firebaseConfig.getIntAsync(FirebaseConfigsEnum.APP_VERSION_CODE,
+            success = {
 
-        }
+            },
+            failure = {
+
+            })
     }
 
     override fun onBackPressed() {
