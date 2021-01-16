@@ -235,7 +235,7 @@ class VideoFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         (activity as MainActivity).also {
-            it.binding.mainMotionLayout.progress = 1f
+            it.binding.mainMotionLayout.progress = 0f
         }
     }
 }

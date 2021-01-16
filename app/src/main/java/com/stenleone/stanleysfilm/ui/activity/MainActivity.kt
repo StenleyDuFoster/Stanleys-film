@@ -1,5 +1,6 @@
 package com.stenleone.stanleysfilm.ui.activity
 
+import android.content.pm.ActivityInfo
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import com.stenleone.stanleysfilm.BuildConfig
@@ -12,6 +13,7 @@ import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
+import com.stenleone.stanleysfilm.util.extencial.getOrientation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
