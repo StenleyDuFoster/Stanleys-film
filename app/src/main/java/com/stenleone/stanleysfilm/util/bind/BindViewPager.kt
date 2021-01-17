@@ -37,8 +37,8 @@ class BindViewPager(private val pager: ViewPager) {
 
     private fun converterViewPagerAndBottomNavPosition(positionOrId: Int): Int {
         return when (positionOrId) {
-            R.id.navigation_dashboard -> FragmentViewPagerAdapter.SETTINGS_FRAGMENT
-            R.id.navigation_notifications -> FragmentViewPagerAdapter.SEARCH_FRAGMENT
+            R.id.navigation_dashboard -> FragmentViewPagerAdapter.SEARCH_FRAGMENT
+            R.id.navigation_notifications -> FragmentViewPagerAdapter.SETTINGS_FRAGMENT
             R.id.navigation_home -> FragmentViewPagerAdapter.MAIN_FRAGMENT
             FragmentViewPagerAdapter.SEARCH_FRAGMENT -> R.id.navigation_dashboard
             FragmentViewPagerAdapter.SETTINGS_FRAGMENT -> R.id.navigation_notifications

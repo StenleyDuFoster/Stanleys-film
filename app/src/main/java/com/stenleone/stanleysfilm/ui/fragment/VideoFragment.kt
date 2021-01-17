@@ -236,6 +236,10 @@ class VideoFragment : BaseFragment() {
         super.onDestroy()
         (activity as MainActivity).also {
             it.binding.mainMotionLayout.progress = 0f
+            if (it.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                it.showStatusBar()
+                it.showSystemButtons()
+            }
         }
     }
 }

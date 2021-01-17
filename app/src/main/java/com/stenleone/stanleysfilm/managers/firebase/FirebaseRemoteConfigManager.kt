@@ -19,10 +19,7 @@ class FirebaseRemoteConfigManager @Inject constructor() {
         fetchAndActivate()
     }
 
-    private val firebaseConfig
-        get() = firebaseRemoteConfig.apply { fetchAndActivate() }
-
-    fun getInt(config: FirebaseConfigsEnum) = firebaseConfig.getLong(config.key).toInt()
+    fun getInt(config: FirebaseConfigsEnum) = firebaseRemoteConfig.getLong(config.key).toInt()
 
     fun getIntAsync(config: FirebaseConfigsEnum,  success: (Int) -> Unit, failure: (String) -> Unit = {}) {
 
@@ -37,7 +34,7 @@ class FirebaseRemoteConfigManager @Inject constructor() {
             }
     }
 
-    fun getString(config: FirebaseConfigsEnum, vararg replace: String): String = firebaseConfig.getString(config.key).let { string ->
+    fun getString(config: FirebaseConfigsEnum, vararg replace: String): String = firebaseRemoteConfig.getString(config.key).let { string ->
         var result = string
         replace.forEach { result = result.replaceFirst("%s", it) }
         return result
@@ -58,5 +55,5 @@ class FirebaseRemoteConfigManager @Inject constructor() {
             }
     }
 
-    fun getBoolean(config: FirebaseConfigsEnum) = firebaseConfig.getBoolean(config.key)
+    fun getBoolean(config: FirebaseConfigsEnum) = firebaseRemoteConfig.getBoolean(config.key)
 }

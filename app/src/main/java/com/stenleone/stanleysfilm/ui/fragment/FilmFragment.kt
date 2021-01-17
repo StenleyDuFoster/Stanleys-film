@@ -18,7 +18,6 @@ import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseAnalyticsManagers
-import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
@@ -27,7 +26,6 @@ import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
-import com.stenleone.stanleysfilm.util.filmFinders.FindFilmController
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.copyToClipBoard
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
@@ -35,7 +33,6 @@ import com.stenleone.stanleysfilm.viewModel.network.FilmViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 import ru.ldralighieri.corbind.view.clicks
 import javax.inject.Inject
 
@@ -52,18 +49,18 @@ class FilmFragment : BaseFragment() {
 
     @Inject
     lateinit var genreAdapter: GenreListRecycler
+
     @Inject
     lateinit var recomendedMovieAdapter: HorizontalListMovie
+
     @Inject
     lateinit var studioAdapter: StudiosListRecycler
+
     @Inject
     lateinit var sharedPreferencesSortMainManager: SharedPreferencesSortMainManager
+
     @Inject
     lateinit var analyticsManagers: FirebaseAnalyticsManagers
-    @Inject
-    lateinit var firestoreManager: FirebaseCloudFirestoreManagers
-
-    private var findFilmController: FindFilmController? = null
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_film, container, false)
@@ -76,8 +73,6 @@ class FilmFragment : BaseFragment() {
         setupClicks()
         setupViewModelCallBack()
         setupRecyclerView()
-        searchVideoUrlFromFirestore()
-        searchVideoUrlFromWebView()
 
         savedInstanceState?.getInt(VERTICAL_SCROLL_POSITION)?.let {
             binding.nestedScrollContainer.scrollTo(0, it)
@@ -127,6 +122,15 @@ class FilmFragment : BaseFragment() {
         navArgs.movie?.id?.let {
             viewModel.getPageData(it)
         }
+        viewModel.startFindFilmUrl(navArgs.movie?.title ?: navArgs.movie?.originalTitle ?: "", navArgs.movie?.releaseDate)
+        viewModel.movieUrl.observe(viewLifecycleOwner, {
+            binding.watchButtonText.text = getString(R.string.watch_online)
+        })
+        viewModel.findFilmFilmixController.status.observe(viewLifecycleOwner, {
+            if (viewModel.movieUrl.value == null) {
+                binding.watchButtonText.text = it
+            }
+        })
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.movieDetails = it
             genreAdapter.itemList.clear()
@@ -218,55 +222,11 @@ class FilmFragment : BaseFragment() {
                 .launchIn(lifecycleScope)
         }
     }
-    private fun searchVideoUrlFromFirestore() {
-        firestoreManager.getMovieUrl(navArgs.movie?.title ?: "") {
-
-            if (viewModel.movieUrl.value == null) {
-                binding.watchButtonText.text = getString(R.string.watch_online)
-                viewModel.movieUrl.postValue(it)
-            }
-        }
-    }
-
-    private fun searchVideoUrlFromWebView() {
-        if (viewModel.movieUrl.value.isNullOrEmpty()) {
-            if (findFilmController == null) {
-                findFilmController = FindFilmController(
-                    requireActivity(),
-                    binding.webView,
-                    navArgs.movie?.title ?: navArgs.movie?.originalTitle.toString(),
-                    navArgs.movie?.releaseDate ?: "0000",
-                    object : CallBackVideoFromParser {
-                        override fun onVideoFind(link: String) {
-                            viewModel.movieUrl.postValue(link)
-                            firestoreManager.setMovieUrl(navArgs.movie?.title ?: "", link)
-                            requireActivity().runOnUiThread {
-                                binding.watchButtonText.text = getString(R.string.watch_online)
-                            }
-                        }
-                    }
-                )
-            }
-
-            findFilmController?.progress?.observe(viewLifecycleOwner) {
-
-            }
-            findFilmController?.status?.observe(viewLifecycleOwner) {
-                if (viewModel.movieUrl.value == null) {
-                    binding.watchButtonText.text = it
-                }
-            }
-        }
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (this::binding.isInitialized) {
             outState.putInt(VERTICAL_SCROLL_POSITION, binding.nestedScrollContainer.verticalScrollbarPosition)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }

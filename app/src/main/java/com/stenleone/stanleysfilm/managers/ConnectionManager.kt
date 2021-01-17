@@ -18,7 +18,7 @@ class ConnectionManager @Inject constructor(@ApplicationContext context: Context
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
 
-    var isConnected = MutableLiveData<Boolean>(isAvailableConnection())  // with initial value
+    var isConnected = MutableLiveData(isAvailableConnection())  // with initial value
 
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

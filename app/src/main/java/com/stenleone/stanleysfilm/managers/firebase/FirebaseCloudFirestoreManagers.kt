@@ -28,7 +28,7 @@ class FirebaseCloudFirestoreManagers @Inject constructor() {
     fun setMovieUrl(title: String, url: String) {
         val hashMap = HashMap<String, String>()
             .also {
-                it.put(MOVIE, url)
+                it[MOVIE] = url
             }
         store.collection(FILMIX).document(title)
             .set(hashMap)
