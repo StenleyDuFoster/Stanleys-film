@@ -10,7 +10,7 @@ import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.util.extencial.successOrError
-import com.stenleone.stanleysfilm.util.filmFinders.FindFilmFilmixController
+import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 

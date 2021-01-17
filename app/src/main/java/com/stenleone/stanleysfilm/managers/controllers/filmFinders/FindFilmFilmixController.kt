@@ -1,4 +1,4 @@
-package com.stenleone.stanleysfilm.util.filmFinders
+package com.stenleone.stanleysfilm.managers.controllers.filmFinders
 
 import android.annotation.SuppressLint
 import android.content.Context
