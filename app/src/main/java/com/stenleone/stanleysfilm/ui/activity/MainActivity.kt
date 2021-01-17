@@ -1,6 +1,7 @@
 package com.stenleone.stanleysfilm.ui.activity
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import com.stenleone.stanleysfilm.BuildConfig
@@ -71,7 +72,7 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         binding.apply {
-            if (supportFragmentManager.backStackEntryCount == 0) {
+            if (!((supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as? VideoFragment?)?.fullscreen ?: false)) {
                 if (!Navigation.findNavController(
                         this@MainActivity,
                         (viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavControllerId()
@@ -84,7 +85,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
             } else {
-                supportFragmentManager.popBackStack()
+                (supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as VideoFragment).collapseDown()
             }
         }
     }

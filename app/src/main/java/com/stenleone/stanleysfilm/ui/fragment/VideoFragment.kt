@@ -1,6 +1,7 @@
 package com.stenleone.stanleysfilm.ui.fragment
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -45,6 +46,7 @@ class VideoFragment : BaseFragment() {
 
     private lateinit var binding: FragmentVideoBinding
     private var videoUrl: String? = null
+    var fullscreen = false
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_video, container, false)
@@ -65,9 +67,10 @@ class VideoFragment : BaseFragment() {
 
     private fun configurationWindow() {
         requireActivity().apply {
-            if (getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            if (getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                 hideStatusBar()
                 hideSystemButtons()
+                fullscreen = true
             } else {
                 showStatusBar()
                 showSystemButtons()
@@ -85,15 +88,25 @@ class VideoFragment : BaseFragment() {
                     }
 
                     if (progress < 0.5) {
+                        fullscreen = false
                         controls.visibility = View.GONE
                         closeButton.visibility = View.VISIBLE
                     } else {
+                        fullscreen = true
                         closeButton.visibility = View.GONE
                         controls.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                    when (id) {
+                        R.id.collapsed -> {
+                            fullscreen = false
+                        }
+                        R.id.expanded -> {
+                            fullscreen = true
+                        }
+                    }
                 }
 
                 override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
@@ -164,7 +177,7 @@ class VideoFragment : BaseFragment() {
             fullScreenButtonControls.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (requireActivity().getOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                    if (requireActivity().getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
                         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                     } else {
                         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -187,6 +200,17 @@ class VideoFragment : BaseFragment() {
         binding.apply {
             videoUrl = url
             reSetupPlayer()
+        }
+    }
+
+    fun collapseDown() {
+        binding.apply {
+            requireActivity().apply {
+                if (getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                }
+            }
+            videoMotionLayout.transitionToState(R.id.collapsed)
         }
     }
 
@@ -236,7 +260,7 @@ class VideoFragment : BaseFragment() {
         super.onDestroy()
         (activity as MainActivity).also {
             it.binding.mainMotionLayout.progress = 0f
-            if (it.getOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            if (it.getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                 it.showStatusBar()
                 it.showSystemButtons()
             }

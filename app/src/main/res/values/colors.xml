@@ -6,6 +6,8 @@
     <color name="gray">#404040</color>
     <color name="active">#4264E1</color>
 
+    <color name="main_gray">#FF424242</color>
+
     <color name="half_black">#80000000</color>
     <color name="half_white">#80FFFFFF</color>
     <color name="transparent">#00000000</color>

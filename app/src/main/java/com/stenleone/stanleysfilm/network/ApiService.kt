@@ -10,6 +10,7 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_LATES
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RECOMENDED
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.MOVIE_DETAILS
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.POST_LIKE_MOVIE
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.SEARCH_MOVIE
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
@@ -79,5 +80,14 @@ interface ApiService {
         @Query("api_key") api_key: String = API_V3,
         @Query("guest_session_id") guest_session_id: String
     ): Deferred<Response<String>>
+
+    @GET(SEARCH_MOVIE)
+    fun searchMovie(
+        @Query("query") search: String,
+        @Query("api_key") api_key: String = API_V3,
+        @Query("language") language: String,
+        @Query("page") page: Int,
+        @Query("include_adult") includeAdult: Boolean = true
+    ): Deferred<Response<MoviesEntity>>
 
 }

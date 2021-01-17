@@ -23,11 +23,7 @@
     </fragment>
     <action
         android:id="@+id/action_global_filmFragment"
-        app:destination="@id/filmFragment"
-        app:enterAnim="@anim/top_to_middle_transition_anim"
-        app:exitAnim="@anim/middle_to_bottom_transition_anim"
-        app:popEnterAnim="@anim/bottom_to_middle_transition_anim"
-        app:popExitAnim="@anim/middle_to_top_transition_anim"/>
+        app:destination="@id/filmFragment"/>
 
     <fragment
         android:id="@+id/searchFragment"
@@ -63,10 +59,6 @@
     </fragment>
     <action
         android:id="@+id/action_global_moreMovieFragment"
-        app:destination="@id/moreMovieFragment"
-        app:enterAnim="@anim/top_to_middle_transition_anim"
-        app:exitAnim="@anim/middle_to_bottom_transition_anim"
-        app:popEnterAnim="@anim/bottom_to_middle_transition_anim"
-        app:popExitAnim="@anim/middle_to_top_transition_anim"/>
+        app:destination="@id/moreMovieFragment"/>
 
 </navigation>

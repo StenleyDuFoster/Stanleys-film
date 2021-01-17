@@ -36,7 +36,6 @@
 <!--        app:popExitAnim="@anim/middle_to_top_transition_anim"-->
 
     <fragment
-
         android:id="@+id/moreMovieFragment"
         android:name="com.stenleone.stanleysfilm.ui.fragment.MoreMovieFragment"
         android:label="MoreMovieFragment"

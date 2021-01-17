@@ -19,4 +19,6 @@ object TmdbNetworkConstant {
     const val GET_SESSION = "authentication/guest_session/new?"
     const val POST_LIKE_MOVIE = "movie/{movie_id}/rating?"
     const val DELETE_LIKE_MOVIE = "movie/{movie_id}/rating?"
+
+    const val SEARCH_MOVIE = "search/movie"
 }

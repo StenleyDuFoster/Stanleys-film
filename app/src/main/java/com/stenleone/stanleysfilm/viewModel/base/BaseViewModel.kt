@@ -36,7 +36,7 @@ abstract class BaseViewModel(
             inProgress.postValue(true)
             doCoroutineWork(doOnAsyncBlock, viewModelScope, IO)
         } catch (e: Exception) {
-            if (connectionManager.isConnected.value != true) {
+            if (connectionManager.isConnected.value == true) {
                 isFailure(RequestError.REQUEST_ERROR, e.message.toString())
             } else {
                 isFailure(RequestError.CONNECTION_ERROR, e.message.toString())

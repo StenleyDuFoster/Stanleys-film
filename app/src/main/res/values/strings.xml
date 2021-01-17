@@ -23,6 +23,10 @@
     <string name="title">Название:</string>
     <string name="budget">Бюджет</string>
     <string name="recomended_list">Вам может понравится</string>
+    <string name="search_hint">Поиск</string>
+    <string name="search_null">Ничего не найдено</string>
+    <string name="search_movie">Найденные фильмы</string>
+    <string name="search_movie_by_text">Найденные фильмы по запросу " %s "</string>
 
     <string name="recomended_listtitle">Похожие на</string>
 
