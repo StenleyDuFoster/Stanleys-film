@@ -8,9 +8,9 @@
     </data>
 
     <androidx.core.widget.NestedScrollView
-        android:background="@color/main_gray"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/main_gray">
 
         <LinearLayout
             android:id="@+id/container"
@@ -21,46 +21,60 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
+                android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                app:cardBackgroundColor="@color/half_black"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="5dp">
 
-                <EditText
-                    android:id="@+id/searchEditText"
+                <FrameLayout
+                    android:animateLayoutChanges="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="50dp"
-                    android:background="@color/transparent"
-                    android:fontFamily="@string/font_main"
-                    android:gravity="start"
-                    android:hint="@string/search_hint"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
+                    android:background="@color/half_black"
+                    android:padding="10dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="14dp"
-                    android:visibility="gone"
-                    app:cardBackgroundColor="@color/transparent"
-                    app:cardCornerRadius="20dp"
-                    app:cardElevation="0dp"
-                    tools:visibility="visible">
+                    <EditText
+                        android:id="@+id/searchEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="50dp"
+                        android:background="@color/transparent"
+                        android:fontFamily="@string/font_main"
+                        android:gravity="start"
+                        android:hint="@string/search_hint"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:outlineAmbientShadowColor="@color/transparent"
+                        android:outlineSpotShadowColor="@color/transparent"
+                        android:shadowColor="@color/transparent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorPrimary"
+                        android:textColorHint="@color/half_white"
+                        android:textSize="20sp" />
 
-                    <ImageView
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/clearEditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_close" />
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="14dp"
+                        android:visibility="gone"
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
+                        tools:visibility="visible">
 
-                </com.google.android.material.card.MaterialCardView>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_close" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </FrameLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -70,12 +84,13 @@
                 android:background="@color/colorPrimary" />
 
             <TextView
+                android:id="@+id/searchNull"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@string/font_main"
                 android:text="@string/search_null"
-                android:textColor="@color/half_black"
+                android:textColor="@color/colorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -85,55 +100,65 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/transparent"
-                app:cardElevation="0dp">
+                app:cardElevation="0dp"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@string/font_main"
+                            android:text="@string/search_movie"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/searchMovieSortSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:foreground="?selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_small_list"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/searchMovieSortBig"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="20dp"
+                            android:foreground="?selectableItemBackgroundBorderless"
+                            android:src="@drawable/ic_big_list"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_weight="1"
-                        android:fontFamily="@string/font_main"
-                        android:text="@string/search_movie"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:id="@+id/searchMovieSortSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:foreground="?selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_small_list"
-                        android:visibility="gone" />
-
-                    <ImageView
-                        android:id="@+id/searchMovieSortBig"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="20dp"
-                        android:foreground="?selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_big_list"
-                        android:visibility="gone" />
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:spanCount="3"
+                        tools:listitem="@layout/item_card_movie_small" />
 
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3"
-                tools:listitem="@layout/item_card_movie_small" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

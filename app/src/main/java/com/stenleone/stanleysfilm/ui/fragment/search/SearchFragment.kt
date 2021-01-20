@@ -69,6 +69,13 @@ class SearchFragment : BaseFragment() {
                     )
                 }
                 .launchIn(lifecycleScope)
+
+            clearEditText.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    searchEditText.text.clear()
+                }
+                .launchIn(lifecycleScope)
         }
     }
 
@@ -76,7 +83,11 @@ class SearchFragment : BaseFragment() {
         binding.apply {
             searchEditText.doOnTextChanged { text, start, before, count ->
                 if (text.toString().isNotBlank()) {
+                    clearEditText.visibility = View.VISIBLE
                     searchViewModel.search(text.toString())
+                } else {
+                    clearEditText.visibility = View.GONE
+                    searchMovieCard.visibility = View.GONE
                 }
             }
         }
@@ -101,6 +112,17 @@ class SearchFragment : BaseFragment() {
 
     private fun setupViewModelCallBacks() {
         searchViewModel.searchData.observe(viewLifecycleOwner) {
+
+            binding.apply {
+                if (it.movies.size > 0) {
+                    searchNull.visibility = View.GONE
+                    searchMovieCard.visibility = View.VISIBLE
+                } else {
+                    searchNull.visibility = View.VISIBLE
+                    searchMovieCard.visibility = View.GONE
+                }
+            }
+
             movieAdapter.itemList.clear()
             movieAdapter.itemList.addAll(it.movies)
             binding.recycler.adapter?.notifyDataSetChanged()

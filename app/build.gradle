@@ -16,8 +16,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         project.ext.set("archivesBaseName", "Stanley`s_film")
-        versionCode 2
-        versionName '1.0 alpha'
+        versionCode 3
+        versionName '1.1 alpha'
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

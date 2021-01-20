@@ -40,7 +40,7 @@ class FindFilmFilmixController @Inject constructor(
     val progress = MutableLiveData<Int>()
     val status = MutableLiveData<String>()
 
-    private val webView = WebView(context)
+    private lateinit var webView: WebView
     private var countFoundTry = 1
     private lateinit var titleMovie: String
     private lateinit var dateMovie: String
@@ -51,6 +51,7 @@ class FindFilmFilmixController @Inject constructor(
         dateMovie: String,
         loadVideoCallBack: CallBackVideoFromParser
     ) {
+        webView = WebView(context)
         this.titleMovie = titleMovie
         this.dateMovie = dateMovie
         this.loadVideoCallBack = loadVideoCallBack

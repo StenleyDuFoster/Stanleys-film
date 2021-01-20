@@ -175,11 +175,12 @@
                     app:strokeWidth="1dp">
 
                     <TextView
+                        android:background="@drawable/in_active_drawable"
                         android:id="@+id/watchButtonText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="10dp"
                         android:layout_weight="1"
                         android:fontFamily="@string/font_main"
                         android:text='@string/watch_online'

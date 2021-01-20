@@ -19,7 +19,6 @@
         android:id="@+id/collapsingToolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         android:tooltipText="dfdsfsdf"
         app:contentScrim="@color/colorPrimaryDark"
         app:expandedTitleGravity="top"
@@ -32,7 +31,6 @@
             android:id="@+id/titleImage"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
             app:layout_collapseMode="parallax"
             app:loadImage="@{image}" />

@@ -1,7 +1,6 @@
 package com.stenleone.stanleysfilm.ui.activity
 
-import android.content.pm.ActivityInfo
-import android.content.res.Configuration
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import com.stenleone.stanleysfilm.BuildConfig
@@ -14,7 +13,7 @@ import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
-import com.stenleone.stanleysfilm.util.extencial.getOrientation
+import com.stenleone.stanleysfilm.viewModel.masterDetails.DialogControllerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,6 +22,8 @@ class MainActivity : BaseActivity() {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
+    private val dialogControllerViewModel: DialogControllerViewModel by viewModels()
+
     @Inject
     lateinit var firebaseConfig: FirebaseRemoteConfigManager
 
@@ -61,9 +62,17 @@ class MainActivity : BaseActivity() {
     }
 
     private fun checkAppVersionFromConfig() {
-        firebaseConfig.getIntAsync(FirebaseConfigsEnum.APP_VERSION_CODE,
+        firebaseConfig.getIntAsync(FirebaseConfigsEnum.MIN_SUPPORT_VERSION_CODE,
             success = {
-
+                if (it > BuildConfig.VERSION_CODE) {
+                    dialogControllerViewModel.startUnSupportDialog(
+                        getString(R.string.version_app_title), getString(R.string.version_app_sub_title), getString(R.string.ok),
+                        {
+                            finish()
+                        },
+                        supportFragmentManager
+                    )
+                }
             },
             failure = {
 

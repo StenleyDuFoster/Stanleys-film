@@ -33,7 +33,7 @@ class FilmViewModel @ViewModelInject constructor(
 
     fun startFindFilmUrl(title: String, date: String?) {
         findByWebView(title, date)
-        findByFireStore(title)
+        findByFireStore(title, date)
     }
 
     private fun findByWebView(title: String, date: String?) {
@@ -43,13 +43,13 @@ class FilmViewModel @ViewModelInject constructor(
             object : CallBackVideoFromParser {
                 override fun onVideoFind(link: String) {
                     movieUrl.postValue(link)
-                    firestoreManager.setMovieUrl(title, link)
+                    firestoreManager.setMovieUrl(title, date ?: "0000", link)
                 }
             })
     }
 
-    private fun findByFireStore(title: String) {
-        firestoreManager.getMovieUrl(title) {
+    private fun findByFireStore(title: String, date: String?) {
+        firestoreManager.getMovieUrl(title, date ?: "0000") {
 
             if (movieUrl.value == null) {
                 movieUrl.postValue(it)

@@ -26,6 +26,7 @@ import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
+import com.stenleone.stanleysfilm.util.anim.ButtonTextColorAnimator
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.copyToClipBoard
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
@@ -46,6 +47,7 @@ class FilmFragment : BaseFragment() {
     private lateinit var binding: FragmentFilmBinding
     private val navArgs: FilmFragmentArgs by navArgs()
     private val viewModel: FilmViewModel by viewModels()
+    private lateinit var buttonColorAnim: ButtonTextColorAnimator
 
     @Inject
     lateinit var genreAdapter: GenreListRecycler
@@ -87,6 +89,7 @@ class FilmFragment : BaseFragment() {
                 donutProgressRate.text = (it * 10).toInt().toString()
             }
         }
+        buttonColorAnim = ButtonTextColorAnimator(requireContext())
     }
 
     private fun setupRecyclerView() {
@@ -124,7 +127,10 @@ class FilmFragment : BaseFragment() {
         }
         viewModel.startFindFilmUrl(navArgs.movie?.title ?: navArgs.movie?.originalTitle ?: "", navArgs.movie?.releaseDate)
         viewModel.movieUrl.observe(viewLifecycleOwner, {
-            binding.watchButtonText.text = getString(R.string.watch_online)
+            binding.apply {
+                buttonColorAnim.click(watchButtonText)
+                watchButtonText.text = getString(R.string.watch_online)
+            }
         })
         viewModel.findFilmFilmixController.status.observe(viewLifecycleOwner, {
             if (viewModel.movieUrl.value == null) {
