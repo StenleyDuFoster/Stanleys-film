@@ -27,8 +27,37 @@ class FilmViewModel @ViewModelInject constructor(
     val recomendedMovieList = MutableLiveData<MoviesEntity>()
 
     fun getPageData(id: Int) {
-        getMovieDetails(id)
-        getRecomendedMovieList(id)
+        doAsyncRequests(
+            arrayListOf(
+                {
+                    apiService.getMovieDetails(
+                        language = sharedPreferencesManager.language,
+                        movieId = id
+                    )
+                        .await()
+                        .successOrError(
+                            success = {
+                                movieDetails.postValue(it)
+                            }, {
+                                isFailure(RequestError.UNSUCCESS_STATUS, it)
+                            }
+                        )
+                }, {
+                    apiService.getRecomendedList(
+                        language = sharedPreferencesManager.language,
+                        movieId = id
+                    )
+                        .await()
+                        .successOrError(
+                            success = {
+                                recomendedMovieList.postValue(it)
+                            }, {
+                                isFailure(RequestError.UNSUCCESS_STATUS, it)
+                            }
+                        )
+                }
+            )
+        )
     }
 
     fun startFindFilmUrl(title: String, date: String?) {
@@ -76,7 +105,7 @@ class FilmViewModel @ViewModelInject constructor(
 
     private fun getRecomendedMovieList(id: Int) {
         doAsyncRequest {
-           apiService.getRecomendedList(
+            apiService.getRecomendedList(
                 language = sharedPreferencesManager.language,
                 movieId = id
             )

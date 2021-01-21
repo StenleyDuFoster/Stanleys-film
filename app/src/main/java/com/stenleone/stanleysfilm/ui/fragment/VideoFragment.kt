@@ -67,14 +67,13 @@ class VideoFragment : BaseFragment() {
 
     private fun configurationWindow() {
         requireActivity().apply {
-            if (getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
-                hideStatusBar()
-                hideSystemButtons()
-                fullscreen = true
-            } else {
-                showStatusBar()
-                showSystemButtons()
-            }
+//            if (getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+//                hideStatusBar()
+//                hideSystemButtons()
+//            } else {
+//                showStatusBar()
+//                showSystemButtons()
+//            }
         }
     }
 
@@ -208,9 +207,11 @@ class VideoFragment : BaseFragment() {
             requireActivity().apply {
                 if (getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                     requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                } else {
+                    videoMotionLayout.transitionToState(R.id.collapsed)
                 }
             }
-            videoMotionLayout.transitionToState(R.id.collapsed)
+
         }
     }
 

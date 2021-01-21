@@ -2,6 +2,7 @@ package com.stenleone.stanleysfilm.viewModel.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
@@ -17,8 +18,6 @@ abstract class BaseViewModel(
     protected val connectionManager: ConnectionManager
 ) : ViewModel() {
 
-    private var viewModelJob = Job()
-    private val viewModelScope = CoroutineScope(Main + viewModelJob)
     private var isActive = true
 
     val inProgress = MutableLiveData<Boolean>()
@@ -46,6 +45,26 @@ abstract class BaseViewModel(
         }
     }
 
+    fun <P> doAsyncRequests(doOnAsyncBlock: ArrayList<suspend CoroutineScope.() -> P>) {
+        viewModelScope.launch {
+
+            inProgress.postValue(true)
+            doOnAsyncBlock.forEachIndexed { index, suspendFunction ->
+                try {
+                    suspendFunction.invoke(this)
+                } catch (e: Exception) {
+                    if (connectionManager.isConnected.value == true) {
+                        isFailure(RequestError.REQUEST_ERROR, e.message.toString())
+                    } else {
+                        isFailure(RequestError.CONNECTION_ERROR, e.message.toString())
+                    }
+
+                }
+                inProgress.postValue(false)
+            }
+        }
+    }
+
     private inline fun <P> doCoroutineWork(
         crossinline doOnAsyncBlock: suspend CoroutineScope.() -> P,
         coroutineScope: CoroutineScope,
@@ -61,6 +80,5 @@ abstract class BaseViewModel(
     override fun onCleared() {
         super.onCleared()
         isActive = false
-        viewModelJob.cancel()
     }
 }

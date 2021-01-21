@@ -1,8 +1,11 @@
 package com.stenleone.stanleysfilm.util.extencial
 
+import android.view.View
+import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import ru.ldralighieri.corbind.view.clicks
 import java.util.*
 
 fun <T> Flow<T>.throttleLatest(periodMillis: Long): Flow<T> {
@@ -50,4 +53,13 @@ fun <T> Flow<T>.throttleFirst(periodMillis: Long): Flow<T> {
             }
         }
     }
+}
+
+fun View.throttleClicks(onEach: () -> Unit, scope: CoroutineScope, periodMillis: Long = BindingConstant.SMALL_THROTTLE) {
+    this.clicks()
+        .throttleFirst(periodMillis)
+        .onEach {
+            onEach.invoke()
+        }
+        .launchIn(scope)
 }

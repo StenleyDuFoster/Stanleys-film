@@ -17,6 +17,10 @@ class SettingsNavHostFragment : BaseFragment(), FragmentWithNavController {
         return R.id.navHostSettingsFragment
     }
 
+    override fun popToStart() {
+        Navigation.findNavController(requireActivity(), getNavControllerId()).popBackStack()
+    }
+
     private lateinit var binding: FragmentSettingsNavHostBinding
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {

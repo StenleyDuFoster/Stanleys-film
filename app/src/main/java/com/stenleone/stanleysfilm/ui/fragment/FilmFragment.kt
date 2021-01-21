@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
@@ -29,7 +31,9 @@ import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.anim.ButtonTextColorAnimator
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.copyToClipBoard
+import com.stenleone.stanleysfilm.util.extencial.throttleClicks
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
+import com.stenleone.stanleysfilm.viewModel.masterDetails.DialogControllerViewModel
 import com.stenleone.stanleysfilm.viewModel.network.FilmViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -47,6 +51,7 @@ class FilmFragment : BaseFragment() {
     private lateinit var binding: FragmentFilmBinding
     private val navArgs: FilmFragmentArgs by navArgs()
     private val viewModel: FilmViewModel by viewModels()
+    private val dialogControllerViewModel: DialogControllerViewModel by activityViewModels()
     private lateinit var buttonColorAnim: ButtonTextColorAnimator
 
     @Inject
@@ -128,8 +133,10 @@ class FilmFragment : BaseFragment() {
         viewModel.startFindFilmUrl(navArgs.movie?.title ?: navArgs.movie?.originalTitle ?: "", navArgs.movie?.releaseDate)
         viewModel.movieUrl.observe(viewLifecycleOwner, {
             binding.apply {
-                buttonColorAnim.click(watchButtonText)
-                watchButtonText.text = getString(R.string.watch_online)
+                if (watchButtonText.text != getString(R.string.watch_online)) {
+                    buttonColorAnim.toActive(watchButtonText)
+                    watchButtonText.text = getString(R.string.watch_online)
+                }
             }
         })
         viewModel.findFilmFilmixController.status.observe(viewLifecycleOwner, {
@@ -226,6 +233,18 @@ class FilmFragment : BaseFragment() {
                     )
                 }
                 .launchIn(lifecycleScope)
+
+            rateMovie.throttleClicks(
+                {
+                    dialogControllerViewModel.startUnSupportDialog( // TODO: HARDCODE
+                        "test", "test", "test",
+                        {
+                            it?.dismiss()
+                        },
+                        childFragmentManager
+                    )
+                }, lifecycleScope
+            )
         }
     }
 

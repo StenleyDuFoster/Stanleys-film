@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Build
 import android.view.View
 import android.view.WindowInsets
@@ -21,10 +22,10 @@ fun Activity.copyToClipBoard(copyText: String?) {
 }
 
 fun Activity.getOrientation(): Int {
-    return if (resources.configuration.screenWidthDp < resources.configuration.screenHeightDp) {
-        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Configuration.ORIENTATION_PORTRAIT
     } else {
-        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        Configuration.ORIENTATION_LANDSCAPE
     }
 }
 

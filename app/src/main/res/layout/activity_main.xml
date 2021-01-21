@@ -9,13 +9,13 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/fragmentPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="?attr/actionBarSize" />
+            android:paddingBottom="?attr/actionBarSize" />
 
         <androidx.constraintlayout.motion.widget.MotionLayout
             android:id="@+id/mainMotionLayout"

@@ -3,6 +3,7 @@ package com.stenleone.stanleysfilm.util.bind
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.stenleone.stanleysfilm.R
+import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 
 class BindViewPager(private val pager: ViewPager) {
@@ -32,6 +33,10 @@ class BindViewPager(private val pager: ViewPager) {
         nav.setOnNavigationItemSelectedListener {
             pager.currentItem = converterViewPagerAndBottomNavPosition(it.itemId)
             return@setOnNavigationItemSelectedListener true
+        }
+
+        nav.setOnNavigationItemReselectedListener {
+           ((pager.adapter as FragmentViewPagerAdapter).listFragments[pager.currentItem] as FragmentWithNavController).popToStart()
         }
     }
 

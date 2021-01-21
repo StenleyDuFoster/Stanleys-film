@@ -17,6 +17,10 @@ class SearchNavHostFragment : BaseFragment(), FragmentWithNavController {
         return R.id.navHostSearchFragment
     }
 
+    override fun popToStart() {
+        Navigation.findNavController(requireActivity(), getNavControllerId()).popBackStack()
+    }
+
     private lateinit var binding: FragmentSearchNavHostBinding
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
