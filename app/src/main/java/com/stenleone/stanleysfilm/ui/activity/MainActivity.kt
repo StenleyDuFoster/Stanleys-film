@@ -81,7 +81,7 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         binding.apply {
-            if (!((supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as? VideoFragment?)?.fullscreen ?: false)) {
+            if ((supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as? VideoFragment?)?.fullscreen != true) {
                 if (!Navigation.findNavController(
                         this@MainActivity,
                         (viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavControllerId()

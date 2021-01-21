@@ -36,6 +36,9 @@ class MoreMovieViewModel @ViewModelInject constructor(
             TmdbNetworkConstant.LIST_MOVIE_TOP_UPCOMING -> {
                 getMovieList(typeList, page)
             }
+            TmdbNetworkConstant.SEARCH_MOVIE -> {
+                search(movieId ?: "", page)
+            }
             else -> {
                 isFailure(RequestError.UNSUCCESS_STATUS, "TMDB CONSTANT FAIL")
             }
@@ -66,6 +69,24 @@ class MoreMovieViewModel @ViewModelInject constructor(
                 language = sharedPreferencesManager.language,
                 movieId = id,
                 page = page
+            )
+                .await()
+                .successOrError(
+                    success = {
+                        movieList.postValue(it)
+                    }, {
+                        isFailure(RequestError.UNSUCCESS_STATUS, it)
+                    }
+                )
+        }
+    }
+
+    fun search(keywords: String, page: Int) {
+        doAsyncRequest {
+            apiService.searchMovie(
+                search = keywords,
+                page = page,
+                language = sharedPreferencesManager.language,
             )
                 .await()
                 .successOrError(

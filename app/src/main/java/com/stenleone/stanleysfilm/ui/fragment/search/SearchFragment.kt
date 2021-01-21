@@ -61,8 +61,8 @@ class SearchFragment : BaseFragment() {
                     findNavController().navigate(
                         MoreMovieFragmentDirections.actionGlobalMoreMovieFragment(
                             searchViewModel.searchData.value,
-                            TmdbNetworkConstant.LIST_MOVIE_POPULAR,
-                            null,
+                            TmdbNetworkConstant.SEARCH_MOVIE,
+                            searchEditText.text.toString(),
                             (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition(),
                             SpannableString(getString(R.string.search_movie_by_text, searchEditText.text.toString())).toString()
                         )

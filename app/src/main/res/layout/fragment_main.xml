@@ -39,12 +39,14 @@
                     android:text="@string/latest_episodes"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/latestShimmerViewContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/card"
@@ -64,18 +66,18 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_weight="1"
                                 android:layout_width="200dp"
                                 android:layout_height="190dp"
                                 android:layout_gravity="center_horizontal"
+                                android:layout_weight="1"
                                 android:minWidth="100dp"
                                 android:scaleType="centerCrop"
                                 app:loadImage="@{latestEpisode.posterPath}" />
 
                             <RelativeLayout
-                                android:layout_weight="1"
                                 android:layout_width="150dp"
                                 android:layout_height="match_parent"
+                                android:layout_weight="1"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -132,50 +134,56 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@string/font_main"
-                            android:text="@string/now_playing"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/nowPlayingSortSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_small_list" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@string/font_main"
+                                android:text="@string/now_playing"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/nowPlayingSortBig"
-                            android:layout_width="wrap_content"
+                            <ImageView
+                                android:id="@+id/nowPlayingSortSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_small_list" />
+
+                            <ImageView
+                                android:id="@+id/nowPlayingSortBig"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="20dp"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_big_list" />
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerNowPlaying"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="20dp"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_big_list" />
+                            android:clipToPadding="false"
+                            android:orientation="horizontal"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="3"
+                            tools:listitem="@layout/item_card_movie_small" />
 
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerNowPlaying"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/item_card_movie_small" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/popularText"
@@ -187,50 +195,56 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@string/font_main"
-                            android:text="@string/popular"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/popularSortSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_small_list" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@string/font_main"
+                                android:text="@string/popular"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/popularSortBig"
-                            android:layout_width="wrap_content"
+                            <ImageView
+                                android:id="@+id/popularSortSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_small_list" />
+
+                            <ImageView
+                                android:id="@+id/popularSortBig"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="20dp"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_big_list" />
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerPopular"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="20dp"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_big_list" />
+                            android:clipToPadding="false"
+                            android:orientation="horizontal"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="10"
+                            tools:listitem="@layout/item_card_movie_small" />
 
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerPopular"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/item_card_movie_small" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/topRatedText"
@@ -242,50 +256,56 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@string/font_main"
-                            android:text="@string/top_rated"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/topRatedSortSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_small_list" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@string/font_main"
+                                android:text="@string/top_rated"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/topRatedSortBig"
-                            android:layout_width="wrap_content"
+                            <ImageView
+                                android:id="@+id/topRatedSortSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_small_list" />
+
+                            <ImageView
+                                android:id="@+id/topRatedSortBig"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="20dp"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_big_list" />
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerTopRated"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="20dp"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_big_list" />
+                            android:clipToPadding="false"
+                            android:orientation="horizontal"
+                            android:paddingStart="15dp"
+                            android:paddingEnd="15dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="10"
+                            tools:listitem="@layout/item_card_movie_small" />
 
                     </LinearLayout>
-
                 </com.google.android.material.card.MaterialCardView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerTopRated"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/item_card_movie_small" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/upcomingText"
@@ -297,51 +317,56 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@string/font_main"
-                            android:text="@string/upcoming"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/upcomingSortSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_small_list" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@string/font_main"
+                                android:text="@string/upcoming"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
-                        <ImageView
-                            android:id="@+id/upcomingSortBig"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="20dp"
-                            android:foreground="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/ic_big_list" />
+                            <ImageView
+                                android:id="@+id/upcomingSortSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_small_list" />
 
+                            <ImageView
+                                android:id="@+id/upcomingSortBig"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="20dp"
+                                android:foreground="?selectableItemBackgroundBorderless"
+                                android:src="@drawable/ic_big_list" />
+
+                        </LinearLayout>
                     </LinearLayout>
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerUpcoming"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="10"
+                        tools:listitem="@layout/item_card_movie_small" />
+
                 </com.google.android.material.card.MaterialCardView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerUpcoming"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/item_card_movie_small" />
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -43,7 +43,8 @@ class MoreMovieFragment : BaseFragment() {
     private lateinit var binding: FragmentMoreMovieBinding
     private val navArgs: MoreMovieFragmentArgs by navArgs()
     private val viewModel: MoreMovieViewModel by viewModels()
-    @Inject lateinit var adapter: HorizontalListMovie
+    @Inject
+    lateinit var adapter: HorizontalListMovie
 
     private var lastLoadedPage = 1
 
@@ -78,7 +79,7 @@ class MoreMovieFragment : BaseFragment() {
     }
 
     private fun setupViewModelCallBack() {
-        viewModel.getPage(navArgs.searchType ?: "", 2)
+        viewModel.getPage(navArgs.searchType ?: "", 2, navArgs.movieRecomendedId)
         lastLoadedPage = 2
 
         viewModel.movieList.observe(viewLifecycleOwner) {
@@ -118,7 +119,7 @@ class MoreMovieFragment : BaseFragment() {
                     if ((recycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > adapter.itemList.size - PAGINATION_SIZE && viewModel.inProgress.value != true) {
                         if (lastLoadedPage + 1 <= navArgs.movieEntity?.totalPages ?: 0) {
                             lastLoadedPage++
-                            viewModel.getPage(navArgs.searchType ?: "", lastLoadedPage)
+                            viewModel.getPage(navArgs.searchType ?: "", lastLoadedPage, navArgs.movieRecomendedId)
                         }
                     }
                 }
