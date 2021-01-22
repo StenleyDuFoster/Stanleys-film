@@ -22,9 +22,8 @@ class FirebaseRemoteConfigManager @Inject constructor() {
     fun getInt(config: FirebaseConfigsEnum) = firebaseRemoteConfig.getLong(config.key).toInt()
 
     fun getIntAsync(config: FirebaseConfigsEnum,  success: (Int) -> Unit, failure: (String) -> Unit = {}) {
-
         firebaseRemoteConfig.fetchAndActivate()
-            .addOnSuccessListener {
+            .addOnCompleteListener {
                 firebaseRemoteConfig.getLong(config.key).let { long ->
                     success(long.toInt())
                 }

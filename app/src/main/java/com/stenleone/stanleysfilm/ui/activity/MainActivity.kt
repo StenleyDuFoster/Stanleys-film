@@ -65,7 +65,7 @@ class MainActivity : BaseActivity() {
     private fun checkAppVersionFromConfig() {
         firebaseConfig.getIntAsync(FirebaseConfigsEnum.MIN_SUPPORT_VERSION_CODE,
             success = {
-                if (it < BuildConfig.VERSION_CODE) {
+                if (it > BuildConfig.VERSION_CODE) {
                     dialogControllerViewModel.startUnSupportDialog(
                         getString(R.string.version_app_title), getString(R.string.version_app_sub_title), getString(R.string.ok),
                         {
