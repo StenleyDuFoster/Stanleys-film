@@ -1,6 +1,7 @@
 package com.stenleone.stanleysfilm.ui.dialog
 
 import android.R
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,7 @@ class UnSupportVersionDialog : DialogFragment() {
     ): View? {
         dialog?.window?.setBackgroundDrawableResource(R.color.transparent)
         dialog?.setCanceledOnTouchOutside(false)
+        setCancelable(false)
         binding = DialogMessageBinding.inflate(inflater)
         return binding.root
     }
@@ -60,7 +62,13 @@ class UnSupportVersionDialog : DialogFragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
+    override fun onCancel(dialog: DialogInterface) {
+
     }
+
+    override fun onDismiss(dialog: DialogInterface) {
+
+    }
+
+
 }

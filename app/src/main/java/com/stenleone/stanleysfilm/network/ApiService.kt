@@ -2,15 +2,16 @@ package com.stenleone.stanleysfilm.network
 
 import com.stenleone.stanleysfilm.network.ApiConstant.API_SORT
 import com.stenleone.stanleysfilm.network.ApiConstant.API_V3
-import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.DELETE_LIKE_MOVIE
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_IMAGE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_SESSION
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_LATES
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RECOMENDED
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.MOVIE_DETAILS
-import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.POST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.SEARCH_MOVIE
+import com.stenleone.stanleysfilm.network.entity.images.ImagesEntity
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
@@ -66,7 +67,14 @@ interface ApiService {
         @Query("api_key") api_key: String = API_V3
     ): Deferred<Response<GuestSessionEntity>>
 
-    @POST(POST_LIKE_MOVIE)
+    @GET(GET_IMAGE)
+    fun getImageList(
+        @Path("movie_id") movieId: Int,
+        @Query("language") language: String,
+        @Query("api_key") api_key: String = API_V3
+    ): Deferred<Response<ImagesEntity>>
+
+    @POST(LIKE_MOVIE)
     fun postLikeMovieAsync(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String = API_V3,
@@ -74,7 +82,7 @@ interface ApiService {
         @Body userData: String
     ): Deferred<Response<String>>
 
-    @DELETE(DELETE_LIKE_MOVIE)
+    @DELETE(LIKE_MOVIE)
     fun deleteLikeMovieAsync(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String = API_V3,

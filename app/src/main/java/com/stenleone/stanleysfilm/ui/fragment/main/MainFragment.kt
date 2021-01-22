@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentMainBinding
-import com.stenleone.stanleysfilm.interfaces.ItemClick
+import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
@@ -214,7 +214,7 @@ class MainFragment : BaseFragment() {
             recyclerTopRated.adapter = topRatedAdapter
             recyclerUpcoming.adapter = upComingAdapter
 
-            val clickListener = object : ItemClick {
+            val clickListener = object : ItemClickParcelable {
                 override fun click(item: Parcelable) {
                     if (item is Movie) {
                         findNavController().navigate(

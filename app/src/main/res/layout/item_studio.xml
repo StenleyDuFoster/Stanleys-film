@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="studio"
             type="com.stenleone.stanleysfilm.network.entity.movie.ProductionCompany" />
@@ -37,6 +39,18 @@
                     android:layout_margin="5dp"
                     app:loadImage="@{studio.logoPath}"
                     tools:background="@color/active" />
+
+                <TextView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@string/font_main"
+                    android:gravity="center"
+                    android:singleLine="false"
+                    android:text="@{studio.name}"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:visibility="@{studio.logoPath == null ? View.VISIBLE : View.GONE}" />
 
             </com.google.android.material.card.MaterialCardView>
         </com.facebook.shimmer.ShimmerFrameLayout>

@@ -16,8 +16,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         project.ext.set("archivesBaseName", "Stanley`s_film")
-        versionCode 3
-        versionName '1.1 alpha'
+        versionCode 4
+        versionName '1.2 alpha'
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -117,8 +117,10 @@ dependencies {
 
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'//---------------------------------------Progress bars
 
-    implementation "com.google.android.exoplayer:exoplayer:2.11.3"//--------------------------------Exo Player
-    implementation "com.google.android.exoplayer:extension-okhttp:2.11.3"
+    implementation "com.google.android.exoplayer:exoplayer:2.12.0"//--------------------------------Exo Player
+    implementation "com.google.android.exoplayer:extension-okhttp:2.12.0"
 
     implementation 'com.github.vkay94:DoubleTapPlayerView:0.7.0'//----------------------------------Exo player double tap
+
+    implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'//-------------------------------ImageViewer
 }

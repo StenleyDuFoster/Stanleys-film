@@ -13,6 +13,7 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeToRefresh"
+        tools:ignore="ContentDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -31,7 +32,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_weight="1"
@@ -126,6 +127,7 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/nowPlayingText"
+                    android:layout_marginTop="50dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/transparent"
@@ -142,7 +144,7 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
                                 android:layout_weight="1"

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentSearchBinding
-import com.stenleone.stanleysfilm.interfaces.ItemClick
+import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
@@ -94,7 +94,7 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun setupRecycler() {
-        val filmClickListener = object : ItemClick {
+        val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
                 if (item is Movie) {
                     findNavController().navigate(

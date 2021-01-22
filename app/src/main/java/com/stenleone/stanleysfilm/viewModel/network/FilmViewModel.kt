@@ -11,6 +11,7 @@ import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
+import com.stenleone.stanleysfilm.network.entity.images.ImagesEntity
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 
@@ -24,6 +25,7 @@ class FilmViewModel @ViewModelInject constructor(
 
     val movieUrl = MutableLiveData<String?>()
     val movieDetails = MutableLiveData<MovieDetailsEntity>()
+    val imageList = MutableLiveData<ImagesEntity>()
     val recomendedMovieList = MutableLiveData<MoviesEntity>()
 
     fun getPageData(id: Int) {
@@ -51,6 +53,19 @@ class FilmViewModel @ViewModelInject constructor(
                         .successOrError(
                             success = {
                                 recomendedMovieList.postValue(it)
+                            }, {
+                                isFailure(RequestError.UNSUCCESS_STATUS, it)
+                            }
+                        )
+                }, {
+                    apiService.getImageList(
+                        language = sharedPreferencesManager.language,
+                        movieId = id
+                    )
+                        .await()
+                        .successOrError(
+                            success = {
+                                imageList.postValue(it)
                             }, {
                                 isFailure(RequestError.UNSUCCESS_STATUS, it)
                             }

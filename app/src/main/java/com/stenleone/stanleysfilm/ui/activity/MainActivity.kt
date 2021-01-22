@@ -9,6 +9,7 @@ import com.stenleone.stanleysfilm.databinding.ActivityMainBinding
 import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseRemoteConfigManager
 import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
+import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
@@ -44,11 +45,11 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    fun openVideoFragment(videoUrl: String) {
+    fun openVideoFragment(videoUrl: String, movie: Movie) {
         if (supportFragmentManager.backStackEntryCount > 0) {
-            (supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as VideoFragment).updateVideoUrl(videoUrl)
+            (supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as VideoFragment).updateVideoUrl(videoUrl, movie)
         } else {
-            VideoFragment.newInstance(videoUrl).also {
+            VideoFragment.newInstance(videoUrl, movie).also {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainer, it, VideoFragment.TAG)
                     .addToBackStack(VideoFragment.TAG)

@@ -3,27 +3,18 @@ package com.stenleone.stanleysfilm.ui.adapter.recyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.stenleone.stanleysfilm.databinding.ItemCardMovieBigBinding
-import com.stenleone.stanleysfilm.databinding.ItemCardMovieSmallBinding
 import com.stenleone.stanleysfilm.databinding.ItemGenreBinding
-import com.stenleone.stanleysfilm.interfaces.ItemClick
+import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
 import com.stenleone.stanleysfilm.network.entity.movie.Genre
-import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
-import com.stenleone.stanleysfilm.util.constant.BindingConstant
-import com.stenleone.stanleysfilm.util.extencial.throttleFirst
-import dagger.Component
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import ru.ldralighieri.corbind.view.clicks
 import java.util.ArrayList
 import javax.inject.Inject
 
 class GenreListRecycler @Inject constructor() : BaseRecyclerView() {
 
     val itemList: ArrayList<Genre> = arrayListOf()
-    lateinit var listener: ItemClick
+    lateinit var listener: ItemClickParcelable
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return GenreHolder(ItemGenreBinding.inflate(LayoutInflater.from(parent.context)))

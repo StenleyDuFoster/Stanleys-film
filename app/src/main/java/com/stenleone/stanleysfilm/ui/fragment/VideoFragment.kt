@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentVideoBinding
+import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.activity.MainActivity
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
@@ -38,14 +39,17 @@ class VideoFragment : BaseFragment() {
         const val SAVE_POSITION_VIDEO = "video_player_position"
         const val SAVE_WINDOW_INDEX_VIDEO = "video_player_window_index"
         const val SAVE_VIDEO_URL = "video_url"
+        const val SAVE_MOVIE = "movie_obj"
 
-        fun newInstance(url: String?): VideoFragment = VideoFragment().also { f ->
+        fun newInstance(url: String?, movie: Movie): VideoFragment = VideoFragment().also { f ->
             f.videoUrl = url
+            f.movie = movie
         }
     }
 
     private lateinit var binding: FragmentVideoBinding
     private var videoUrl: String? = null
+    private var movie: Movie? = null
     var fullscreen = false
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
@@ -56,6 +60,7 @@ class VideoFragment : BaseFragment() {
     override fun setup(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             videoUrl = it.getString(SAVE_VIDEO_URL)
+            movie = it.getParcelable(SAVE_MOVIE)
         }
 
         configurationWindow()
@@ -151,6 +156,7 @@ class VideoFragment : BaseFragment() {
         binding.apply {
             val playControlButton = videoView.findViewById<ImageButton>(R.id.playPauseButton)
             val fullScreenButtonControls = videoView.findViewById<ImageButton>(R.id.fullscreenButton)
+            title.text = movie?.title ?: movie?.originalTitle
 
             closeButton.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
@@ -188,6 +194,14 @@ class VideoFragment : BaseFragment() {
 
     private fun setupVideoView() {
         binding.apply {
+            videoView.setOnTouchListener { v, event ->
+                videoMotionLayout.onTouchEvent(event)
+                return@setOnTouchListener false
+            }
+            playerDoubleTapContainer.setOnTouchListener { v, event ->
+                videoMotionLayout.onTouchEvent(event)
+                return@setOnTouchListener false
+            }
             val player = SimpleExoPlayer.Builder(requireContext()).build()
             videoView.player = player
             playerDoubleTapContainer.setPlayer(player)
@@ -195,8 +209,10 @@ class VideoFragment : BaseFragment() {
         }
     }
 
-    fun updateVideoUrl(url: String) {
+    fun updateVideoUrl(url: String, movie: Movie) {
         binding.apply {
+            this@VideoFragment.movie = movie
+            title.text = movie.title
             videoUrl = url
             reSetupPlayer()
         }
@@ -219,7 +235,7 @@ class VideoFragment : BaseFragment() {
         binding.apply {
             val userAgent = Util.getUserAgent(requireContext(), requireContext().getString(R.string.app_name))
             val mediaSource = ProgressiveMediaSource
-                .Factory(DefaultDataSourceFactory(context, userAgent))
+                .Factory(DefaultDataSourceFactory(requireContext(), userAgent))
                 .createMediaSource(Uri.parse(videoUrl))
 
             (videoView.player as SimpleExoPlayer).apply {
@@ -243,6 +259,9 @@ class VideoFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
         videoUrl?.let {
             outState.putString(SAVE_VIDEO_URL, it)
+        }
+        movie?.let {
+            outState.putParcelable(SAVE_MOVIE, it)
         }
         (binding.videoView.player as SimpleExoPlayer).let {
             outState.putLong(SAVE_POSITION_VIDEO, it.contentPosition)

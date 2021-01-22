@@ -5,13 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.databinding.ItemCardMovieBigBinding
 import com.stenleone.stanleysfilm.databinding.ItemCardMovieSmallBinding
-import com.stenleone.stanleysfilm.interfaces.ItemClick
+import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
-import dagger.Component
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
@@ -30,7 +29,7 @@ class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
 
     var typeHolder = TYPE_SMALL
     val itemList: ArrayList<Movie> = arrayListOf()
-    lateinit var listener: ItemClick
+    lateinit var listener: ItemClickParcelable
 
     override fun getItemViewType(position: Int): Int {
         return if (position < itemList.size) {

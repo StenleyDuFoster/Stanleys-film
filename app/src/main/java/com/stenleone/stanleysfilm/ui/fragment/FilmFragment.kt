@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
+import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
+import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseAnalyticsManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
@@ -27,6 +28,7 @@ import com.stenleone.stanleysfilm.ui.activity.MainActivity
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
+import com.stenleone.stanleysfilm.ui.adapter.viewPager.ImageViewPager
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.anim.ButtonTextColorAnimator
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
@@ -69,6 +71,9 @@ class FilmFragment : BaseFragment() {
     @Inject
     lateinit var analyticsManagers: FirebaseAnalyticsManagers
 
+    @Inject
+    lateinit var imageViewPager: ImageViewPager
+
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_film, container, false)
         return binding.root
@@ -77,6 +82,7 @@ class FilmFragment : BaseFragment() {
     override fun setup(savedInstanceState: Bundle?) {
 
         setupArgs()
+        setupToolbarViewPager()
         setupClicks()
         setupViewModelCallBack()
         setupRecyclerView()
@@ -97,9 +103,26 @@ class FilmFragment : BaseFragment() {
         buttonColorAnim = ButtonTextColorAnimator(requireContext())
     }
 
+    private fun setupToolbarViewPager() {
+        binding.apply {
+            navArgs.movie?.backdropPath?.let {
+                imageViewPager.listItems.add(it)
+            }
+
+            imageViewPager.title = navArgs.movie?.title ?: navArgs.movie?.originalTitle ?: ""
+            imageViewPager.moveListener = object : ItemClick {
+                override fun click(position: Int) {
+                    toolbarLay.titlePager.setCurrentItem(position, false)
+                }
+            }
+
+            toolbarLay.titlePager.adapter = imageViewPager
+        }
+    }
+
     private fun setupRecyclerView() {
 
-        val filmClickListener = object : ItemClick {
+        val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
                 if (item is Movie) {
                     findNavController().navigate(
@@ -134,14 +157,32 @@ class FilmFragment : BaseFragment() {
         viewModel.movieUrl.observe(viewLifecycleOwner, {
             binding.apply {
                 if (watchButtonText.text != getString(R.string.watch_online)) {
+                    progressLoadUrl.visibility = View.GONE
                     buttonColorAnim.toActive(watchButtonText)
                     watchButtonText.text = getString(R.string.watch_online)
                 }
             }
         })
+        viewModel.imageList.observe(viewLifecycleOwner) {
+            binding.toolbarLay.apply {
+                rightArrow.visibility = View.VISIBLE
+                leftArrow.visibility = View.VISIBLE
+
+                val oldItemCount = imageViewPager.listItems.size
+                it.posters.forEach {
+                    imageViewPager.listItems.add(it.file_path)
+                }
+                titlePager.adapter?.notifyItemChanged(oldItemCount, imageViewPager.listItems.size - 1)
+            }
+        }
         viewModel.findFilmFilmixController.status.observe(viewLifecycleOwner, {
             if (viewModel.movieUrl.value == null) {
                 binding.watchButtonText.text = it
+            }
+        })
+        viewModel.findFilmFilmixController.progress.observe(viewLifecycleOwner, {
+            if (viewModel.movieUrl.value == null && it == FindFilmFilmixController.FAILED_FIND) {
+                binding.progressLoadUrl.visibility = View.GONE
             }
         })
         viewModel.movieDetails.observe(viewLifecycleOwner) {
@@ -180,9 +221,11 @@ class FilmFragment : BaseFragment() {
             watchButton.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    viewModel.movieUrl.value?.let {
+                    viewModel.movieUrl.value?.let { url ->
                         analyticsManagers.openFilm(navArgs.movie?.title ?: "")
-                        (requireActivity() as MainActivity).openVideoFragment(it)
+                        navArgs.movie?.let { movie ->
+                            (requireActivity() as MainActivity).openVideoFragment(url, movie)
+                        }
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -243,6 +286,24 @@ class FilmFragment : BaseFragment() {
                         },
                         childFragmentManager
                     )
+                }, lifecycleScope
+            )
+            toolbarLay.rightArrow.throttleClicks(
+                {
+                    toolbarLay.titlePager.currentItem = if (toolbarLay.titlePager.currentItem < imageViewPager.listItems.size - 1) {
+                        toolbarLay.titlePager.currentItem + 1
+                    } else {
+                        0
+                    }
+                }, lifecycleScope
+            )
+            toolbarLay.leftArrow.throttleClicks(
+                {
+                    toolbarLay.titlePager.currentItem = if (toolbarLay.titlePager.currentItem > 0) {
+                        toolbarLay.titlePager.currentItem - 1
+                    } else {
+                        imageViewPager.listItems.size - 1
+                    }
                 }, lifecycleScope
             )
         }

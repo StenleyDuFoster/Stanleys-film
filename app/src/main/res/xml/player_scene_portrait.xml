@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Transition
+        android:id="@+id/layTransition"
         app:constraintSetEnd="@id/expanded"
         app:constraintSetStart="@id/collapsed"
         app:duration="300"
@@ -17,7 +18,7 @@
         <KeyFrameSet>
             <KeyAttribute
                 app:framePosition="0"
-                app:motionTarget="@id/videoViewLay">
+                app:motionTarget="@id/videoViewCardContainer">
                 <CustomAttribute
                     app:attributeName="EndPadding"
                     app:customDimension="250dp" />
