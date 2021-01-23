@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.stenleone.stanleysfilm.util.extencial.hideKeybord
-import dagger.hilt.android.AndroidEntryPoint
+import com.stenleone.stanleysfilm.util.extencial.hideKeyboard
 
 abstract class BaseFragment : Fragment() {
 
@@ -22,7 +21,7 @@ abstract class BaseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setup(savedInstanceState)
-        requireActivity().hideKeybord()
+        requireActivity().hideKeyboard()
     }
 
     protected abstract fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View

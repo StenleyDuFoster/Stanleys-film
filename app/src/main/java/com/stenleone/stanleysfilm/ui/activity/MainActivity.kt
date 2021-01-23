@@ -15,7 +15,6 @@ import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
-import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
 import com.stenleone.stanleysfilm.viewModel.masterDetails.DialogControllerViewModel
@@ -53,7 +52,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupEventBus() {
-        var subscription = MessageEventBus.asChannel<OpenFilmEvent>()
+        var subscription = MessageEventBus.asChannel()
         lifecycleScope.launch {
             subscription.consumeEach { event ->
                 if (event is OpenFilmEvent) {

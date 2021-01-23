@@ -12,12 +12,16 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false">
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerViewContainer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card"
@@ -55,10 +59,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
+                            android:ellipsize="end"
                             android:fontFamily="@string/font_main"
                             android:gravity="center"
                             android:maxLines="3"
-                            android:ellipsize="end"
                             android:singleLine="false"
                             android:text="@{movie.title}"
                             android:textStyle="bold" />
@@ -78,9 +82,9 @@
 
                         <TextView
                             android:id="@+id/overviewDate"
-                            android:layout_alignParentBottom="true"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
                             android:layout_margin="5dp"
                             android:fontFamily="@string/font_main"
                             android:gravity="center"

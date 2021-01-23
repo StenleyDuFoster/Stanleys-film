@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="com.stenleone.stanleysfilm.BuildConfig"/>
+
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -15,6 +17,23 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textOriginalTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@string/font_main"
+                android:foreground="?selectableItemBackground"
+                android:maxLines="3"
+                android:singleLine="false"
+                android:text='@{BuildConfig.VERSION_NAME + " " + BuildConfig.VERSION_CODE}'
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -12,7 +12,7 @@ object MessageEventBus {
             bus.send(o)
     }
 
-    inline fun <reified T> asChannel(): ReceiveChannel<Any> {
+    inline fun asChannel(): ReceiveChannel<Any> {
         return bus.openSubscription()
     }
 }

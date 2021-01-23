@@ -57,7 +57,7 @@ fun Activity.showSystemButtons() {
     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 }
 
-fun Activity.hideKeybord() {
+fun Activity.hideKeyboard() {
     val imm: InputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     var view: View? = this.getCurrentFocus()
     if (view == null) {

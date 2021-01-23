@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.goodbarber.sharjah.eventbus.MessageEventBus
 import com.goodbarber.sharjah.eventbus.eventmodels.OpenFilmEvent
@@ -14,10 +14,9 @@ import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentMainNavHostBinding
 import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
 import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+
 
 class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
 
@@ -26,7 +25,8 @@ class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
     }
 
     override fun popToStart() {
-        Navigation.findNavController(requireActivity(), getNavControllerId()).popBackStack()
+        val navOptions = NavOptions.Builder().setPopUpTo(R.id.mainFragment, true).build()
+        Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(R.id.mainFragment, null, navOptions)
     }
 
     private lateinit var binding: FragmentMainNavHostBinding
@@ -38,7 +38,7 @@ class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
 
     override fun setup(savedInstanceState: Bundle?) {
         binding.apply {
-            var subscription = MessageEventBus.asChannel<OpenFilmEvent>()
+            var subscription = MessageEventBus.asChannel()
 
             lifecycleScope.launch {
                 subscription.consumeEach { event ->

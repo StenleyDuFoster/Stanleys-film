@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentSettingsNavHostBinding
@@ -18,7 +19,8 @@ class SettingsNavHostFragment : BaseFragment(), FragmentWithNavController {
     }
 
     override fun popToStart() {
-        Navigation.findNavController(requireActivity(), getNavControllerId()).popBackStack()
+        val navOptions = NavOptions.Builder().setPopUpTo(R.id.settingsFragment, true).build()
+        Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(R.id.settingsFragment, null, navOptions)
     }
 
     private lateinit var binding: FragmentSettingsNavHostBinding
