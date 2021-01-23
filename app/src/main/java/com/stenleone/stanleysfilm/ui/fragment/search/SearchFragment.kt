@@ -18,7 +18,7 @@ import com.stenleone.stanleysfilm.databinding.FragmentSearchBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
-import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
+import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.MoreMovieFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
@@ -38,7 +38,7 @@ class SearchFragment : BaseFragment() {
     private val searchViewModel: SearchViewModel by viewModels()
 
     @Inject
-    lateinit var movieAdapter: HorizontalListMovie
+    lateinit var movieAdapterAdapter: ListMovieAdapter
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
@@ -104,9 +104,9 @@ class SearchFragment : BaseFragment() {
             }
         }
         binding.apply {
-            movieAdapter.listener = filmClickListener
+            movieAdapterAdapter.listener = filmClickListener
             recycler.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            recycler.adapter = movieAdapter
+            recycler.adapter = movieAdapterAdapter
         }
     }
 
@@ -123,8 +123,8 @@ class SearchFragment : BaseFragment() {
                 }
             }
 
-            movieAdapter.itemList.clear()
-            movieAdapter.itemList.addAll(it.movies)
+            movieAdapterAdapter.itemList.clear()
+            movieAdapterAdapter.itemList.addAll(it.movies)
             binding.recycler.adapter?.notifyDataSetChanged()
         }
     }

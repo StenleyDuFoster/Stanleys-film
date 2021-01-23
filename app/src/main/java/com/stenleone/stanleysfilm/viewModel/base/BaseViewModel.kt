@@ -22,7 +22,7 @@ abstract class BaseViewModel(
 
     val inProgress = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<RequestError>()
-    val isFailure: (errorMessage: String, type: String) -> Unit = { errorMessage: String, type: String ->
+    val isFailure: (type: String, errorMessage: String) -> Unit = { type: String, errorMessage: String ->
         errorLiveData.postValue(RequestError(type = type, message = errorMessage))
     }
 

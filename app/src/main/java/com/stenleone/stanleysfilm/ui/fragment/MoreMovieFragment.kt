@@ -19,7 +19,7 @@ import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentMoreMovieBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
-import com.stenleone.stanleysfilm.ui.adapter.recyclerView.HorizontalListMovie
+import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
@@ -44,7 +44,7 @@ class MoreMovieFragment : BaseFragment() {
     private val navArgs: MoreMovieFragmentArgs by navArgs()
     private val viewModel: MoreMovieViewModel by viewModels()
     @Inject
-    lateinit var adapter: HorizontalListMovie
+    lateinit var adapter: ListMovieAdapter
 
     private var lastLoadedPage = 1
 

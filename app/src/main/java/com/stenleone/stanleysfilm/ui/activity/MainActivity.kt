@@ -2,7 +2,10 @@ package com.stenleone.stanleysfilm.ui.activity
 
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import com.goodbarber.sharjah.eventbus.MessageEventBus
+import com.goodbarber.sharjah.eventbus.eventmodels.OpenFilmEvent
 import com.stenleone.stanleysfilm.BuildConfig
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.ActivityMainBinding
@@ -12,10 +15,13 @@ import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
+import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
 import com.stenleone.stanleysfilm.viewModel.masterDetails.DialogControllerViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,6 +39,7 @@ class MainActivity : BaseActivity() {
 
         setupViewPager()
         checkAppVersionFromConfig()
+        setupEventBus()
     }
 
     private fun setupViewPager() {
@@ -42,6 +49,17 @@ class MainActivity : BaseActivity() {
             fragmentPager.offscreenPageLimit = 3
 
             BindViewPager(fragmentPager).withBottomNav(bottomNavView)
+        }
+    }
+
+    private fun setupEventBus() {
+        var subscription = MessageEventBus.asChannel<OpenFilmEvent>()
+        lifecycleScope.launch {
+            subscription.consumeEach { event ->
+                if (event is OpenFilmEvent) {
+                    binding.fragmentPager.currentItem = 0
+                }
+            }
         }
     }
 

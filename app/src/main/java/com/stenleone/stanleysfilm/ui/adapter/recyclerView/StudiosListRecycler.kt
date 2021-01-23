@@ -29,7 +29,7 @@ class StudiosListRecycler @Inject constructor() : BaseRecyclerView() {
 
     override fun getItemCount(): Int {
         return if(itemList.size == 0) {
-            HorizontalListMovie.DEFAULT_LIST_SIZE
+            ListMovieAdapter.DEFAULT_LIST_SIZE
         } else {
             itemList.size
         }

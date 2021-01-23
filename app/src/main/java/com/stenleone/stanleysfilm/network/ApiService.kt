@@ -9,6 +9,7 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_LATES
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RECOMENDED
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_SIMILAR
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.MOVIE_DETAILS
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.SEARCH_MOVIE
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntity
@@ -47,6 +48,14 @@ interface ApiService {
 
     @GET(LIST_RECOMENDED)
     fun getRecomendedList(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") api_key: String = API_V3,
+        @Query("language") language: String,
+        @Query("page") page: Int = 1
+    ): Deferred<Response<MoviesEntity>>
+
+    @GET(LIST_SIMILAR)
+    fun getSimilarList(
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,

@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.databinding.ItemCardMovieBigBinding
 import com.stenleone.stanleysfilm.databinding.ItemCardMovieSmallBinding
+import com.stenleone.stanleysfilm.databinding.ItemCardMovieVerticalBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
@@ -17,12 +18,13 @@ import ru.ldralighieri.corbind.view.clicks
 import java.util.ArrayList
 import javax.inject.Inject
 
-class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
+class ListMovieAdapter @Inject constructor() : BaseRecyclerView() {
 
     companion object {
         const val TYPE_SMALL = 0
         const val TYPE_LARGE = 1
         const val TYPE_MORE_INFO = 2
+        const val TYPE_VERTICAL = 2
 
         const val DEFAULT_LIST_SIZE = 10
     }
@@ -43,6 +45,7 @@ class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
         return when (viewType) {
             TYPE_SMALL -> SmallMovieHolder(ItemCardMovieSmallBinding.inflate(LayoutInflater.from(parent.context)))
             TYPE_LARGE -> LargeMovieHolder(ItemCardMovieBigBinding.inflate(LayoutInflater.from(parent.context)))
+            TYPE_VERTICAL -> VerticalMovieHolder(ItemCardMovieVerticalBinding.inflate(LayoutInflater.from(parent.context)))
             else -> WatchMoreMovieHolder(ItemCardMovieSmallBinding.inflate(LayoutInflater.from(parent.context)))
         }
     }
@@ -60,8 +63,10 @@ class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
 
         override fun bind() {
             binding.apply {
-                movie = itemList[adapterPosition]
-                shimmerViewContainer.hideShimmer()
+                if (itemList.size > 0) {
+                    movie = itemList[adapterPosition]
+                    shimmerViewContainer.hideShimmer()
+                }
             }
 
             setupClicks()
@@ -71,7 +76,7 @@ class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
             binding.card.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (this@HorizontalListMovie::listener.isInitialized) {
+                    if (this@ListMovieAdapter::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
                     }
                 }
@@ -88,8 +93,10 @@ class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
 
         override fun bind() {
             binding.apply {
-                movie = itemList[adapterPosition]
-                shimmerViewContainer.hideShimmer()
+                if (itemList.size > 0) {
+                    movie = itemList[adapterPosition]
+                    shimmerViewContainer.hideShimmer()
+                }
             }
 
             setupClicks()
@@ -99,7 +106,7 @@ class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
             binding.card.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (this@HorizontalListMovie::listener.isInitialized) {
+                    if (this@ListMovieAdapter::listener.isInitialized) {
                         listener.click(itemList[adapterPosition])
                     }
                 }
@@ -122,7 +129,41 @@ class HorizontalListMovie @Inject constructor() : BaseRecyclerView() {
             binding.card.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    if (this@HorizontalListMovie::listener.isInitialized) {
+                    if (this@ListMovieAdapter::listener.isInitialized) {
+                        try {
+                            listener.click(itemList[adapterPosition])
+                        } catch (e: IndexOutOfBoundsException) {
+
+                        }
+                    }
+                }
+                .launchIn(recyclerScope)
+        }
+
+        override fun unBind() {
+
+        }
+    }
+
+    inner class VerticalMovieHolder(val binding: ItemCardMovieVerticalBinding) :
+        RecyclerView.ViewHolder(binding.root), RecyclerViewInterface {
+
+        override fun bind() {
+            binding.apply {
+                if (itemList.size > 0) {
+                    movie = itemList[adapterPosition]
+                    shimmerViewContainer.hideShimmer()
+                }
+            }
+
+            setupClicks()
+        }
+
+        private fun setupClicks() {
+            binding.card.clicks()
+                .throttleFirst(BindingConstant.SMALL_THROTTLE)
+                .onEach {
+                    if (this@ListMovieAdapter::listener.isInitialized) {
                         try {
                             listener.click(itemList[adapterPosition])
                         } catch (e: IndexOutOfBoundsException) {

@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,24 +12,37 @@ import android.widget.ImageButton
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
+import com.goodbarber.sharjah.eventbus.MessageEventBus
+import com.goodbarber.sharjah.eventbus.eventmodels.OpenFilmEvent
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentVideoBinding
+import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.network.entity.movie.Movie
 import com.stenleone.stanleysfilm.ui.activity.MainActivity
+import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.*
+import com.stenleone.stanleysfilm.viewModel.network.VideoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
+import javax.inject.Inject
 import kotlin.math.abs
 
+@AndroidEntryPoint
 class VideoFragment : BaseFragment() {
 
     companion object {
@@ -48,9 +62,13 @@ class VideoFragment : BaseFragment() {
     }
 
     private lateinit var binding: FragmentVideoBinding
+    private val viewModel: VideoViewModel by viewModels()
     private var videoUrl: String? = null
     private var movie: Movie? = null
     var fullscreen = false
+
+    @Inject
+    lateinit var movieAdapterAdapter: ListMovieAdapter
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_video, container, false)
@@ -65,6 +83,8 @@ class VideoFragment : BaseFragment() {
 
         configurationWindow()
         setupMotionLay()
+        setupRecyclerView()
+        setupViewModelCallBack()
         setupDoubleClick()
         setupVideoView()
         setupClicks()
@@ -125,6 +145,41 @@ class VideoFragment : BaseFragment() {
                 (activity as MainActivity).also {
                     it.binding.mainMotionLayout.progress = 1f
                 }
+            }
+        }
+    }
+
+    private fun setupRecyclerView() {
+        val filmClickListener = object : ItemClickParcelable {
+            override fun click(item: Parcelable) {
+                if (item is Movie) {
+                    lifecycleScope.launch {
+                        MessageEventBus.send(OpenFilmEvent(item))
+                    }
+                    binding.videoMotionLayout.transitionToState(R.id.collapsed)
+                }
+            }
+        }
+        binding.apply {
+            movieAdapterAdapter.also {
+                it.listener = filmClickListener
+                it.typeHolder = ListMovieAdapter.TYPE_VERTICAL
+            }
+            recyclerView.adapter = movieAdapterAdapter
+            recyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        }
+    }
+
+    private fun setupViewModelCallBack() {
+        viewModel.apply {
+            if (movieList.value?.movies?.size ?: 0 == 0) {
+                getSimilarMovieList(movie?.id ?: 0, 1)
+            }
+
+            movieList.observe(viewLifecycleOwner) {
+                movieAdapterAdapter.itemList.clear()
+                movieAdapterAdapter.itemList.addAll(it.movies)
+                movieAdapterAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -210,7 +265,9 @@ class VideoFragment : BaseFragment() {
     }
 
     fun updateVideoUrl(url: String, movie: Movie) {
+        viewModel.getSimilarMovieList(movie.id, 1)
         binding.apply {
+            videoMotionLayout.transitionToState(R.id.collapsed)
             this@VideoFragment.movie = movie
             title.text = movie.title
             videoUrl = url

@@ -13,6 +13,7 @@ object TmdbNetworkConstant {
     const val LIST_MOVIE_TOP_UPCOMING = "upcoming"
     const val MOVIE_DETAILS = "movie/{movie_id}"
     const val LIST_RECOMENDED = "$MOVIE_DETAILS/recommendations"
+    const val LIST_SIMILAR = "$MOVIE_DETAILS/similar"
     const val LIST_LIKE_MOVIE = "guest_session/{session_id}/rated/movies?"
     const val GET_SESSION = "authentication/guest_session/new?"
     const val LIKE_MOVIE = "$MOVIE_DETAILS/rating?"
