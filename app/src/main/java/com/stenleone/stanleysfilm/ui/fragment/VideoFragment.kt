@@ -14,7 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
@@ -27,7 +26,7 @@ import com.google.android.exoplayer2.util.Util
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentVideoBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
-import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.activity.MainActivity
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
@@ -55,16 +54,16 @@ class VideoFragment : BaseFragment() {
         const val SAVE_VIDEO_URL = "video_url"
         const val SAVE_MOVIE = "movie_obj"
 
-        fun newInstance(url: String?, movie: Movie): VideoFragment = VideoFragment().also { f ->
+        fun newInstance(url: String?, movieUI: MovieUI): VideoFragment = VideoFragment().also { f ->
             f.videoUrl = url
-            f.movie = movie
+            f.movieUI = movieUI
         }
     }
 
     private lateinit var binding: FragmentVideoBinding
     private val viewModel: VideoViewModel by viewModels()
     private var videoUrl: String? = null
-    private var movie: Movie? = null
+    private var movieUI: MovieUI? = null
     var fullscreen = false
 
     @Inject
@@ -78,7 +77,7 @@ class VideoFragment : BaseFragment() {
     override fun setup(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             videoUrl = it.getString(SAVE_VIDEO_URL)
-            movie = it.getParcelable(SAVE_MOVIE)
+            movieUI = it.getParcelable(SAVE_MOVIE)
         }
 
         configurationWindow()
@@ -152,7 +151,7 @@ class VideoFragment : BaseFragment() {
     private fun setupRecyclerView() {
         val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
-                if (item is Movie) {
+                if (item is MovieUI) {
                     lifecycleScope.launch {
                         MessageEventBus.send(OpenFilmEvent(item))
                     }
@@ -173,7 +172,7 @@ class VideoFragment : BaseFragment() {
     private fun setupViewModelCallBack() {
         viewModel.apply {
             if (movieList.value?.movies?.size ?: 0 == 0) {
-                getSimilarMovieList(movie?.id ?: 0, 1)
+                getSimilarMovieList(movieUI?.id ?: 0, 1)
             }
 
             movieList.observe(viewLifecycleOwner) {
@@ -211,7 +210,7 @@ class VideoFragment : BaseFragment() {
         binding.apply {
             val playControlButton = videoView.findViewById<ImageButton>(R.id.playPauseButton)
             val fullScreenButtonControls = videoView.findViewById<ImageButton>(R.id.fullscreenButton)
-            title.text = movie?.title ?: movie?.originalTitle
+            title.text = movieUI?.title ?: movieUI?.originalTitle
 
             closeButton.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
@@ -264,12 +263,12 @@ class VideoFragment : BaseFragment() {
         }
     }
 
-    fun updateVideoUrl(url: String, movie: Movie) {
-        viewModel.getSimilarMovieList(movie.id, 1)
+    fun updateVideoUrl(url: String, movieUI: MovieUI) {
+        viewModel.getSimilarMovieList(movieUI.id, 1)
         binding.apply {
             videoMotionLayout.transitionToState(R.id.collapsed)
-            this@VideoFragment.movie = movie
-            title.text = movie.title
+            this@VideoFragment.movieUI = movieUI
+            title.text = movieUI.title
             videoUrl = url
             reSetupPlayer()
         }
@@ -317,7 +316,7 @@ class VideoFragment : BaseFragment() {
         videoUrl?.let {
             outState.putString(SAVE_VIDEO_URL, it)
         }
-        movie?.let {
+        movieUI?.let {
             outState.putParcelable(SAVE_MOVIE, it)
         }
         (binding.videoView.player as SimpleExoPlayer).let {

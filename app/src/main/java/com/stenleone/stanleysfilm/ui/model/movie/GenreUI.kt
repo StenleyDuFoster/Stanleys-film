@@ -1,8 +1,8 @@
 package com.stenleone.stanleysfilm.network.entity.movie
 
-import com.stenleone.stanleysfilm.interfaces.model.Network
+import com.stenleone.stanleysfilm.interfaces.model.UI
 
-data class Genre(
+data class GenreUI(
     val id: Int,
     val name: String
-): Network
+): UI

@@ -1,8 +1,8 @@
 package com.stenleone.stanleysfilm.network.entity.movie
 
-import com.stenleone.stanleysfilm.interfaces.model.Network
+import com.stenleone.stanleysfilm.interfaces.model.UI
 
-data class ProductionCountry(
+data class ProductionCountryUI(
     val iso_3166_1: String,
     val name: String
-): Network
+): UI

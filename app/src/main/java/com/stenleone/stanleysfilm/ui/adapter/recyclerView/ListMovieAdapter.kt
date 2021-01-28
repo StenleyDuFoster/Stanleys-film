@@ -8,7 +8,7 @@ import com.stenleone.stanleysfilm.databinding.ItemCardMovieSmallBinding
 import com.stenleone.stanleysfilm.databinding.ItemCardMovieVerticalBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
-import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
@@ -30,7 +30,7 @@ class ListMovieAdapter @Inject constructor() : BaseRecyclerView() {
     }
 
     var typeHolder = TYPE_SMALL
-    val itemList: ArrayList<Movie> = arrayListOf()
+    val itemList: ArrayList<MovieUI> = arrayListOf()
     lateinit var listener: ItemClickParcelable
 
     override fun getItemViewType(position: Int): Int {

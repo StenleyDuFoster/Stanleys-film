@@ -17,7 +17,7 @@ import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentSearchBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
-import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.MoreMovieFragmentDirections
@@ -96,7 +96,7 @@ class SearchFragment : BaseFragment() {
     private fun setupRecycler() {
         val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
-                if (item is Movie) {
+                if (item is MovieUI) {
                     findNavController().navigate(
                         FilmFragmentDirections.actionGlobalFilmFragment(item)
                     )

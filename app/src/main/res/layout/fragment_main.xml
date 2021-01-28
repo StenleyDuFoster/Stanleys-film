@@ -7,7 +7,7 @@
 
         <variable
             name="latestEpisode"
-            type="com.stenleone.stanleysfilm.network.entity.lates.LatesEntity" />
+            type="com.stenleone.stanleysfilm.network.entity.lates.LatesEntityUI" />
 
     </data>
 

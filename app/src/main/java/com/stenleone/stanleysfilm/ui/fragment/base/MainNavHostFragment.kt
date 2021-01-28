@@ -45,7 +45,7 @@ class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
                     if (event is OpenFilmEvent) {
                         Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(
                             FilmFragmentDirections.actionGlobalFilmFragment(
-                                event.movie
+                                event.movieUI
                             )
                         )
                     }

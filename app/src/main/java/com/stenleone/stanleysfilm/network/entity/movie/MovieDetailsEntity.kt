@@ -1,15 +1,16 @@
 package com.stenleone.stanleysfilm.network.entity.movie
 
 import com.google.gson.annotations.SerializedName
+import com.stenleone.stanleysfilm.interfaces.model.Network
 
 data class MovieDetailsEntity(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String,
     @SerializedName("belongs_to_collection")
-    val belongsToCollection: BelongsToCollection,
+    val belongsToCollectionUI: BelongsToCollectionUI,
     val budget: Int?,
-    val genres: ArrayList<Genre>,
+    val genres: ArrayList<GenreUI>,
     val homepage: String,
     val id: Int,
     @SerializedName("imdb_id")
@@ -23,15 +24,15 @@ data class MovieDetailsEntity(
     @SerializedName("poster_path")
     val posterPath: String,
     @SerializedName("production_companies")
-    val productionCompanies: ArrayList<ProductionCompany>,
+    val productionCompaniesUI: ArrayList<ProductionCompanyUI>,
     @SerializedName("production_countries")
-    val productionCountries: ArrayList<ProductionCountry>,
+    val productionCountriesUI: ArrayList<ProductionCountryUI>,
     @SerializedName("release_date")
     val releaseDate: String,
     val revenue: Int,
     val runtime: Int,
     @SerializedName("spoken_languages")
-    val spokenLanguages: ArrayList<SpokenLanguage>,
+    val spokenLanguagesUI: ArrayList<SpokenLanguageUI>,
     val status: String,
     @SerializedName("tagline")
     val tagLine: String,
@@ -41,4 +42,4 @@ data class MovieDetailsEntity(
     val voteAverage: Double,
     @SerializedName("vote_count")
     val voteCount: Int
-)
+): Network

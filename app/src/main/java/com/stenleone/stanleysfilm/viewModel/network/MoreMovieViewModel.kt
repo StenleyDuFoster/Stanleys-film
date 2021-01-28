@@ -7,7 +7,7 @@ import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
-import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 
@@ -17,7 +17,7 @@ class MoreMovieViewModel @ViewModelInject constructor(
     connectionManager: ConnectionManager
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
-    val movieList = MutableLiveData<MoviesEntity>()
+    val movieList = MutableLiveData<MoviesEntityUI>()
 
     fun getPage(typeList: String, page: Int, movieId: String? = null) {
         when (typeList) {
@@ -55,7 +55,7 @@ class MoreMovieViewModel @ViewModelInject constructor(
                 .await()
                 .successOrError(
                     success = {
-                        movieList.postValue(it)
+//                        movieList.postValue(it)
                     }, {
                         isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }

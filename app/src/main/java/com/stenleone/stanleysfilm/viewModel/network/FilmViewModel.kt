@@ -7,11 +7,11 @@ import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManage
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
-import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
-import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
+import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
-import com.stenleone.stanleysfilm.network.entity.images.ImagesEntity
+import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 
@@ -24,9 +24,9 @@ class FilmViewModel @ViewModelInject constructor(
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
     val movieUrl = MutableLiveData<String?>()
-    val movieDetails = MutableLiveData<MovieDetailsEntity>()
-    val imageList = MutableLiveData<ImagesEntity>()
-    val recomendedMovieList = MutableLiveData<MoviesEntity>()
+    val movieDetails = MutableLiveData<MovieDetailsEntityUI>()
+    val imageList = MutableLiveData<ImagesEntityUI>()
+    val recomendedMovieList = MutableLiveData<MoviesEntityUI>()
 
     fun getPageData(id: Int) {
         doAsyncRequests(

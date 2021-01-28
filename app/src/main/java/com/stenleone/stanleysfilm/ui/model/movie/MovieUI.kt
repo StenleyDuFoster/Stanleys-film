@@ -2,10 +2,11 @@ package com.stenleone.stanleysfilm.network.entity.movie
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.stenleone.stanleysfilm.interfaces.model.Network
+import com.stenleone.stanleysfilm.interfaces.model.UI
 import kotlinx.android.parcel.Parcelize
 
-data class Movie(
+@Parcelize
+data class MovieUI(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String,
@@ -28,4 +29,4 @@ data class Movie(
     val voteAverage: Float?,
     @SerializedName("vote_count")
     val voteCount: Int?
-): Network
+): Parcelable, UI

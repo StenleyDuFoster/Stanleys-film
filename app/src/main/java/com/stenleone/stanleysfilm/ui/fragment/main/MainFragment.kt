@@ -3,7 +3,6 @@ package com.stenleone.stanleysfilm.ui.fragment.main
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -18,7 +17,7 @@ import com.stenleone.stanleysfilm.databinding.FragmentMainBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
-import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
 import com.stenleone.stanleysfilm.ui.fragment.MoreMovieFragmentDirections
@@ -217,7 +216,7 @@ class MainFragment : BaseFragment() {
 
             val clickListener = object : ItemClickParcelable {
                 override fun click(item: Parcelable) {
-                    if (item is Movie) {
+                    if (item is MovieUI) {
                         findNavController().navigate(
                             FilmFragmentDirections.actionGlobalFilmFragment(item)
                         )

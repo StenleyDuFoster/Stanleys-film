@@ -9,11 +9,11 @@
 
         <variable
             name="movie"
-            type="com.stenleone.stanleysfilm.network.entity.movie.Movie" />
+            type="com.stenleone.stanleysfilm.network.entity.movie.MovieUI" />
 
         <variable
             name="movieDetails"
-            type="com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity" />
+            type="com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI" />
 
     </data>
 

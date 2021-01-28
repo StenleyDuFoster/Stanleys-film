@@ -23,7 +23,7 @@ import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmi
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseAnalyticsManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
-import com.stenleone.stanleysfilm.network.entity.movie.Movie
+import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.activity.MainActivity
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
@@ -124,7 +124,7 @@ class FilmFragment : BaseFragment() {
 
         val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
-                if (item is Movie) {
+                if (item is MovieUI) {
                     findNavController().navigate(
                         FilmFragmentDirections.actionGlobalFilmFragment(item)
                     )
@@ -193,7 +193,7 @@ class FilmFragment : BaseFragment() {
             genreAdapter.itemList.addAll(it.genres)
 
             studioAdapter.itemList.clear()
-            studioAdapter.itemList.addAll(it.productionCompanies)
+            studioAdapter.itemList.addAll(it.productionCompaniesUI)
 
             binding.genreRecycler.adapter?.notifyDataSetChanged()
             binding.recyclerStudioList.adapter?.notifyDataSetChanged()

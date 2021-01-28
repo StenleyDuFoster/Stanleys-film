@@ -18,7 +18,7 @@
         tools:layout="@layout/fragment_film">
         <argument
             android:name="movie"
-            app:argType="com.stenleone.stanleysfilm.network.entity.movie.Movie"
+            app:argType="com.stenleone.stanleysfilm.network.entity.movie.MovieUI"
             app:nullable="true" />
     </fragment>
     <action
@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_more_movie" >
         <argument
             android:name="movieEntity"
-            app:argType="com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity"
+            app:argType="com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI"
             app:nullable="true" />
         <argument
             android:name="searchType"

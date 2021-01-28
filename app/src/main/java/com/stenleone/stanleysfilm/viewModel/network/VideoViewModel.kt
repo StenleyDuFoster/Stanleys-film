@@ -6,8 +6,7 @@ import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
-import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
-import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 
@@ -17,7 +16,7 @@ class VideoViewModel @ViewModelInject constructor(
     connectionManager: ConnectionManager
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
-    val movieList = MutableLiveData<MoviesEntity>()
+    val movieList = MutableLiveData<MoviesEntityUI>()
 
     fun getSimilarMovieList(id: Int, page: Int) {
         doAsyncRequest {

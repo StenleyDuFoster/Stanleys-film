@@ -1,12 +1,12 @@
 package com.stenleone.stanleysfilm.network.entity.lates
 
 import com.google.gson.annotations.SerializedName
-import com.stenleone.stanleysfilm.interfaces.model.Network
+import com.stenleone.stanleysfilm.interfaces.model.UI
 import com.stenleone.stanleysfilm.network.entity.movie.GenreUI
 import com.stenleone.stanleysfilm.network.entity.movie.ProductionCompanyUI
 import com.stenleone.stanleysfilm.network.entity.movie.ProductionCountryUI
 
-data class LatesEntity(
+data class LatesEntityUI(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: Any,
@@ -44,4 +44,4 @@ data class LatesEntity(
     val voteAverage: Int,
     @SerializedName("vote_count")
     val voteCount: Int
-): Network
+): UI

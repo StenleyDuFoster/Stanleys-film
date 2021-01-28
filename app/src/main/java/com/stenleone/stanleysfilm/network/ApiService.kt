@@ -12,11 +12,12 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RECOMENDED
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_SIMILAR
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.MOVIE_DETAILS
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.SEARCH_MOVIE
-import com.stenleone.stanleysfilm.network.entity.images.ImagesEntity
-import com.stenleone.stanleysfilm.network.entity.lates.LatesEntity
-import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
+import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
+import com.stenleone.stanleysfilm.network.entity.lates.LatesEntityUI
+import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
-import com.stenleone.stanleysfilm.network.entity.tmdb_auth.GuestSessionEntity
+import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
+import com.stenleone.stanleysfilm.network.entity.tmdb_auth.GuestSessionEntityUI
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
@@ -37,14 +38,14 @@ interface ApiService {
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,
         @Query("page") page: Int = 1
-    ): Deferred<Response<LatesEntity>>
+    ): Deferred<Response<LatesEntityUI>>
 
     @GET(MOVIE_DETAILS)
     fun getMovieDetails(
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String
-    ): Deferred<Response<MovieDetailsEntity>>
+    ): Deferred<Response<MovieDetailsEntityUI>>
 
     @GET(LIST_RECOMENDED)
     fun getRecomendedList(
@@ -52,7 +53,7 @@ interface ApiService {
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,
         @Query("page") page: Int = 1
-    ): Deferred<Response<MoviesEntity>>
+    ): Deferred<Response<MoviesEntityUI>>
 
     @GET(LIST_SIMILAR)
     fun getSimilarList(
@@ -60,7 +61,7 @@ interface ApiService {
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String,
         @Query("page") page: Int = 1
-    ): Deferred<Response<MoviesEntity>>
+    ): Deferred<Response<MoviesEntityUI>>
 
     @GET(LIST_LIKE_MOVIE)
     fun getLikeMovieAsync(
@@ -74,14 +75,14 @@ interface ApiService {
     @GET(GET_SESSION)
     fun getSessionAsync(
         @Query("api_key") api_key: String = API_V3
-    ): Deferred<Response<GuestSessionEntity>>
+    ): Deferred<Response<GuestSessionEntityUI>>
 
     @GET(GET_IMAGE)
     fun getImageList(
         @Path("movie_id") movieId: Int,
         @Query("language") language: String,
         @Query("api_key") api_key: String = API_V3
-    ): Deferred<Response<ImagesEntity>>
+    ): Deferred<Response<ImagesEntityUI>>
 
     @POST(LIKE_MOVIE)
     fun postLikeMovieAsync(
@@ -105,6 +106,6 @@ interface ApiService {
         @Query("language") language: String,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean = true
-    ): Deferred<Response<MoviesEntity>>
+    ): Deferred<Response<MoviesEntityUI>>
 
 }

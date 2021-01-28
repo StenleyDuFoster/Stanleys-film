@@ -3,16 +3,12 @@ package com.stenleone.stanleysfilm.viewModel.network
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.ConnectionManager
-import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
-import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
-import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
+import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
-import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
-import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 
 class SearchViewModel @ViewModelInject constructor(
     apiService: ApiService,
@@ -20,7 +16,7 @@ class SearchViewModel @ViewModelInject constructor(
     connectionManager: ConnectionManager
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
-    val searchData = MutableLiveData<MoviesEntity>()
+    val searchData = MutableLiveData<MoviesEntityUI>()
 
     fun search(keywords: String) {
         doAsyncRequest {

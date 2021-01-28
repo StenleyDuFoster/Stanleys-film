@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.databinding.ItemGenreBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
-import com.stenleone.stanleysfilm.network.entity.movie.Genre
+import com.stenleone.stanleysfilm.network.entity.movie.GenreUI
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
 import java.util.ArrayList
 import javax.inject.Inject
 
 class GenreListRecycler @Inject constructor() : BaseRecyclerView() {
 
-    val itemList: ArrayList<Genre> = arrayListOf()
+    val itemList: ArrayList<GenreUI> = arrayListOf()
     lateinit var listener: ItemClickParcelable
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

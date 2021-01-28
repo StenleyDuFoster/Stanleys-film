@@ -9,7 +9,7 @@
 
         <variable
             name="studio"
-            type="com.stenleone.stanleysfilm.network.entity.movie.ProductionCompany" />
+            type="com.stenleone.stanleysfilm.network.entity.movie.ProductionCompanyUI" />
 
     </data>
 

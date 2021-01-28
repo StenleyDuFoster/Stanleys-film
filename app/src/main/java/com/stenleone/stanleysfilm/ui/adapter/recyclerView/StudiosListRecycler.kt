@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stenleone.stanleysfilm.databinding.ItemStudioBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.interfaces.RecyclerViewInterface
-import com.stenleone.stanleysfilm.network.entity.movie.ProductionCompany
+import com.stenleone.stanleysfilm.network.entity.movie.ProductionCompanyUI
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.base.BaseRecyclerView
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class StudiosListRecycler @Inject constructor() : BaseRecyclerView() {
 
-    val itemList: ArrayList<ProductionCompany> = arrayListOf()
+    val itemList: ArrayList<ProductionCompanyUI> = arrayListOf()
     lateinit var listener: ItemClickParcelable
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
