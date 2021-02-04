@@ -15,7 +15,7 @@ import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
-import com.stenleone.stanleysfilm.ui.fragment.VideoFragment
+import com.stenleone.stanleysfilm.ui.fragment.ResizeVideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
 import com.stenleone.stanleysfilm.viewModel.masterDetails.DialogControllerViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,12 +64,12 @@ class MainActivity : BaseActivity() {
 
     fun openVideoFragment(videoUrl: String, movieUI: MovieUI) {
         if (supportFragmentManager.backStackEntryCount > 0) {
-            (supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as VideoFragment).updateVideoUrl(videoUrl, movieUI)
+            (supportFragmentManager.findFragmentByTag(ResizeVideoFragment.TAG) as ResizeVideoFragment).updateVideoUrl(videoUrl, movieUI)
         } else {
-            VideoFragment.newInstance(videoUrl, movieUI).also {
+            ResizeVideoFragment.newInstance(videoUrl, movieUI).also {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, it, VideoFragment.TAG)
-                    .addToBackStack(VideoFragment.TAG)
+                    .replace(R.id.fragmentContainer, it, ResizeVideoFragment.TAG)
+                    .addToBackStack(ResizeVideoFragment.TAG)
                     .commit()
             }
         }
@@ -99,7 +99,7 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         binding.apply {
-            if ((supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as? VideoFragment?)?.fullscreen != true) {
+            if ((supportFragmentManager.findFragmentByTag(ResizeVideoFragment.TAG) as? ResizeVideoFragment?)?.fullscreen != true) {
                 if (!Navigation.findNavController(
                         this@MainActivity,
                         (viewPagerAdapter.listFragments[fragmentPager.currentItem] as FragmentWithNavController).getNavControllerId()
@@ -112,7 +112,7 @@ class MainActivity : BaseActivity() {
                     }
                 }
             } else {
-                (supportFragmentManager.findFragmentByTag(VideoFragment.TAG) as VideoFragment).collapseDown()
+                (supportFragmentManager.findFragmentByTag(ResizeVideoFragment.TAG) as ResizeVideoFragment).collapseDown()
             }
         }
     }
