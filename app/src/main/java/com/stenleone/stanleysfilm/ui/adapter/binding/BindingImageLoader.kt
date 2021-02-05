@@ -16,6 +16,8 @@ fun loadImage(view: ImageView, url: String?) {
             .with(view)
             .load("$BASE_IMAGE_URL$url")
             .transition(DrawableTransitionOptions.withCrossFade(GlideModule.IMAGE_ANIM_DURUTATION))
+            .override(200, 500)
+            .error(R.drawable.not_found_logo)
             .into(view)
     }
 }
