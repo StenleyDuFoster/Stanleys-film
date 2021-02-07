@@ -1,6 +1,5 @@
 package com.stenleone.stanleysfilm.ui.activity
 
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -15,9 +14,9 @@ import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
+import com.stenleone.stanleysfilm.ui.dialog.UnSupportVersionDialog
 import com.stenleone.stanleysfilm.ui.fragment.ResizeVideoFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
-import com.stenleone.stanleysfilm.viewModel.masterDetails.DialogControllerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -28,7 +27,6 @@ class MainActivity : BaseActivity() {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var viewPagerAdapter: FragmentViewPagerAdapter
-    private val dialogControllerViewModel: DialogControllerViewModel by viewModels()
 
     @Inject
     lateinit var firebaseConfig: FirebaseRemoteConfigManager
@@ -52,7 +50,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupEventBus() {
-        var subscription = MessageEventBus.asChannel()
+        val subscription = MessageEventBus.asChannel()
         lifecycleScope.launch {
             subscription.consumeEach { event ->
                 if (event is OpenFilmEvent) {
@@ -83,13 +81,7 @@ class MainActivity : BaseActivity() {
         firebaseConfig.getIntAsync(FirebaseConfigsEnum.MIN_SUPPORT_VERSION_CODE,
             success = {
                 if (it > BuildConfig.VERSION_CODE) {
-                    dialogControllerViewModel.startUnSupportDialog(
-                        getString(R.string.version_app_title), getString(R.string.version_app_sub_title), getString(R.string.ok),
-                        {
-                            finish()
-                        },
-                        supportFragmentManager
-                    )
+                    UnSupportVersionDialog.show(supportFragmentManager)
                 }
             },
             failure = {

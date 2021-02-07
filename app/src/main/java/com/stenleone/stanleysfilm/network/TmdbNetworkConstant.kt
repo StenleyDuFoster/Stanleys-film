@@ -19,4 +19,5 @@ object TmdbNetworkConstant {
     const val LIKE_MOVIE = "$MOVIE_DETAILS/rating?"
     const val SEARCH_MOVIE = "search/movie"
     const val GET_IMAGE = "$MOVIE_DETAILS/images"
+    const val GET_VIDEOS = "$MOVIE_DETAILS/videos"
 }

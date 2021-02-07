@@ -1,6 +1,5 @@
 package com.stenleone.stanleysfilm.viewModel.network
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManagers
@@ -11,14 +10,22 @@ import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
+import com.stenleone.stanleysfilm.model.entity.DataState
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
+import com.stenleone.stanleysfilm.network.repository.MovieAdditionallyRepository
+import com.stenleone.stanleysfilm.ui.model.VideosUI
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
+import javax.inject.Inject
 
-class FilmViewModel @ViewModelInject constructor(
+@HiltViewModel
+class FilmViewModel @Inject constructor(
     apiService: ApiService,
     sharedPreferencesManager: SharedPreferencesManager,
     connectionManager: ConnectionManager,
+    val additionallyRepository: MovieAdditionallyRepository,
     val findFilmFilmixController: FindFilmFilmixController,
     val firestoreManager: FirebaseCloudFirestoreManagers
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
@@ -27,6 +34,7 @@ class FilmViewModel @ViewModelInject constructor(
     val movieDetails = MutableLiveData<MovieDetailsEntityUI>()
     val imageList = MutableLiveData<ImagesEntityUI>()
     val recomendedMovieList = MutableLiveData<MoviesEntityUI>()
+    val moviesVideos = MutableLiveData<VideosUI>()
 
     fun getPageData(id: Int) {
         doAsyncRequests(
@@ -70,6 +78,18 @@ class FilmViewModel @ViewModelInject constructor(
                                 isFailure(RequestError.UNSUCCESS_STATUS, it)
                             }
                         )
+                },
+                {
+                    additionallyRepository.getVideos(id).collect {
+                        when (it) {
+                            is DataState.Success -> {
+                                moviesVideos.postValue(it.data)
+                            }
+                            is DataState.Error -> {
+
+                            }
+                        }
+                    }
                 }
             )
         )

@@ -1,31 +1,29 @@
 package com.stenleone.stanleysfilm.network.entity.movie
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.stenleone.stanleysfilm.interfaces.model.Network
-import kotlinx.android.parcel.Parcelize
 
 data class Movie(
-    val adult: Boolean,
+    val adult: String?,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("genre_ids")
-    val genreIds: List<Int>,
-    val id: Int,
+    val genreIds: ArrayList<String>?,
+    val id: String?,
     @SerializedName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String?,
     @SerializedName("original_title")
-    val originalTitle: String,
-    val overview: String,
-    val popularity: Float?,
+    val originalTitle: String?,
+    val overview: String?,
+    val popularity: String?,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("release_date")
-    val releaseDate: String,
-    val title: String,
-    val video: Boolean,
+    val releaseDate: String?,
+    val title: String?,
+    val video: String?,
     @SerializedName("vote_average")
-    val voteAverage: Float?,
+    val voteAverage: String?,
     @SerializedName("vote_count")
-    val voteCount: Int?
+    val voteCount: String?
 ): Network

@@ -46,8 +46,6 @@ class MoreMovieFragment : BaseFragment() {
     @Inject
     lateinit var adapter: ListMovieAdapter
 
-    private var lastLoadedPage = 1
-
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_more_movie, container, false)
         return binding.root
@@ -79,8 +77,10 @@ class MoreMovieFragment : BaseFragment() {
     }
 
     private fun setupViewModelCallBack() {
-        viewModel.getPage(navArgs.searchType ?: "", 2, navArgs.movieRecomendedId)
-        lastLoadedPage = 2
+        if (viewModel.pageCurrent == null) {
+            viewModel.pageCurrent = (navArgs.movieEntity?.page)
+        }
+        viewModel.getPage(navArgs.searchType ?: "", navArgs.movieRecomendedId)
 
         viewModel.movieList.observe(viewLifecycleOwner) {
             val oldLastPosition = adapter.itemList.size
@@ -116,10 +116,9 @@ class MoreMovieFragment : BaseFragment() {
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if ((recycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > adapter.itemList.size - PAGINATION_SIZE && viewModel.inProgress.value != true) {
-                        if (lastLoadedPage + 1 <= navArgs.movieEntity?.totalPages ?: 0) {
-                            lastLoadedPage++
-                            viewModel.getPage(navArgs.searchType ?: "", lastLoadedPage, navArgs.movieRecomendedId)
+                    if ((recycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > adapter.itemList.size - PAGINATION_SIZE && viewModel.inProgress.value == false) {
+                        if (viewModel.pageCurrent ?: 0 + 1 < navArgs.movieEntity?.totalPages ?: 0) {
+                            viewModel.getPage(navArgs.searchType ?: "", navArgs.movieRecomendedId)
                         }
                     }
                 }

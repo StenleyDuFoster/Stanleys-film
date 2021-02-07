@@ -9,7 +9,7 @@ import java.util.ArrayList
 data class MoviesEntity(
     val page: String?,
     @SerializedName("results")
-    val movies: ArrayList<MovieUI>?,
+    val movies: ArrayList<Movie>?,
     @SerializedName("total_pages")
     val totalPages: String?,
     @SerializedName("total_results")

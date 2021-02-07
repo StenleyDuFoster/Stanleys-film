@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.readystatesoftware.chuck.ChuckInterceptor
+import com.stenleone.stanleysfilm.BuildConfig
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import dagger.Module
@@ -39,20 +40,24 @@ class NetworkModule {
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
         cache: Cache,
-//        authInterceptor: AuthInterceptor,
         onlineCacheInterceptor: OnlineCacheInterceptor,
         offlineCacheInterceptor: OfflineCacheInterceptor
-    ): OkHttpClient =
-        OkHttpClient.Builder()
+    ): OkHttpClient {
+        val client = OkHttpClient.Builder()
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-//            .addNetworkInterceptor(authInterceptor)
             .addInterceptor(offlineCacheInterceptor)
             .addNetworkInterceptor(onlineCacheInterceptor)
-            .addNetworkInterceptor(ChuckInterceptor(context))
             .cache(cache)
-            .build()
+
+        if (BuildConfig.DEBUG) {
+            client.addNetworkInterceptor(ChuckInterceptor(context))
+        }
+
+        return client.build()
+    }
+
 
     @Provides
     fun provideGson(): Gson = GsonBuilder().setLenient().create()

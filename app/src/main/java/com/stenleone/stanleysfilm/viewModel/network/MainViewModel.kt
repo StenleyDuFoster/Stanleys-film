@@ -1,7 +1,6 @@
 package com.stenleone.stanleysfilm.viewModel.network
 
 import android.annotation.SuppressLint
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.stenleone.stanleysfilm.managers.ConnectionManager
@@ -18,13 +17,16 @@ import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.network.repository.ListMovieRepository
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-
-class MainViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     apiService: ApiService,
     sharedPreferencesManager: SharedPreferencesManager,
     connectionManager: ConnectionManager,
@@ -43,31 +45,51 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun loadContent() {
-        getLatesMovie()
-
         viewModelScope.launch {
-            movieRepository.getMoviesListsSuccessively(
-                arrayListOf(
-                    ListMovieRepository.GetListsObject(LIST_MOVIE_NOW_PLAYING),
-                    ListMovieRepository.GetListsObject(LIST_MOVIE_POPULAR),
-                    ListMovieRepository.GetListsObject(LIST_MOVIE_TOP_RATED),
-                    ListMovieRepository.GetListsObject(LIST_MOVIE_TOP_UPCOMING)
-                )
-            ).collect {
-                when (it) {
-//                    is DataState.Success -> {
-//                        it.data.forEach { dataRepository ->
-//                            postValue(dataRepository.typeList, dataRepository.moviesEntity)
-//                        }
-//                    }
-                    is DataState.Succes -> {
-                        postValue(it.data.typeList, it.data.moviesEntity)
-                    }
-                    is DataState.Errors -> {
+            inProgress.postValue(true)
+            async {
+                movieRepository.getMovieList(LIST_MOVIE_NOW_PLAYING).collect {
+                    when (it) {
+                        is DataState.Success -> {
+                            postValue(LIST_MOVIE_NOW_PLAYING, it.data)
+                        }
+                        is DataState.Error -> {
 
+                        }
+                    }
+                }
+                movieRepository.getMovieList(LIST_MOVIE_POPULAR).collect {
+                    when (it) {
+                        is DataState.Success -> {
+                            postValue(LIST_MOVIE_POPULAR, it.data)
+                        }
+                        is DataState.Error -> {
+
+                        }
+                    }
+                }
+                movieRepository.getMovieList(LIST_MOVIE_TOP_RATED).collect {
+                    when (it) {
+                        is DataState.Success -> {
+                            postValue(LIST_MOVIE_TOP_RATED, it.data)
+                        }
+                        is DataState.Error -> {
+
+                        }
+                    }
+                }
+                movieRepository.getMovieList(LIST_MOVIE_TOP_UPCOMING).collect {
+                    when (it) {
+                        is DataState.Success -> {
+                            postValue(LIST_MOVIE_TOP_UPCOMING, it.data)
+                        }
+                        is DataState.Error -> {
+
+                        }
                     }
                 }
             }
+            inProgress.postValue(false)
         }
     }
 
@@ -87,24 +109,6 @@ class MainViewModel @ViewModelInject constructor(
                 )
         }
     }
-
-//    private fun getListMovie(typeList: String, page: Int = 1) {
-//        doAsyncRequest {
-//            apiService.getListMovieAsync(
-//                typeList,
-//                language = sharedPreferencesManager.language,
-//                page = page
-//            )
-//                .await()
-//                .successOrError(
-//                    success = {
-//                        postValue(typeList, it)
-//                    }, {
-//                        isFailure(RequestError.UNSUCCESS_STATUS, it)
-//                    }
-//                )
-//        }
-//    }
 
     private fun postValue(
         type: String,

@@ -6,13 +6,14 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
 
 object MessageEventBus {
-    val bus: BroadcastChannel<Any> = ConflatedBroadcastChannel()
+
+    val bus: BroadcastChannel<EventModel> = ConflatedBroadcastChannel()
 
     suspend fun send(o: EventModel) {
             bus.send(o)
     }
 
-    inline fun asChannel(): ReceiveChannel<Any> {
+    fun asChannel(): ReceiveChannel<EventModel> {
         return bus.openSubscription()
     }
 }

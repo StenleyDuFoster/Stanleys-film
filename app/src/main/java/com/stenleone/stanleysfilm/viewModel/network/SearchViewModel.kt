@@ -9,8 +9,11 @@ import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SearchViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     apiService: ApiService,
     sharedPreferencesManager: SharedPreferencesManager,
     connectionManager: ConnectionManager

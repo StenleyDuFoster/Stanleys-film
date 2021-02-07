@@ -1,25 +1,33 @@
 package com.stenleone.stanleysfilm.viewModel.network
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
+import com.stenleone.stanleysfilm.model.entity.DataState
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
+import com.stenleone.stanleysfilm.network.repository.ListMovieRepository
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
-class MoreMovieViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MoreMovieViewModel @Inject constructor(
     apiService: ApiService,
     sharedPreferencesManager: SharedPreferencesManager,
-    connectionManager: ConnectionManager
+    connectionManager: ConnectionManager,
+    val movieRepository: ListMovieRepository
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
     val movieList = MutableLiveData<MoviesEntityUI>()
+    var pageCurrent: Int? = null
 
-    fun getPage(typeList: String, page: Int, movieId: String? = null) {
+    fun getPage(typeList: String, movieId: String? = null) {
+        val page = (pageCurrent ?: 0) + 1 // load next page
         when (typeList) {
             TmdbNetworkConstant.LIST_RECOMENDED -> {
                 getRecomendedMovieList(movieId?.toInt() ?: 0, page)
@@ -47,19 +55,17 @@ class MoreMovieViewModel @ViewModelInject constructor(
 
     private fun getMovieList(typeList: String, page: Int) {
         doAsyncRequest {
-            apiService.getListMovieAsync(
-                typeList,
-                language = sharedPreferencesManager.language,
-                page = page
-            )
-                .await()
-                .successOrError(
-                    success = {
-//                        movieList.postValue(it)
-                    }, {
-                        isFailure(RequestError.UNSUCCESS_STATUS, it)
+            movieRepository.getMovieList(typeList, page).collect {
+                when (it) {
+                    is DataState.Success -> {
+                        movieList.postValue(it.data)
+                        pageCurrent = (it.data.page)
                     }
-                )
+                    is DataState.Error -> {
+
+                    }
+                }
+            }
         }
     }
 
@@ -74,6 +80,7 @@ class MoreMovieViewModel @ViewModelInject constructor(
                 .successOrError(
                     success = {
                         movieList.postValue(it)
+                        pageCurrent = (it.page)
                     }, {
                         isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }
@@ -92,6 +99,7 @@ class MoreMovieViewModel @ViewModelInject constructor(
                 .successOrError(
                     success = {
                         movieList.postValue(it)
+                        pageCurrent = (it.page)
                     }, {
                         isFailure(RequestError.UNSUCCESS_STATUS, it)
                     }

@@ -19,6 +19,10 @@
             name="buttonOk"
             type="String" />
 
+        <variable
+            name="buttonCancel"
+            type="String" />
+
     </data>
 
     <FrameLayout
@@ -79,15 +83,16 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/buttonOkCard"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:visibility="@{buttonOk == null ? View.GONE : View.VISIBLE}"
                     app:cardBackgroundColor="@color/active"
                     app:cardCornerRadius="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/buttonCancelCard"
                     app:layout_constraintTop_toBottomOf="@+id/textSubTitle">
 
                     <TextView
@@ -101,6 +106,39 @@
                         android:padding="5dp"
                         android:singleLine="false"
                         android:text='@{buttonOk}'
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/buttonCancelCard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:visibility="@{buttonCancel == null ? View.GONE : View.VISIBLE}"
+                    app:cardBackgroundColor="@color/active"
+                    app:cardCornerRadius="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/buttonOkCard"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textSubTitle">
+
+                    <TextView
+                        android:id="@+id/buttonCancelText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/font_main"
+                        android:foreground="?selectableItemBackground"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:singleLine="false"
+                        android:text='@{buttonCancel}'
                         android:textColor="@color/colorPrimary"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"

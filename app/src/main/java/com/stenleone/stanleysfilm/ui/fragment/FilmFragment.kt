@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayoutMediator
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
@@ -29,13 +31,14 @@ import com.stenleone.stanleysfilm.ui.adapter.recyclerView.GenreListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.ImageViewPager
+import com.stenleone.stanleysfilm.ui.adapter.viewPager.YouTubeTrailersAdapter
+import com.stenleone.stanleysfilm.ui.dialog.UnSupportVersionDialog
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.anim.ButtonTextColorAnimator
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import com.stenleone.stanleysfilm.util.extencial.copyToClipBoard
 import com.stenleone.stanleysfilm.util.extencial.throttleClicks
 import com.stenleone.stanleysfilm.util.extencial.throttleFirst
-import com.stenleone.stanleysfilm.viewModel.masterDetails.DialogControllerViewModel
 import com.stenleone.stanleysfilm.viewModel.network.FilmViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -53,7 +56,6 @@ class FilmFragment : BaseFragment() {
     private lateinit var binding: FragmentFilmBinding
     private val navArgs: FilmFragmentArgs by navArgs()
     private val viewModel: FilmViewModel by viewModels()
-    private val dialogControllerViewModel: DialogControllerViewModel by activityViewModels()
     private lateinit var buttonColorAnim: ButtonTextColorAnimator
 
     @Inject
@@ -74,6 +76,8 @@ class FilmFragment : BaseFragment() {
     @Inject
     lateinit var imageViewPager: ImageViewPager
 
+    lateinit var youTubePlayersAdapter: YouTubeTrailersAdapter
+
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_film, container, false)
         return binding.root
@@ -85,6 +89,7 @@ class FilmFragment : BaseFragment() {
         setupToolbarViewPager()
         setupClicks()
         setupViewModelCallBack()
+        setupYouTubePager()
         setupRecyclerView()
 
         savedInstanceState?.getInt(VERTICAL_SCROLL_POSITION)?.let {
@@ -106,7 +111,9 @@ class FilmFragment : BaseFragment() {
     private fun setupToolbarViewPager() {
         binding.apply {
             navArgs.movie?.backdropPath?.let {
-                imageViewPager.listItems.add(it)
+                if (imageViewPager.listItems.size <= 1) {
+                    imageViewPager.listItems.add(it)
+                }
             }
 
             imageViewPager.title = navArgs.movie?.title ?: navArgs.movie?.originalTitle ?: ""
@@ -117,6 +124,16 @@ class FilmFragment : BaseFragment() {
             }
 
             toolbarLay.titlePager.adapter = imageViewPager
+            TabLayoutMediator(toolbarLay.tabLayout, toolbarLay.titlePager, { tabs, pager -> }).attach()
+        }
+    }
+
+    private fun setupYouTubePager() {
+        youTubePlayersAdapter = YouTubeTrailersAdapter(requireActivity() as AppCompatActivity)
+        binding.apply {
+            youTubeVideoPager.adapter = youTubePlayersAdapter
+            youTubeVideoPager.offscreenPageLimit = 10
+            TabLayoutMediator(tabLayoutYouTubeVideoPager ,youTubeVideoPager, { tab, pager -> }).attach()
         }
     }
 
@@ -125,9 +142,7 @@ class FilmFragment : BaseFragment() {
         val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
                 if (item is MovieUI) {
-                    findNavController().navigate(
-                        FilmFragmentDirections.actionGlobalFilmFragment(item)
-                    )
+                    findNavController().navigate(FilmFragmentDirections.actionGlobalFilmFragment(item))
                 }
             }
         }
@@ -166,17 +181,27 @@ class FilmFragment : BaseFragment() {
         viewModel.imageList.observe(viewLifecycleOwner) {
             binding.toolbarLay.apply {
                 if (it.posters.size > 0) {
-                    rightArrow.visibility = View.VISIBLE
-                    leftArrow.visibility = View.VISIBLE
+                    tabLayout.visibility = View.VISIBLE
                 }
 
                 val oldItemCount = imageViewPager.listItems.size
-                it.posters.forEach {
-                    imageViewPager.listItems.add(it.file_path)
+                if (imageViewPager.listItems.size <= 1) {
+                    it.posters.forEach {
+                        imageViewPager.listItems.add(it.file_path)
+                    }
+                    titlePager.adapter?.notifyItemChanged(oldItemCount, imageViewPager.listItems.size - 1)
                 }
-                titlePager.adapter?.notifyItemChanged(oldItemCount, imageViewPager.listItems.size - 1)
             }
         }
+        viewModel.moviesVideos.observe(viewLifecycleOwner, {
+            if (it.results.size > 0) {
+                binding.tabLayoutYouTubeVideoPager.visibility = View.VISIBLE
+                if (youTubePlayersAdapter.itemList.size == 0) {
+                    youTubePlayersAdapter.itemList.addAll(it.results)
+                    youTubePlayersAdapter.notifyDataSetChanged()
+                }
+            }
+        })
         viewModel.findFilmFilmixController.status.observe(viewLifecycleOwner, {
             if (viewModel.movieUrl.value == null) {
                 binding.watchButtonText.text = it
@@ -279,35 +304,7 @@ class FilmFragment : BaseFragment() {
                 }
                 .launchIn(lifecycleScope)
 
-            rateMovie.throttleClicks(
-                {
-                    dialogControllerViewModel.startUnSupportDialog( // TODO: HARDCODE
-                        "test", "test", "test",
-                        {
-                            it?.dismiss()
-                        },
-                        childFragmentManager
-                    )
-                }, lifecycleScope
-            )
-            toolbarLay.rightArrow.throttleClicks(
-                {
-                    toolbarLay.titlePager.currentItem = if (toolbarLay.titlePager.currentItem < imageViewPager.listItems.size - 1) {
-                        toolbarLay.titlePager.currentItem + 1
-                    } else {
-                        0
-                    }
-                }, lifecycleScope
-            )
-            toolbarLay.leftArrow.throttleClicks(
-                {
-                    toolbarLay.titlePager.currentItem = if (toolbarLay.titlePager.currentItem > 0) {
-                        toolbarLay.titlePager.currentItem - 1
-                    } else {
-                        imageViewPager.listItems.size - 1
-                    }
-                }, lifecycleScope
-            )
+            rateMovie.throttleClicks({ UnSupportVersionDialog.show(childFragmentManager) }, lifecycleScope)
         }
     }
 

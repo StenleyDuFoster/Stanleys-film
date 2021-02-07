@@ -28,54 +28,23 @@
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:toolbarId="@+id/toolbar">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/rightArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|right"
-            android:layout_margin="20dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/active"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="5dp"
-            app:strokeColor="@color/colorPrimary"
-            app:strokeWidth="1dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:rotation="180"
-                android:src="@drawable/ic_back_arrow" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/leftArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|left"
-            android:layout_margin="20dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/active"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="5dp"
-            app:strokeColor="@color/colorPrimary"
-            app:strokeWidth="1dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:src="@drawable/ic_back_arrow" />
-
-        </com.google.android.material.card.MaterialCardView>
-
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/titlePager"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             app:layout_collapseMode="parallax" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="center|bottom"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            app:tabBackground="@drawable/tab_layout_indicator_background"
+            app:tabIndicatorColor="@color/transparent"
+            app:tabMaxWidth="15dp"
+            tools:visibility="visible" />
 
         <!--        <ImageView-->
         <!--            android:id="@+id/titleImage"-->

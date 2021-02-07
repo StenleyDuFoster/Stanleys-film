@@ -4,6 +4,7 @@ import com.stenleone.stanleysfilm.network.ApiConstant.API_SORT
 import com.stenleone.stanleysfilm.network.ApiConstant.API_V3
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_IMAGE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_SESSION
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_VIDEOS
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_LIKE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE
@@ -12,6 +13,7 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RECOMENDED
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_SIMILAR
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.MOVIE_DETAILS
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.SEARCH_MOVIE
+import com.stenleone.stanleysfilm.network.entity.Videos
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
@@ -62,6 +64,13 @@ interface ApiService {
         @Query("language") language: String,
         @Query("page") page: Int = 1
     ): Deferred<Response<MoviesEntityUI>>
+
+    @GET(GET_VIDEOS)
+    fun getVideos(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") api_key: String = API_V3,
+        @Query("language") language: String
+    ): Deferred<Response<Videos>>
 
     @GET(LIST_LIKE_MOVIE)
     fun getLikeMovieAsync(

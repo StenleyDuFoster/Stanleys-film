@@ -60,18 +60,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="200dp"
                     android:layout_margin="20dp"
+                    android:maxWidth="400dp"
                     app:cardBackgroundColor="@color/transparent"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="0dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:strokeColor="@color/colorPrimary"
-                    android:maxWidth="400dp"
                     app:strokeWidth="1dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:contentDescription="title"
                         app:loadImage="@{movie.posterPath}"
                         tools:background="@color/colorAccent"
                         tools:minWidth="100dp" />
@@ -164,8 +165,8 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
-                    android:animateLayoutChanges="true"
                     android:layout_marginBottom="10dp"
+                    android:animateLayoutChanges="true"
                     app:cardBackgroundColor="@color/transparent"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="0dp"
@@ -192,13 +193,42 @@
 
                     <ProgressBar
                         android:id="@+id/progressLoadUrl"
-                        android:elevation="10dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="end|center_vertical"
                         android:layout_margin="10dp"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"/>
+                        android:elevation="10dp" />
 
                 </com.google.android.material.card.MaterialCardView>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/youTubeVideoPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:clipToPadding="false"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:clipChildren="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/watchButton"
+                    tools:layout_height="100dp" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayoutYouTubeVideoPager"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center|bottom"
+                    android:background="@color/transparent"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/youTubeVideoPager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:tabBackground="@drawable/tab_layout_indicator_background"
+                    app:tabIndicatorColor="@color/transparent"
+                    app:tabMaxWidth="15dp"
+                    tools:visibility="visible" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/actorsButton"
@@ -210,9 +240,8 @@
                     app:cardCornerRadius="20dp"
                     app:cardElevation="0dp"
                     app:layout_constraintEnd_toStartOf="@+id/reviewButton"
-                    app:layout_constraintHorizontal_weight="3"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/watchButton"
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayoutYouTubeVideoPager"
                     app:strokeColor="@color/colorPrimary"
                     app:strokeWidth="1dp"
                     tools:visibility="visible">
@@ -241,9 +270,8 @@
                     app:cardCornerRadius="20dp"
                     app:cardElevation="0dp"
                     app:layout_constraintEnd_toStartOf="@+id/rateMovie"
-                    app:layout_constraintHorizontal_weight="3"
                     app:layout_constraintStart_toEndOf="@+id/actorsButton"
-                    app:layout_constraintTop_toBottomOf="@+id/watchButton"
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayoutYouTubeVideoPager"
                     app:strokeColor="@color/colorPrimary"
                     app:strokeWidth="1dp"
                     tools:visibility="visible">
@@ -264,18 +292,17 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/rateMovie"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     app:cardBackgroundColor="@color/active"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_weight="5"
                     app:layout_constraintStart_toEndOf="@+id/reviewButton"
-                    app:layout_constraintTop_toBottomOf="@+id/watchButton"
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayoutYouTubeVideoPager"
                     app:strokeColor="@color/colorPrimary"
                     app:strokeWidth="1dp">
 
@@ -319,7 +346,7 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
                             android:orientation="vertical"
-                            android:visibility="@{movie.voteAverage != null ? View.VISIBLE : View.GONE}">
+                            android:visibility="@{movie.voteAverage != 0.0f ? View.VISIBLE : View.GONE}">
 
                             <com.github.lzyzsd.circleprogress.DonutProgress
                                 android:id="@+id/donutProgressRate"
@@ -410,7 +437,7 @@
                             android:layout_marginEnd="20dp"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:visibility="@{movie.popularity != null ? View.VISIBLE : View.GONE}">
+                            android:visibility="@{movie.popularity != 0.0f ? View.VISIBLE : View.GONE}">
 
                             <TextView
                                 android:id="@+id/donutProgressPopularity"
@@ -419,7 +446,7 @@
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@string/font_main"
                                 android:gravity="center"
-                                android:text="@{movie.popularity.toString()}"
+                                android:text="@{String.valueOf(movie.popularity)}"
                                 android:textColor="@color/colorPrimary"
                                 android:textStyle="bold"
                                 app:donut_text=""
@@ -451,7 +478,7 @@
                             android:layout_marginEnd="20dp"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:visibility="@{movie.voteCount != null ? View.VISIBLE : View.GONE}">
+                            android:visibility="@{movie.voteCount != 0 ? View.VISIBLE : View.GONE}">
 
                             <TextView
                                 android:id="@+id/voteCount"
@@ -460,7 +487,7 @@
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@string/font_main"
                                 android:gravity="center"
-                                android:text="@{movie.voteCount.toString()}"
+                                android:text="@{String.valueOf(movie.voteCount)}"
                                 android:textColor="@color/colorPrimary"
                                 android:textStyle="bold"
                                 app:donut_text=""

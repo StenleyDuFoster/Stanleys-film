@@ -31,6 +31,7 @@
     <string name="version_app_title">Версия приложения</string>
     <string name="version_app_sub_title">Ваша версия приложения больше не поддерживается!</string>
     <string name="ok">Окей</string>
+    <string name="version_update">Обновить</string>
 
     <string name="recomended_listtitle">Похожие на</string>
 

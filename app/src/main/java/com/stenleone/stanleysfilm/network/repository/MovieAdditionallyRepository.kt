@@ -4,32 +4,31 @@ import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.DataState
 import com.stenleone.stanleysfilm.network.ApiService
-import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
-import com.stenleone.stanleysfilm.network.mapper.MoviesEntityMapper
+import com.stenleone.stanleysfilm.network.mapper.VideosMapper
+import com.stenleone.stanleysfilm.ui.model.VideosUI
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class ListMovieRepository @Inject constructor(
+class MovieAdditionallyRepository @Inject constructor(
     val apiService: ApiService,
     val sharedPreferencesManager: SharedPreferencesManager,
     val connectionManager: ConnectionManager,
-    val listMovieMapper: MoviesEntityMapper
+    val videosMapper: VideosMapper
 ) {
 
-    suspend fun getMovieList(typeList: String, page: Int = 1): Flow<DataState<MoviesEntityUI>> = flow {
+    suspend fun getVideos(movieId: Int): Flow<DataState<VideosUI>> = flow {
         emit(DataState.Loading(true))
         try {
-            val response = apiService.getListMovieAsync(
-                typeList,
-                language = sharedPreferencesManager.language,
-                page = page
+            val response = apiService.getVideos(
+                movieId,
+                language = sharedPreferencesManager.language
             ).await()
             emit(DataState.Loading(false))
 
             if (response.isSuccessful) {
                 response.body()?.let { data ->
-                    emit(DataState.Success(listMovieMapper.mapFromEntity(data)))
+                    emit(DataState.Success(videosMapper.mapFromEntity(data)))
                 }
             } else {
                 emit(DataState.Error(Exception()))

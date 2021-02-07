@@ -17,8 +17,4 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected abstract fun setup()
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }
