@@ -6,7 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.stenleone.stanleysfilm.ui.fragment.YouTubeVideoFragment
 import com.stenleone.stanleysfilm.ui.model.VideosResultUI
 
-class YouTubeTrailersAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
+class YouTubeTrailersAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     val itemList = ArrayList<VideosResultUI>()
 

@@ -112,6 +112,9 @@ class FilmFragment : BaseFragment() {
         binding.apply {
             navArgs.movie?.backdropPath?.let {
                 if (imageViewPager.listItems.size <= 1) {
+                    navArgs.movie?.posterPath?.let {
+                        imageViewPager.listItems.add(it)
+                    }
                     imageViewPager.listItems.add(it)
                 }
             }
@@ -119,21 +122,20 @@ class FilmFragment : BaseFragment() {
             imageViewPager.title = navArgs.movie?.title ?: navArgs.movie?.originalTitle ?: ""
             imageViewPager.moveListener = object : ItemClick {
                 override fun click(position: Int) {
-                    toolbarLay.titlePager.setCurrentItem(position, false)
+                    titlePager.setCurrentItem(position, false)
                 }
             }
 
-            toolbarLay.titlePager.adapter = imageViewPager
-            TabLayoutMediator(toolbarLay.tabLayout, toolbarLay.titlePager, { tabs, pager -> }).attach()
+            titlePager.adapter = imageViewPager
+            TabLayoutMediator(tabLayout, titlePager, { tabs, pager -> }).attach()
         }
     }
 
     private fun setupYouTubePager() {
-        youTubePlayersAdapter = YouTubeTrailersAdapter(requireActivity() as AppCompatActivity)
+        youTubePlayersAdapter = YouTubeTrailersAdapter(this)
         binding.apply {
-            youTubeVideoPager.adapter = youTubePlayersAdapter
-            youTubeVideoPager.offscreenPageLimit = 10
-            TabLayoutMediator(tabLayoutYouTubeVideoPager ,youTubeVideoPager, { tab, pager -> }).attach()
+            toolbarLay.youTubeVideoPager.adapter = youTubePlayersAdapter
+            TabLayoutMediator(toolbarLay.tabLayoutYouTubeVideoPager ,toolbarLay.youTubeVideoPager, { tab, pager -> }).attach()
         }
     }
 
@@ -179,7 +181,7 @@ class FilmFragment : BaseFragment() {
             }
         })
         viewModel.imageList.observe(viewLifecycleOwner) {
-            binding.toolbarLay.apply {
+            binding.apply {
                 if (it.posters.size > 0) {
                     tabLayout.visibility = View.VISIBLE
                 }
@@ -195,7 +197,7 @@ class FilmFragment : BaseFragment() {
         }
         viewModel.moviesVideos.observe(viewLifecycleOwner, {
             if (it.results.size > 0) {
-                binding.tabLayoutYouTubeVideoPager.visibility = View.VISIBLE
+                binding.toolbarLay.tabLayoutYouTubeVideoPager.visibility = View.VISIBLE
                 if (youTubePlayersAdapter.itemList.size == 0) {
                     youTubePlayersAdapter.itemList.addAll(it.results)
                     youTubePlayersAdapter.notifyDataSetChanged()

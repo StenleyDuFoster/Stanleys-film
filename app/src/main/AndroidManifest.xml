@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.YoutubePlayerActivity" />
+        <activity android:name=".ui.activity.YoutubeFullScreenActivity"
+            android:screenOrientation="sensorLandscape"/>
 
     </application>
 

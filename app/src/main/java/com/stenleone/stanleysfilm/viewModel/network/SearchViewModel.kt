@@ -1,6 +1,5 @@
 package com.stenleone.stanleysfilm.viewModel.network
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager

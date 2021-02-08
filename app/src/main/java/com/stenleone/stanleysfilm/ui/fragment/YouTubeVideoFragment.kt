@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.HolderYouTubeVideoBinding
-import com.stenleone.stanleysfilm.ui.activity.YoutubePlayerActivity
-import com.stenleone.stanleysfilm.util.extencial.throttleClicks
+import com.stenleone.stanleysfilm.ui.activity.YoutubeFullScreenActivity
 
 class YouTubeVideoFragment : Fragment() {
 
@@ -43,12 +44,29 @@ class YouTubeVideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.title = arguments?.getString(SAVE_TITLE) ?: ""
+        binding.apply {
+            val tracker = YouTubePlayerTracker()
+            getLifecycle().addObserver(youtubePlayerView)
+            youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                override fun onReady(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.loadVideo(arguments?.getString(SAVE_URL) ?: "", 0f)
+                    youTubePlayer.pause()
+                }
+            })
+            youtubePlayerView.getPlayerUiController().setFullScreenButtonClickListener(object : View.OnClickListener {
 
-        binding.clickCard.throttleClicks(
-            {
-                YoutubePlayerActivity.start(requireContext(), arguments?.getString(SAVE_URL) ?: "")
-            }, lifecycleScope
-        )
+                override fun onClick(v: View?) {
+                    YoutubeFullScreenActivity.start(requireContext(), arguments?.getString(SAVE_URL) ?: "", tracker.currentSecond)
+                }
+
+            })
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.apply {
+            youtubePlayerView.release()
+        }
     }
 }
