@@ -45,6 +45,7 @@ class FindFilmFilmixController @Inject constructor(
     private lateinit var titleMovie: String
     private lateinit var dateMovie: String
     private lateinit var loadVideoCallBack: CallBackVideoFromParser
+    private var webViewInProgress = false
 
     fun start(
         titleMovie: String,
@@ -100,32 +101,48 @@ class FindFilmFilmixController @Inject constructor(
 
     @SuppressLint("SetJavaScriptEnabled")
     fun findVideoUrlWithVideoView(pageUrl: String) {
+        webViewInProgress = true
+        controllerScope.launch {
+            val localWebView = WebView(context)
+            status.postValue("поиск видео")
+            val oldProgress = progress.value ?: 0
+            val newProgress = 80 + Random.nextInt(-2, 10)
 
-        status.postValue("поиск видео")
-        val oldProgress = progress.value ?: 0
-        val newProgress = 80 + Random.nextInt(-2, 10)
-
-        if (newProgress > oldProgress) {
-            progress.postValue(newProgress)
-        }
-
-        webView.settings.javaScriptEnabled = true
-        webView.addJavascriptInterface(JavaScriptParserVideo(loadVideoCallBack), "VIDEO")
-        webView.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView, url: String) {
-                webView.loadUrl("javascript:window.VIDEO.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');")
+            if (newProgress > oldProgress) {
+                progress.postValue(newProgress)
             }
+
+            localWebView.settings.javaScriptEnabled = true
+            localWebView.getSettings().setDomStorageEnabled(true);
+            localWebView.getSettings().setSaveFormData(true);
+            localWebView.getSettings().setSavePassword(true);
+            localWebView.getSettings().setLoadsImagesAutomatically(false);
+            localWebView.addJavascriptInterface(JavaScriptParserVideo(loadVideoCallBack), "VIDEO")
+            localWebView.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    Handler(Looper.getMainLooper())
+                        .postDelayed(
+                            {
+                                localWebView.loadUrl("javascript:window.VIDEO.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');")
+                                webViewInProgress = false
+
+                            }, 5000 // Sometimes the webView does not have time to load, this waiting fixes problem
+                        )
+
+                }
+            }
+            localWebView.settings.userAgentString = USER_AGENT_WEB_VIEW
+
+            localWebView.loadUrl(pageUrl)
         }
-        webView.settings.userAgentString = USER_AGENT_WEB_VIEW
-
-        webView.loadUrl(pageUrl)
-
     }
 
     override fun onPageFind(link: String) {
         Log.v(TAG, link)
-        controllerScope.launch {
-            findVideoUrlWithVideoView(link)
+        if (!webViewInProgress) {
+            controllerScope.launch {
+                findVideoUrlWithVideoView(link)
+            }
         }
     }
 

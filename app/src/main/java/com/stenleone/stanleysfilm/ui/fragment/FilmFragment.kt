@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
@@ -232,9 +230,6 @@ class FilmFragment : BaseFragment() {
             recomendedMovieAdapterAdapter.itemList.addAll(it.movies)
             binding.recyclerRecomendedList.adapter?.notifyDataSetChanged()
             binding.genreRecycler.visibility = View.VISIBLE
-        }
-        viewModel.movieUrl.observe(viewLifecycleOwner) {
-            Log.v("112233", it.toString())
         }
     }
 

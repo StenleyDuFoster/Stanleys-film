@@ -4,6 +4,7 @@ import android.webkit.JavascriptInterface
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.lang.Exception
 
 class JavaScriptParserVideo(private val callBack: CallBackVideoFromParser) {
 
@@ -13,20 +14,13 @@ class JavaScriptParserVideo(private val callBack: CallBackVideoFromParser) {
 
     @JavascriptInterface
     fun processHTML(html: String?) {
-
         val doc: Document = Jsoup
             .parse(html)
 
-        val parseArray = doc
-            .body()
-            .getElementById(PLAYER_CLASS_NAME)
-            .getElementsByAttribute("src")
-            .toString()
-            .split(" \" ")
+        try {
+            callBack.onVideoFind(doc.getElementById(PLAYER_CLASS_NAME).allElements.get(3).allElements.get(1).toString().split("\"").get(1))
+        } catch (e: Exception) {
 
-        if(parseArray.size < 4) {
-            val parse = parseArray[0].split("\"")
-            callBack.onVideoFind(parse[1])
         }
 
     }
