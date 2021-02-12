@@ -28,11 +28,23 @@
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:toolbarId="@+id/toolbar">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:background="@color/colorPrimaryDark"
-            android:id="@+id/youTubeVideoPager"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorPrimaryDark" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/youTubeVideoPager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/colorPrimaryDark" />
+
+        </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayoutYouTubeVideoPager"
@@ -79,10 +91,32 @@
                     android:translationZ="10dp"
                     app:cardBackgroundColor="@color/transparent"
                     app:cardCornerRadius="20dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="back button"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_back_arrow" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/favoriteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="15dp"
+                    android:translationZ="10dp"
+                    app:cardBackgroundColor="@color/transparent"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -104,6 +138,7 @@
                     android:text="@{title}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="18sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/backButton"
                     app:layout_constraintTop_toTopOf="parent"

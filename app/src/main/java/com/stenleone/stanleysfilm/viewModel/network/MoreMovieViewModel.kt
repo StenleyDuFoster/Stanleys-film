@@ -23,10 +23,12 @@ class MoreMovieViewModel @Inject constructor(
     val movieRepository: ListMovieRepository
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
+    var valLocalProgress = false
     val movieList = MutableLiveData<MoviesEntityUI>()
     var pageCurrent: Int? = null
 
     fun getPage(typeList: String, movieId: String? = null) {
+        valLocalProgress = true
         val page = (pageCurrent ?: 0) + 1 // load next page
         when (typeList) {
             TmdbNetworkConstant.LIST_RECOMENDED -> {
@@ -60,9 +62,10 @@ class MoreMovieViewModel @Inject constructor(
                     is DataState.Success -> {
                         movieList.postValue(it.data)
                         pageCurrent = (it.data.page)
+                        valLocalProgress = false
                     }
                     is DataState.Error -> {
-
+                        valLocalProgress = false
                     }
                 }
             }
@@ -81,8 +84,10 @@ class MoreMovieViewModel @Inject constructor(
                     success = {
                         movieList.postValue(it)
                         pageCurrent = (it.page)
+                        valLocalProgress = false
                     }, {
                         isFailure(RequestError.UNSUCCESS_STATUS, it)
+                        valLocalProgress = false
                     }
                 )
         }
@@ -100,8 +105,10 @@ class MoreMovieViewModel @Inject constructor(
                     success = {
                         movieList.postValue(it)
                         pageCurrent = (it.page)
+                        valLocalProgress = false
                     }, {
                         isFailure(RequestError.UNSUCCESS_STATUS, it)
+                        valLocalProgress = false
                     }
                 )
         }

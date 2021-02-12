@@ -185,7 +185,7 @@ class FilmFragment : BaseFragment() {
                 }
 
                 val oldItemCount = imageViewPager.listItems.size
-                if (imageViewPager.listItems.size <= 1) {
+                if (imageViewPager.listItems.size <= 2) {
                     it.posters.forEach {
                         imageViewPager.listItems.add(it.file_path)
                     }

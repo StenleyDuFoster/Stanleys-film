@@ -33,7 +33,7 @@
                 android:id="@+id/toolbarLay"
                 layout="@layout/toolbar"
                 app:image="@{movie.backdropPath == null ? movie.posterPath : movie.backdropPath}"
-                app:title="@{movie.title == null ? movie.originalTitle : movie.title}" />
+                app:title="@{null}" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"

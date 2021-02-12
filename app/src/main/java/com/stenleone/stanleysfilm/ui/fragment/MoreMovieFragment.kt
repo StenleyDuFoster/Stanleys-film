@@ -116,7 +116,7 @@ class MoreMovieFragment : BaseFragment() {
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    if ((recycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > adapter.itemList.size - PAGINATION_SIZE && viewModel.inProgress.value == false) {
+                    if ((recycler.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > adapter.itemList.size - PAGINATION_SIZE && viewModel.valLocalProgress == false) {
                         if (viewModel.pageCurrent ?: 0 + 1 < navArgs.movieEntity?.totalPages ?: 0) {
                             viewModel.getPage(navArgs.searchType ?: "", navArgs.movieRecomendedId)
                         }

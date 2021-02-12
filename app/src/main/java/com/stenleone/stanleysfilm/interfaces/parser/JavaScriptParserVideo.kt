@@ -20,7 +20,7 @@ class JavaScriptParserVideo(private val callBack: CallBackVideoFromParser) {
         try {
             callBack.onVideoFind(doc.getElementById(PLAYER_CLASS_NAME).allElements.get(3).allElements.get(1).toString().split("\"").get(1))
         } catch (e: Exception) {
-
+            callBack.onVideoNotFind()
         }
 
     }

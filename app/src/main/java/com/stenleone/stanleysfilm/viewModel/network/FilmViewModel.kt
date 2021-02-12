@@ -105,9 +105,14 @@ class FilmViewModel @Inject constructor(
             title,
             date ?: "0000",
             object : CallBackVideoFromParser {
+
                 override fun onVideoFind(link: String) {
                     movieUrl.postValue(link)
                     firestoreManager.setMovieUrl(title, date ?: "0000", link)
+                }
+
+                override fun onVideoNotFind() {
+
                 }
             })
     }
