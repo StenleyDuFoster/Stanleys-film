@@ -27,13 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
+        android:layout_margin="10dp"
         android:textColor="@color/colorPrimary"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintBottom_toBottomOf="@+id/fullscreenButton"
+        app:layout_constraintStart_toEndOf="@+id/fullscreenButton"
+        app:layout_constraintTop_toTopOf="@+id/fullscreenButton" />
 
     <com.google.android.exoplayer2.ui.DefaultTimeBar
         android:id="@id/exo_progress"
@@ -59,33 +58,38 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
+        android:layout_margin="10dp"
         android:textColor="@color/colorPrimary"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintBottom_toBottomOf="@+id/volumeButton"
+        app:layout_constraintEnd_toStartOf="@+id/volumeButton"
+        app:layout_constraintTop_toTopOf="@+id/volumeButton" />
 
-    <ImageButton
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/fullscreenButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentStart="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_fullscreen_white"
-        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/rewButtonContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exo_progress"
-        tools:visibility="visible" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_fullscreen_white" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <FrameLayout
         android:id="@+id/rewButtonContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_toLeftOf="@+id/playPauseButton"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/playPauseButton"
         app:layout_constraintStart_toEndOf="@+id/fullscreenButton"
@@ -102,23 +106,33 @@
 
     </FrameLayout>
 
-    <ImageButton
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/playPauseButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_player_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ffwdButtonContainer"
-        app:layout_constraintStart_toEndOf="@+id/rewButtonContainer"
-        app:layout_constraintTop_toTopOf="@+id/rewButtonContainer" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_player_pause" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <FrameLayout
         android:id="@+id/ffwdButtonContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_toRightOf="@+id/playPauseButton"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/volumeButton"
         app:layout_constraintStart_toEndOf="@+id/playPauseButton"
@@ -135,20 +149,24 @@
 
     </FrameLayout>
 
-
-    <ImageButton
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/volumeButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentEnd="true"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_volume_up"
-        android:visibility="visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ffwdButtonContainer"
-        app:layout_constraintTop_toTopOf="@+id/ffwdButtonContainer"
-        tools:visibility="visible" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_volume_up" />
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

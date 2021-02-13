@@ -31,18 +31,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:orientation="vertical">
 
-            <View
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/colorPrimaryDark" />
+                android:layout_height="40dp" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/youTubeVideoPager"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorPrimaryDark" />
+                android:layout_height="200dp" />
 
         </LinearLayout>
 
@@ -60,7 +59,6 @@
             app:tabIndicatorColor="@color/transparent"
             app:tabMaxWidth="15dp"
             tools:visibility="visible" />
-
 
         <!--        <ImageView-->
         <!--            android:id="@+id/titleImage"-->
@@ -118,12 +116,17 @@
                     app:cardCornerRadius="20dp"
                     app:cardElevation="0dp">
 
-                    <ImageView
+                    <com.airbnb.lottie.LottieAnimationView
+                        app:lottie_rawRes=""
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="back button"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_back_arrow" />
+                        android:layout_height="wrap_content"/>
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:contentDescription="back button"-->
+<!--                        android:padding="10dp"-->
+<!--                        android:src="@drawable/ic_back_arrow" />-->
 
                 </com.google.android.material.card.MaterialCardView>
 

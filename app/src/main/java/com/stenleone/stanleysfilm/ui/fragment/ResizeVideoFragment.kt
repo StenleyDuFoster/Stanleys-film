@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
@@ -23,6 +24,7 @@ import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.google.android.material.card.MaterialCardView
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentVideoBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
@@ -218,8 +220,8 @@ class ResizeVideoFragment : BaseFragment() {
 
     private fun setupClicks() {
         binding.apply {
-            val playControlButton = videoView.findViewById<ImageButton>(R.id.playPauseButton)
-            val fullScreenButtonControls = videoView.findViewById<ImageButton>(R.id.fullscreenButton)
+            val playControlButton = videoView.findViewById<MaterialCardView>(R.id.playPauseButton)
+            val fullScreenButtonControls = videoView.findViewById<MaterialCardView>(R.id.fullscreenButton)
             title.text = movieUI?.title ?: movieUI?.originalTitle
 
             closeButton.clicks()
@@ -235,9 +237,9 @@ class ResizeVideoFragment : BaseFragment() {
                 .onEach {
                     val playWhenReady = (videoView.player as SimpleExoPlayer).playWhenReady
                     if (playWhenReady) {
-                        playControlButton.setImageResource(R.drawable.ic_player_play)
+                        (playControlButton.getChildAt(0) as ImageView).setImageResource(R.drawable.ic_player_play)
                     } else {
-                        playControlButton.setImageResource(R.drawable.ic_player_pause)
+                        (playControlButton.getChildAt(0) as ImageView).setImageResource(R.drawable.ic_player_pause)
                     }
                     (videoView.player as SimpleExoPlayer).playWhenReady = !playWhenReady
                 }

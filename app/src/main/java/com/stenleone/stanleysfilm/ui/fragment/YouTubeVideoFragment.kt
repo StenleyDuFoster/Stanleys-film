@@ -50,6 +50,7 @@ class YouTubeVideoFragment : Fragment() {
             youtubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
                     youTubePlayer.loadVideo(arguments?.getString(SAVE_URL) ?: "", 0f)
+                    youTubePlayer.addListener(tracker)
                     youTubePlayer.pause()
                 }
             })
