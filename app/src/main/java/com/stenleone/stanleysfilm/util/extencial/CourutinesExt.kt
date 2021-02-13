@@ -1,6 +1,8 @@
 package com.stenleone.stanleysfilm.util.extencial
 
 import android.view.View
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
@@ -62,4 +64,8 @@ fun View.throttleClicks(onEach: () -> Unit, scope: CoroutineScope, periodMillis:
             onEach.invoke()
         }
         .launchIn(scope)
+}
+
+fun LifecycleOwner.throttleClicks(view: View, onEach: () -> Unit, periodMillis: Long = BindingConstant.SMALL_THROTTLE) {
+    view.throttleClicks(onEach, this.lifecycleScope)
 }

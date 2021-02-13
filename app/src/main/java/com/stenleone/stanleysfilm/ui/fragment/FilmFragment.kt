@@ -1,11 +1,12 @@
 package com.stenleone.stanleysfilm.ui.fragment
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -133,7 +134,7 @@ class FilmFragment : BaseFragment() {
         youTubePlayersAdapter = YouTubeTrailersAdapter(this)
         binding.apply {
             toolbarLay.youTubeVideoPager.adapter = youTubePlayersAdapter
-            TabLayoutMediator(toolbarLay.tabLayoutYouTubeVideoPager ,toolbarLay.youTubeVideoPager, { tab, pager -> }).attach()
+            TabLayoutMediator(toolbarLay.tabLayoutYouTubeVideoPager, toolbarLay.youTubeVideoPager, { tab, pager -> }).attach()
         }
     }
 
@@ -285,6 +286,32 @@ class FilmFragment : BaseFragment() {
                     recomendedMovieAdapterAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
+
+
+            throttleClicks(
+                toolbarLay.addToFavorite, {
+                    if (toolbarLay.addToFavorite.progress == 0f) {
+                        viewModel.firestoreManager.addToFavorite(navArgs.movie?.id?.toString() ?: "", {
+                            Toast.makeText(requireContext(), getString(R.string.added_to_favorite), Toast.LENGTH_SHORT).show()
+                        }, {
+                            Toast.makeText(requireContext(), getString(R.string.error_added_to_favorite), Toast.LENGTH_SHORT).show()
+                        })
+                        val animator = ValueAnimator.ofFloat(0f, 1f)
+                        animator.duration = 1000
+                        animator.addUpdateListener {
+                            toolbarLay.addToFavorite.progress = (Math.abs(it.getAnimatedValue() as Float))
+                        }
+                        animator.start()
+                    } else {
+                        val animator = ValueAnimator.ofFloat(1f, 0f)
+                        animator.duration = 1000
+                        animator.addUpdateListener {
+                            toolbarLay.addToFavorite.progress = (Math.abs(it.getAnimatedValue() as Float))
+                        }
+                        animator.start()
+                    }
+                }
+            )
 
             recomendedText.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
