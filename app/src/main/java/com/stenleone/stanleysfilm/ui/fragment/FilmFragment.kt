@@ -22,6 +22,7 @@ import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseAnalyticsManagers
+import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant
 import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
@@ -232,6 +233,31 @@ class FilmFragment : BaseFragment() {
             binding.recyclerRecomendedList.adapter?.notifyDataSetChanged()
             binding.genreRecycler.visibility = View.VISIBLE
         }
+        viewModel.favoriteIdList.observe(viewLifecycleOwner) {
+            binding.apply {
+                toolbarLay.addToFavorite.visibility = View.VISIBLE
+
+                if (it.get(FirebaseCloudFirestoreManagers.MOVIE)?.contains(navArgs.movie?.id?.toString()) ?: false) {
+                    toolbarLay.addToFavorite.progress = 1f
+                }
+            }
+        }
+        viewModel.updateFavoriteStatus.observe(viewLifecycleOwner, {
+            binding.apply {
+
+                if (it.updateSuccess) {
+                    Toast.makeText(requireContext(), getString(R.string.added_to_favorite), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_added_to_favorite), Toast.LENGTH_SHORT).show()
+                }
+
+                if (it.isFavorite) {
+                    toolbarLay.addToFavorite.progress = 1f
+                } else {
+                    toolbarLay.addToFavorite.progress = 0f
+                }
+            }
+        })
     }
 
     private fun setupClicks() {
@@ -291,11 +317,7 @@ class FilmFragment : BaseFragment() {
             throttleClicks(
                 toolbarLay.addToFavorite, {
                     if (toolbarLay.addToFavorite.progress == 0f) {
-                        viewModel.firestoreManager.addToFavorite(navArgs.movie?.id?.toString() ?: "", {
-                            Toast.makeText(requireContext(), getString(R.string.added_to_favorite), Toast.LENGTH_SHORT).show()
-                        }, {
-                            Toast.makeText(requireContext(), getString(R.string.error_added_to_favorite), Toast.LENGTH_SHORT).show()
-                        })
+                        viewModel.addToFavorite((navArgs.movie?.id ?: 0).toString())
                         val animator = ValueAnimator.ofFloat(0f, 1f)
                         animator.duration = 1000
                         animator.addUpdateListener {
@@ -303,6 +325,7 @@ class FilmFragment : BaseFragment() {
                         }
                         animator.start()
                     } else {
+                        viewModel.removeFromFavorite((navArgs.movie?.id ?: 0).toString())
                         val animator = ValueAnimator.ofFloat(1f, 0f)
                         animator.duration = 1000
                         animator.addUpdateListener {

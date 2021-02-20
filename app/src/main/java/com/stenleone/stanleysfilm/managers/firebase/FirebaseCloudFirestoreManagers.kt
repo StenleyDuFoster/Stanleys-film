@@ -43,61 +43,94 @@ class FirebaseCloudFirestoreManagers @Inject constructor(@ApplicationContext val
             .set(hashMap)
     }
 
-    fun getFavorite(movieId: String, success: (movieIdList: HashMap<String, String>) -> Unit, failure: () -> Unit) {
+    fun getFavorite(success: (userData: HashMap<String, ArrayList<String>>) -> Unit, failure: () -> Unit) {
         store.collection(USERS).document(userId).get().addOnSuccessListener {
-            success.invoke(it.data as? HashMap<String, String>? ?: hashMapOf())
+            if (it.data != null) {
+                success.invoke((it.data as? HashMap<String, ArrayList<String>>? ?: hashMapOf()))
+            } else {
+                success.invoke((it.data as? HashMap<String, ArrayList<String>>? ?: hashMapOf()))
+            }
         }
             .addOnFailureListener {
                 failure.invoke()
             }
     }
 
-    fun removeFromFavorite(movieId: String, userMovies: HashMap<String, String>, success: () -> Unit, failure: () -> Unit) {
-        val hashMap: Map<String, String> = userMovies
-            (hashMap as HashMap<String, String>).remove("$MOVIE${(userMovies.size)}") // add new movie to list
+    fun removeFromFavorite(
+        movieId: String,
+        userMovies: HashMap<String, ArrayList<String>>,
+        success: (HashMap<String, ArrayList<String>>) -> Unit,
+        failure: () -> Unit
+    ) {
+        val moviesList = userMovies.get(MOVIE) ?: arrayListOf()
 
-            if (hashMap.size > 0) {
-                store.collection(USERS).document(userId).update(hashMap)
-                    .addOnSuccessListener {
-                        success.invoke()
-                    }
-                    .addOnFailureListener {
-                        failure.invoke()
-                    }
-            } else {
-                store.collection(USERS).document(userId).set(hashMap)
-                    .addOnSuccessListener {
-                        success.invoke()
-                    }
-                    .addOnFailureListener {
-                        failure.invoke()
-                    }
+        var keyRemove: String? = null
+        moviesList.forEach {
+            if (movieId == it) {
+                keyRemove = it
             }
+        }
 
-    }
-
-    fun addToFavorite(movieId: String, userMovies: HashMap<String, String>, success: () -> Unit, failure: () -> Unit) {
-        val hashMap: Map<String, String> = userMovies
-        if (!userMovies.values.contains(movieId)) {
-            (hashMap as HashMap<String, String>)["$MOVIE${(userMovies.size)}"] = movieId // add new movie to list
+        keyRemove?.let {
+            moviesList.remove(it)
+            val map = HashMap<String, ArrayList<String>>()
+            map.put(MOVIE, moviesList)
 
             if (userMovies.size > 0) {
-                store.collection(USERS).document(userId).update(hashMap)
+                store.collection(USERS).document(userId).set(map)
                     .addOnSuccessListener {
-                        success.invoke()
+                        success.invoke(map)
                     }
                     .addOnFailureListener {
                         failure.invoke()
                     }
+                    .addOnCanceledListener(failure)
             } else {
-                store.collection(USERS).document(userId).set(hashMap)
+                store.collection(USERS).document(userId).set(map)
                     .addOnSuccessListener {
-                        success.invoke()
+                        success.invoke(map)
                     }
                     .addOnFailureListener {
                         failure.invoke()
                     }
+                    .addOnCanceledListener(failure)
             }
+        }
+    }
+
+    fun addToFavorite(
+        movieId: String,
+        userData: HashMap<String, ArrayList<String>>,
+        success: (HashMap<String, ArrayList<String>>) -> Unit,
+        failure: () -> Unit
+    ) {
+        val moviesList = userData.get(MOVIE) ?: arrayListOf()
+
+        if (userData.size > 0) {
+            moviesList.add(movieId)  // add new movie to list
+            val map = HashMap<String, ArrayList<String>>()
+            map.put(MOVIE, moviesList)
+            store.collection(USERS).document(userId).update(map as Map<String, ArrayList<String>>)
+                .addOnSuccessListener {
+                    success.invoke(map)
+                }
+                .addOnFailureListener {
+                    failure.invoke()
+                }
+                .addOnCanceledListener(failure)
+        } else {
+            moviesList.add(movieId)  // add new movie to list
+            val map = HashMap<String, ArrayList<String>>()
+            map.put(MOVIE, moviesList)
+            moviesList.add(movieId) // add new movie to list
+            store.collection(USERS).document(userId).set(map)
+                .addOnSuccessListener {
+                    success.invoke(map)
+                }
+                .addOnFailureListener {
+                    failure.invoke()
+                }
+                .addOnCanceledListener(failure)
         }
     }
 

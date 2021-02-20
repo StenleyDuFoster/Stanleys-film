@@ -47,7 +47,7 @@
     <string name="watch_online">Смотреть Онлайн!</string>
     
     <string name="action_settings">Settings</string>
-    <string name="added_to_favorite">Добавлено к любимым</string>
-    <string name="error_added_to_favorite">Ошибка во время добавления в любимые</string>
-    <string name="error_added_to_favorite_already">Фильм уже был добавлен в любимые</string>
+    <string name="added_to_favorite">Список любимых фильмов обновлён</string>
+    <string name="error_added_to_favorite">Ошибка обновления списка любимых</string>
+
 </resources>

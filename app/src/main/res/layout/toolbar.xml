@@ -80,6 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:animateLayoutChanges="true"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -113,6 +114,7 @@
                     android:layout_gravity="end|center"
                     android:layout_marginEnd="15dp"
                     android:translationZ="10dp"
+                    android:visibility="gone"
                     app:lottie_rawRes="@raw/start_favorite_anim"
                     app:lottie_speed="3" />
 

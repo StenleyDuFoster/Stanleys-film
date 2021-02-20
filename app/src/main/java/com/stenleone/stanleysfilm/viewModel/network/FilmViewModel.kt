@@ -14,6 +14,7 @@ import com.stenleone.stanleysfilm.model.entity.DataState
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
 import com.stenleone.stanleysfilm.network.repository.MovieAdditionallyRepository
 import com.stenleone.stanleysfilm.ui.model.VideosUI
+import com.stenleone.stanleysfilm.ui.model.general.FavoriteState
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -31,6 +32,8 @@ class FilmViewModel @Inject constructor(
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
     val movieUrl = MutableLiveData<String?>()
+    val favoriteIdList = MutableLiveData<HashMap<String, ArrayList<String>>>()
+    val updateFavoriteStatus = MutableLiveData<FavoriteState>()
     val movieDetails = MutableLiveData<MovieDetailsEntityUI>()
     val imageList = MutableLiveData<ImagesEntityUI>()
     val recomendedMovieList = MutableLiveData<MoviesEntityUI>()
@@ -93,11 +96,46 @@ class FilmViewModel @Inject constructor(
                 }
             )
         )
+        getFavoriteList()
     }
 
     fun startFindFilmUrl(title: String, date: String?) {
         findByWebView(title, date)
         findByFireStore(title, date)
+    }
+
+    private fun getFavoriteList() {
+        firestoreManager.getFavorite({
+            favoriteIdList.postValue(it)
+        }, {
+
+        })
+    }
+
+    fun addToFavorite(movieId: String) {
+        val movieMap = favoriteIdList.value ?: hashMapOf()
+
+        if (!(movieMap.get(FirebaseCloudFirestoreManagers.MOVIE)?.contains(movieId) ?: false)) {
+            firestoreManager.addToFavorite(movieId , movieMap, {
+                favoriteIdList.postValue(it)
+                updateFavoriteStatus.postValue((FavoriteState(true, true)))
+            }, {
+                updateFavoriteStatus.postValue((FavoriteState(false, false)))
+            })
+        }
+    }
+
+    fun removeFromFavorite(movieId: String) {
+        val movieMap = favoriteIdList.value ?: hashMapOf()
+
+        if (movieMap.get(FirebaseCloudFirestoreManagers.MOVIE)?.contains(movieId) ?: false) {
+            firestoreManager.removeFromFavorite(movieId , movieMap, {
+                favoriteIdList.postValue(it)
+                updateFavoriteStatus.postValue((FavoriteState(true, false)))
+            }, {
+                updateFavoriteStatus.postValue((FavoriteState(false, true)))
+            })
+        }
     }
 
     private fun findByWebView(title: String, date: String?) {
@@ -123,40 +161,6 @@ class FilmViewModel @Inject constructor(
             if (movieUrl.value == null) {
                 movieUrl.postValue(it)
             }
-        }
-    }
-
-    private fun getMovieDetails(id: Int) {
-        doAsyncRequest {
-            apiService.getMovieDetails(
-                language = sharedPreferencesManager.language,
-                movieId = id
-            )
-                .await()
-                .successOrError(
-                    success = {
-                        movieDetails.postValue(it)
-                    }, {
-                        isFailure(RequestError.UNSUCCESS_STATUS, it)
-                    }
-                )
-        }
-    }
-
-    private fun getRecomendedMovieList(id: Int) {
-        doAsyncRequest {
-            apiService.getRecomendedList(
-                language = sharedPreferencesManager.language,
-                movieId = id
-            )
-                .await()
-                .successOrError(
-                    success = {
-                        recomendedMovieList.postValue(it)
-                    }, {
-                        isFailure(RequestError.UNSUCCESS_STATUS, it)
-                    }
-                )
         }
     }
 
