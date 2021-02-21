@@ -40,6 +40,9 @@ class SettingsFragment : BaseFragment() {
             favoriteButton.throttleClicks(
                 { findNavController().navigate(R.id.favoriteFragment) }, lifecycleScope
             )
+            rateButton.throttleClicks(
+                { findNavController().navigate(R.id.rateFragment) }, lifecycleScope
+            )
         }
     }
 }

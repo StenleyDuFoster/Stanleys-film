@@ -6,7 +6,7 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_IMAGE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_SESSION
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.GET_VIDEOS
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIKE_MOVIE
-import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_LIKE_MOVIE
+import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RATE_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_MOVIE_LATES
 import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.LIST_RECOMENDED
@@ -17,11 +17,12 @@ import com.stenleone.stanleysfilm.network.entity.Videos
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
-import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.network.entity.tmdb_auth.GuestSessionEntityUI
+import com.stenleone.stanleysfilm.viewModel.network.RateMovieViewModel
 import kotlinx.coroutines.Deferred
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -73,7 +74,7 @@ interface ApiService {
         @Query("language") language: String
     ): Deferred<Response<Videos>>
 
-    @GET(LIST_LIKE_MOVIE)
+    @GET(LIST_RATE_MOVIE)
     fun getLikeMovieAsync(
         @Path("session_id") session_id: String,
         @Query("api_key") api_key: String = API_V3,
@@ -98,9 +99,17 @@ interface ApiService {
     fun postLikeMovieAsync(
         @Path("movie_id") movie_id: Int,
         @Query("api_key") api_key: String = API_V3,
-        @Query("guest_session_id") guest_session_id: String,
-        @Body userData: String
-    ): Deferred<Response<String>>
+        @Query("guest_session_id") guest_session_id: String?,
+        @Body userData: RateMovieViewModel.Rate
+    ): Deferred<Response<ResponseBody>>
+
+    @GET(LIST_RATE_MOVIE)
+    fun getListRateMovieAsync(
+        @Path("guest_session_id") guestSessionId: String?,
+        @Query("api_key") api_key: String = API_V3,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Deferred<Response<MoviesEntity>>
 
     @DELETE(LIKE_MOVIE)
     fun deleteLikeMovieAsync(

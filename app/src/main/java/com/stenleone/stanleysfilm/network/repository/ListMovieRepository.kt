@@ -44,4 +44,31 @@ class ListMovieRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun getRateMovieList(guestSessionId: String?, page: Int = 1): DataState<MoviesEntityUI> {
+        try {
+            val response = apiService.getListRateMovieAsync(
+                guestSessionId,
+                language = sharedPreferencesManager.language,
+                page = page
+            ).await()
+
+            val data = response.body()
+            if (response.isSuccessful && data != null) {
+                return (DataState.Success(listMovieMapper.mapFromEntity(data)))
+            } else {
+                return if (connectionManager.isConnected.value == true) {
+                    (DataState.Error(RequestError(RequestError.REQUEST_ERROR, message = response.errorBody().toString())))
+                } else {
+                    (DataState.Error(RequestError(RequestError.CONNECTION_ERROR)))
+                }
+            }
+        } catch (e: Exception) {
+            return if (connectionManager.isConnected.value == true) {
+                (DataState.Error(RequestError(RequestError.REQUEST_ERROR, message = e.message.toString())))
+            } else {
+                (DataState.Error(RequestError(RequestError.CONNECTION_ERROR)))
+            }
+        }
+    }
 }

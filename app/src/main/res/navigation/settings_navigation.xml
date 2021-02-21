@@ -71,4 +71,10 @@
         android:label="FavoriteFragment"
         tools:layout="@layout/fragment_favorite" />
 
+    <fragment
+        android:id="@+id/rateFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.settings.RateFragment"
+        android:label="RateFragment"
+        tools:layout="@layout/ra" />
+
 </navigation>

@@ -50,5 +50,12 @@
     <string name="favorite_list">Список любимых фильмов</string>
     <string name="added_to_favorite">Список любимых фильмов обновлён</string>
     <string name="error_added_to_favorite">Ошибка обновления списка любимых</string>
+    <string name="send">Отправить</string>
+    <string name="rate_send">Рейтинг "%s" для фильма %s был успешно отправлен!</string>
+    <string name="rate_error_send">Не удалось отправить рейтинг</string>
+    <string name="rate_button_list">Список фильмов, которые вы оценили</string>
+
+    <string name="guest_title_message_list">Гостевой аккаунт</string>
+    <string name="guest_sub_title_message_list">Тип вашего аккаунта "гостевой", из за этого он будет удалён после %s, данные в этом списке пропадут</string>
 
 </resources>

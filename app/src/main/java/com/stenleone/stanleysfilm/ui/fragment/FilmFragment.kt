@@ -32,6 +32,7 @@ import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.ImageViewPager
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.YouTubeTrailersAdapter
+import com.stenleone.stanleysfilm.ui.dialog.RateMovieDialog
 import com.stenleone.stanleysfilm.ui.dialog.UnSupportVersionDialog
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.anim.ButtonTextColorAnimator
@@ -313,6 +314,11 @@ class FilmFragment : BaseFragment() {
                 }
                 .launchIn(lifecycleScope)
 
+            rateMovie.throttleClicks(
+                {
+                    RateMovieDialog.show(childFragmentManager, navArgs.movie?.title ?: "", navArgs.movie?.id ?: 0)
+                }, lifecycleScope
+            )
 
             throttleClicks(
                 toolbarLay.addToFavorite, {
@@ -350,8 +356,6 @@ class FilmFragment : BaseFragment() {
                     )
                 }
                 .launchIn(lifecycleScope)
-
-            rateMovie.throttleClicks({ UnSupportVersionDialog.show(childFragmentManager) }, lifecycleScope)
         }
     }
 

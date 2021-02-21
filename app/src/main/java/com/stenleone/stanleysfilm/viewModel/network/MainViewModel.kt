@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
+import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesMessageManager
 import com.stenleone.stanleysfilm.model.entity.DataState
 import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
@@ -30,7 +31,8 @@ class MainViewModel @Inject constructor(
     apiService: ApiService,
     sharedPreferencesManager: SharedPreferencesManager,
     connectionManager: ConnectionManager,
-    val movieRepository: ListMovieRepository
+    val movieRepository: ListMovieRepository,
+    val messageShowsManager: SharedPreferencesMessageManager
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
     val movieLatesLiveData = MutableLiveData<LatesEntityUI>()
@@ -127,15 +129,15 @@ class MainViewModel @Inject constructor(
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun setupGuestSessionToken() {
+    private fun setupGuestSessionToken() { // 2021-02-22 11:13:21 UTC
 
-        val sdf = SimpleDateFormat("yyyy-mm-dd hh:mm:ss")
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
         val currentDate = sdf.format(Date())
 
         if (sharedPreferencesManager.expiresGuestTokenAt != null) {
             val tokenDate = sdf.format(sdf.parse(sharedPreferencesManager.expiresGuestTokenAt ?: "0"))
-
-            if (currentDate < tokenDate) {
+// 2021-30-21 11:30:31 2021-15-22 11:15:16
+            if (currentDate > tokenDate) {
                 getNewGuestToken()
             }
         } else {
@@ -153,6 +155,7 @@ class MainViewModel @Inject constructor(
                         if (it.success) {
                             sharedPreferencesManager.guestSessionToken = it.guestSessionId //2021-01-08 17:53:54 UTC
                             sharedPreferencesManager.expiresGuestTokenAt = it.expiresAt
+                            messageShowsManager.rateMessageGuestSessionShows = false
                         }
                     }, {
                         isFailure(RequestError.UNSUCCESS_STATUS, it)

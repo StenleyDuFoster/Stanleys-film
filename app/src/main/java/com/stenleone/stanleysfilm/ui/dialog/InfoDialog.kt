@@ -68,7 +68,7 @@ class InfoDialog : DialogFragment() {
             buttonOkCard.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    requireActivity().finish()
+                    dialog?.dismiss()
                 }
                 .launchIn(lifecycleScope)
         }
