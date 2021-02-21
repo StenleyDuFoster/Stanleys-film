@@ -19,8 +19,8 @@
         android:id="@+id/collapsingToolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
         android:tooltipText="dfdsfsdf"
+        android:animateLayoutChanges="false"
         app:contentScrim="@color/colorPrimaryDark"
         app:expandedTitleGravity="top"
         app:expandedTitleMarginEnd="58dp"
@@ -28,22 +28,42 @@
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
         app:toolbarId="@+id/toolbar">
 
-        <LinearLayout
+        <FrameLayout
+            android:animateLayoutChanges="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:orientation="vertical">
+            android:background="@color/colorPrimaryDark">
 
-            <Space
+            <LinearLayout
+                android:animateLayoutChanges="false"
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/youTubeVideoPager"
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:animateLayoutChanges="false"
+                    android:id="@+id/youTubeVideoPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:translationZ="-5dp"
+                android:id="@+id/titleImage"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:layout_height="200dp"
+                android:layout_marginTop="50dp"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:loadImage="@{image}" />
 
-        </LinearLayout>
+        </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayoutYouTubeVideoPager"
@@ -59,14 +79,6 @@
             app:tabIndicatorColor="@color/transparent"
             app:tabMaxWidth="15dp"
             tools:visibility="visible" />
-
-        <!--        <ImageView-->
-        <!--            android:id="@+id/titleImage"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="250dp"-->
-        <!--            android:scaleType="centerCrop"-->
-        <!--            app:layout_collapseMode="parallax"-->
-        <!--            app:loadImage="@{image}" />-->
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"

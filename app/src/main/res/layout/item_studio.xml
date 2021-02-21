@@ -50,7 +50,7 @@
                     android:singleLine="false"
                     android:text="@{studio.name}"
                     android:textColor="@color/colorPrimaryDark"
-                    android:visibility="@{studio.logoPath == null ? View.VISIBLE : View.GONE}" />
+                    android:visibility='@{studio.logoPath == "" ? View.VISIBLE : View.GONE}' />
 
             </com.google.android.material.card.MaterialCardView>
         </com.facebook.shimmer.ShimmerFrameLayout>
