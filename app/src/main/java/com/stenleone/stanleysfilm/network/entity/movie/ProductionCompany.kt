@@ -6,10 +6,10 @@ import com.stenleone.stanleysfilm.interfaces.model.Network
 import kotlinx.android.parcel.Parcelize
 
 data class ProductionCompany(
-    val id: Int,
+    val id: String?,
     @SerializedName("logo_path")
-    val logoPath: String,
-    val name: String,
+    val logoPath: String?,
+    val name: String?,
     @SerializedName("origin_country")
-    val originCountry: String
+    val originCountry: String?
 ): Network

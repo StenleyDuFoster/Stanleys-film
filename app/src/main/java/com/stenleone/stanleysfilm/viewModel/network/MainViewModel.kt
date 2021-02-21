@@ -48,44 +48,40 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             inProgress.postValue(true)
             async {
-                movieRepository.getMovieList(LIST_MOVIE_NOW_PLAYING).collect {
-                    when (it) {
-                        is DataState.Success -> {
-                            postValue(LIST_MOVIE_NOW_PLAYING, it.data)
-                        }
-                        is DataState.Error -> {
+                val nowPlaying = movieRepository.getMovieList(LIST_MOVIE_NOW_PLAYING)
+                when (nowPlaying) {
+                    is DataState.Success -> {
+                        postValue(LIST_MOVIE_NOW_PLAYING, nowPlaying.data)
+                    }
+                    is DataState.Error -> {
 
-                        }
                     }
                 }
-                movieRepository.getMovieList(LIST_MOVIE_POPULAR).collect {
-                    when (it) {
-                        is DataState.Success -> {
-                            postValue(LIST_MOVIE_POPULAR, it.data)
-                        }
-                        is DataState.Error -> {
+                val popular = movieRepository.getMovieList(LIST_MOVIE_POPULAR)
+                when (popular) {
+                    is DataState.Success -> {
+                        postValue(LIST_MOVIE_POPULAR, popular.data)
+                    }
+                    is DataState.Error -> {
 
-                        }
                     }
                 }
-                movieRepository.getMovieList(LIST_MOVIE_TOP_RATED).collect {
-                    when (it) {
-                        is DataState.Success -> {
-                            postValue(LIST_MOVIE_TOP_RATED, it.data)
-                        }
-                        is DataState.Error -> {
+                val topRated = movieRepository.getMovieList(LIST_MOVIE_TOP_RATED)
+                when (topRated) {
+                    is DataState.Success -> {
+                        postValue(LIST_MOVIE_TOP_RATED, topRated.data)
+                    }
+                    is DataState.Error -> {
 
-                        }
                     }
                 }
-                movieRepository.getMovieList(LIST_MOVIE_TOP_UPCOMING).collect {
-                    when (it) {
-                        is DataState.Success -> {
-                            postValue(LIST_MOVIE_TOP_UPCOMING, it.data)
-                        }
-                        is DataState.Error -> {
+                val upComing = movieRepository.getMovieList(LIST_MOVIE_TOP_UPCOMING)
+                when (upComing) {
+                    is DataState.Success -> {
+                        postValue(LIST_MOVIE_TOP_UPCOMING, upComing.data)
+                    }
+                    is DataState.Error -> {
 
-                        }
                     }
                 }
             }

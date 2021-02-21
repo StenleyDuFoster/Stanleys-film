@@ -5,9 +5,9 @@ import com.stenleone.stanleysfilm.interfaces.model.Network
 
 data class BelongsToCollection(
     @SerializedName("backdrop_path")
-    val backdropPath: String,
-    val id: Int,
-    val name: String,
+    val backdropPath: String?,
+    val id: String?,
+    val name: String?,
     @SerializedName("poster_path")
-    val posterPath: String
+    val posterPath: String?
 ): Network

@@ -3,6 +3,7 @@ package com.stenleone.stanleysfilm.network.repository
 import com.stenleone.stanleysfilm.managers.ConnectionManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.DataState
+import com.stenleone.stanleysfilm.model.entity.RequestError
 import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.network.mapper.MoviesEntityMapper
@@ -17,26 +18,30 @@ class ListMovieRepository @Inject constructor(
     val listMovieMapper: MoviesEntityMapper
 ) {
 
-    suspend fun getMovieList(typeList: String, page: Int = 1): Flow<DataState<MoviesEntityUI>> = flow {
-        emit(DataState.Loading(true))
+    suspend fun getMovieList(typeList: String, page: Int = 1): DataState<MoviesEntityUI> {
         try {
             val response = apiService.getListMovieAsync(
                 typeList,
                 language = sharedPreferencesManager.language,
                 page = page
             ).await()
-            emit(DataState.Loading(false))
 
-            if (response.isSuccessful) {
-                response.body()?.let { data ->
-                    emit(DataState.Success(listMovieMapper.mapFromEntity(data)))
-                }
+            val data = response.body()
+            if (response.isSuccessful && data != null) {
+                return (DataState.Success(listMovieMapper.mapFromEntity(data)))
             } else {
-                emit(DataState.Error(Exception()))
+                return if (connectionManager.isConnected.value == true) {
+                    (DataState.Error(RequestError(RequestError.REQUEST_ERROR, message = response.errorBody().toString())))
+                } else {
+                    (DataState.Error(RequestError(RequestError.CONNECTION_ERROR)))
+                }
             }
         } catch (e: Exception) {
-            emit(DataState.Loading(false))
-            emit(DataState.Error(e))
+            return if (connectionManager.isConnected.value == true) {
+                (DataState.Error(RequestError(RequestError.REQUEST_ERROR, message = e.message.toString())))
+            } else {
+                (DataState.Error(RequestError(RequestError.CONNECTION_ERROR)))
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ data class MovieDetailsEntityUI(
     @SerializedName("backdrop_path")
     val backdropPath: String,
     @SerializedName("belongs_to_collection")
-    val belongsToCollectionUI: BelongsToCollectionUI,
+    val belongsToCollectionUI: BelongsToCollectionUI?,
     val budget: Int?,
     val genres: ArrayList<GenreUI>,
     val homepage: String,
@@ -42,4 +42,23 @@ data class MovieDetailsEntityUI(
     val voteAverage: Double,
     @SerializedName("vote_count")
     val voteCount: Int
-): UI
+): UI {
+    fun mapToMovie(): MovieUI {
+        return MovieUI(
+            adult,
+            backdropPath,
+            arrayListOf(),
+            id,
+            originalLanguage,
+            originalTitle,
+            overview,
+            popularity.toFloat(),
+            posterPath,
+            releaseDate,
+            title,
+            video,
+            voteAverage.toFloat(),
+            voteCount
+        )
+    }
+}

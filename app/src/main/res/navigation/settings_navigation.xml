@@ -11,4 +11,64 @@
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings" />
 
+    <fragment
+        android:id="@+id/actorFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.ActorFragment"
+        android:label="ActorFragment"
+        tools:layout="@layout/fragment_actor" />
+
+    <fragment
+        android:id="@+id/filmFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.FilmFragment"
+        android:label="FilmFragment"
+        tools:layout="@layout/fragment_film">
+        <argument
+            android:name="movie"
+            app:argType="com.stenleone.stanleysfilm.network.entity.movie.MovieUI"
+            app:nullable="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_filmFragment"
+        app:destination="@id/filmFragment"/>
+    <!--        app:enterAnim="@anim/top_to_middle_transition_anim"-->
+    <!--        app:exitAnim="@anim/middle_to_bottom_transition_anim"-->
+    <!--        app:popEnterAnim="@anim/bottom_to_middle_transition_anim"-->
+    <!--        app:popExitAnim="@anim/middle_to_top_transition_anim"-->
+
+    <fragment
+        android:id="@+id/moreMovieFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.MoreMovieFragment"
+        android:label="MoreMovieFragment"
+        tools:layout="@layout/fragment_more_movie" >
+        <argument
+            android:name="movieEntity"
+            app:argType="com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI"
+            app:nullable="true" />
+        <argument
+            android:name="searchType"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="movieRecomendedId"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="lastVisiblePosition"
+            app:argType="integer"
+            app:nullable="false" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_moreMovieFragment"
+        app:destination="@id/moreMovieFragment"/>
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.stenleone.stanleysfilm.ui.fragment.settings.FavoriteFragment"
+        android:label="FavoriteFragment"
+        tools:layout="@layout/fragment_favorite" />
+
 </navigation>

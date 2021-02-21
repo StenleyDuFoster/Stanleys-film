@@ -17,8 +17,10 @@ import com.stenleone.stanleysfilm.ui.model.VideosUI
 import com.stenleone.stanleysfilm.ui.model.general.FavoriteState
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,18 +45,16 @@ class FilmViewModel @Inject constructor(
         doAsyncRequests(
             arrayListOf(
                 {
-                    apiService.getMovieDetails(
-                        language = sharedPreferencesManager.language,
-                        movieId = id
-                    )
-                        .await()
-                        .successOrError(
-                            success = {
-                                movieDetails.postValue(it)
-                            }, {
-                                isFailure(RequestError.UNSUCCESS_STATUS, it)
-                            }
-                        )
+                    val details = additionallyRepository.getDetailsMovie(id)
+                    when (details) {
+                        is DataState.Success -> {
+                            movieDetails.postValue(details.data)
+                        }
+                        is DataState.Error -> {
+                            isFailure(RequestError.UNSUCCESS_STATUS, details.exception.message ?: "")
+                        }
+                    }
+
                 }, {
                     apiService.getRecomendedList(
                         language = sharedPreferencesManager.language,
@@ -83,16 +83,16 @@ class FilmViewModel @Inject constructor(
                         )
                 },
                 {
-                    additionallyRepository.getVideos(id).collect {
-                        when (it) {
-                            is DataState.Success -> {
-                                moviesVideos.postValue(it.data)
-                            }
-                            is DataState.Error -> {
-
-                            }
+                    val video = additionallyRepository.getVideos(id)
+                    when (video) {
+                        is DataState.Success -> {
+                            moviesVideos.postValue(video.data)
+                        }
+                        is DataState.Error -> {
+                            isFailure(RequestError.UNSUCCESS_STATUS, video.exception.message ?: "")
                         }
                     }
+
                 }
             )
         )
@@ -116,7 +116,7 @@ class FilmViewModel @Inject constructor(
         val movieMap = favoriteIdList.value ?: hashMapOf()
 
         if (!(movieMap.get(FirebaseCloudFirestoreManagers.MOVIE)?.contains(movieId) ?: false)) {
-            firestoreManager.addToFavorite(movieId , movieMap, {
+            firestoreManager.addToFavorite(movieId, movieMap, {
                 favoriteIdList.postValue(it)
                 updateFavoriteStatus.postValue((FavoriteState(true, true)))
             }, {
@@ -129,7 +129,7 @@ class FilmViewModel @Inject constructor(
         val movieMap = favoriteIdList.value ?: hashMapOf()
 
         if (movieMap.get(FirebaseCloudFirestoreManagers.MOVIE)?.contains(movieId) ?: false) {
-            firestoreManager.removeFromFavorite(movieId , movieMap, {
+            firestoreManager.removeFromFavorite(movieId, movieMap, {
                 favoriteIdList.postValue(it)
                 updateFavoriteStatus.postValue((FavoriteState(true, false)))
             }, {

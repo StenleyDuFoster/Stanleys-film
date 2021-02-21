@@ -57,17 +57,17 @@ class MoreMovieViewModel @Inject constructor(
 
     private fun getMovieList(typeList: String, page: Int) {
         doAsyncRequest {
-            movieRepository.getMovieList(typeList, page).collect {
-                when (it) {
-                    is DataState.Success -> {
-                        movieList.postValue(it.data)
-                        pageCurrent = (it.data.page)
-                        valLocalProgress = false
-                    }
-                    is DataState.Error -> {
-                        valLocalProgress = false
-                    }
+            val movies = movieRepository.getMovieList(typeList, page)
+            when (movies) {
+                is DataState.Success -> {
+                    movieList.postValue(movies.data)
+                    pageCurrent = (movies.data.page)
+                    valLocalProgress = false
                 }
+                is DataState.Error -> {
+                    valLocalProgress = false
+                }
+
             }
         }
     }

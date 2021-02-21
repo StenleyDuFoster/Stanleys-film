@@ -16,6 +16,7 @@ import com.stenleone.stanleysfilm.network.TmdbNetworkConstant.SEARCH_MOVIE
 import com.stenleone.stanleysfilm.network.entity.Videos
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
 import com.stenleone.stanleysfilm.network.entity.lates.LatesEntityUI
+import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntity
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
@@ -47,7 +48,7 @@ interface ApiService {
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = API_V3,
         @Query("language") language: String
-    ): Deferred<Response<MovieDetailsEntityUI>>
+    ): Deferred<Response<MovieDetailsEntity>>
 
     @GET(LIST_RECOMENDED)
     fun getRecomendedList(

@@ -5,7 +5,7 @@ import com.stenleone.stanleysfilm.interfaces.model.Network
 
 data class SpokenLanguage(
     @SerializedName("english_name")
-    val englishName: String,
-    val iso_639_1: String,
-    val name: String
+    val englishName: String?,
+    val iso_639_1: String?,
+    val name: String?
 ): Network

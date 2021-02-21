@@ -6,7 +6,6 @@
     app:startDestination="@+id/mainFragment">
 
     <fragment
-
         android:id="@+id/mainFragment"
         android:name="com.stenleone.stanleysfilm.ui.fragment.main.MainFragment"
         android:label="MainFragment"

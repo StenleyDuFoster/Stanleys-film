@@ -4,42 +4,42 @@ import com.google.gson.annotations.SerializedName
 import com.stenleone.stanleysfilm.interfaces.model.Network
 
 data class MovieDetailsEntity(
-    val adult: Boolean,
+    val adult: String?,
     @SerializedName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerializedName("belongs_to_collection")
-    val belongsToCollectionUI: BelongsToCollectionUI,
-    val budget: Int?,
-    val genres: ArrayList<GenreUI>,
-    val homepage: String,
-    val id: Int,
+    val belongsToCollection: BelongsToCollection?,
+    val budget: String?,
+    val genres: ArrayList<Genre>?,
+    val homepage: String?,
+    val id: String?,
     @SerializedName("imdb_id")
     val imdbId: String?,
     @SerializedName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String?,
     @SerializedName("original_title")
-    val originalTitle: String,
-    val overview: String,
-    val popularity: Double,
+    val originalTitle: String?,
+    val overview: String?,
+    val popularity: String?,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerializedName("production_companies")
-    val productionCompaniesUI: ArrayList<ProductionCompanyUI>,
+    val productionCompanies: ArrayList<ProductionCompany>?,
     @SerializedName("production_countries")
-    val productionCountriesUI: ArrayList<ProductionCountryUI>,
+    val productionCountries: ArrayList<ProductionCountry>?,
     @SerializedName("release_date")
-    val releaseDate: String,
-    val revenue: Int,
-    val runtime: Int,
+    val releaseDate: String?,
+    val revenue: String?,
+    val runtime: String?,
     @SerializedName("spoken_languages")
-    val spokenLanguagesUI: ArrayList<SpokenLanguageUI>,
-    val status: String,
+    val spokenLanguages: ArrayList<SpokenLanguage>?,
+    val status: String?,
     @SerializedName("tagline")
-    val tagLine: String,
-    val title: String,
-    val video: Boolean,
+    val tagLine: String?,
+    val title: String?,
+    val video: String?,
     @SerializedName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: String?,
     @SerializedName("vote_count")
-    val voteCount: Int
+    val voteCount: String?
 ): Network
