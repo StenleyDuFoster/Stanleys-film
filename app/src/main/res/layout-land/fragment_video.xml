@@ -40,6 +40,7 @@
 
             <com.github.vkay94.dtpv.DoubleTapPlayerView
                 android:id="@+id/videoView"
+                android:keepScreenOn="true"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:focusable="false"

@@ -93,13 +93,13 @@ class ResizeVideoFragment : BaseFragment() {
 
     private fun configurationWindow() {
         requireActivity().apply {
-//            if (getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
-//                hideStatusBar()
-//                hideSystemButtons()
-//            } else {
-//                showStatusBar()
-//                showSystemButtons()
-//            }
+            if (getOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                hideStatusBar()
+                hideSystemButtons()
+            } else {
+                showStatusBar()
+                showSystemButtons()
+            }
         }
     }
 

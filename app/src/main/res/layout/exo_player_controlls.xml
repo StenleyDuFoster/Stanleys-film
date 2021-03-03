@@ -22,6 +22,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        app:layout_constraintEnd_toStartOf="@id/exo_progress"
+        tools:text="2:44:66"
         android:id="@id/exo_position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,6 +55,7 @@
         app:unplayed_color="@color/half_white" />
 
     <TextView
+        app:layout_constraintStart_toEndOf="@id/exo_progress"
         android:id="@id/exo_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,9 +64,10 @@
         android:layout_margin="10dp"
         android:textColor="@color/colorPrimary"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/volumeButton"
+        app:layout_constraintBottom_toBottomOf="@+id/exo_progress"
         app:layout_constraintEnd_toStartOf="@+id/volumeButton"
-        app:layout_constraintTop_toTopOf="@+id/volumeButton" />
+        app:layout_constraintTop_toTopOf="@+id/exo_progress"
+        tools:text="1:33:52" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/fullscreenButton"

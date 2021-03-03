@@ -82,8 +82,8 @@
                         android:layout_gravity="center|bottom"
                         android:background="@color/transparent"
                         android:visibility="gone"
+                        app:tabIndicator="@color/transparent"
                         app:tabBackground="@drawable/tab_layout_indicator_background"
-                        app:tabIndicatorColor="@color/transparent"
                         app:tabMaxWidth="15dp"
                         tools:visibility="visible" />
 

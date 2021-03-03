@@ -36,7 +36,11 @@ class BindViewPager(private val pager: ViewPager) {
         }
 
         nav.setOnNavigationItemReselectedListener {
-           ((pager.adapter as FragmentViewPagerAdapter).listFragments[pager.currentItem] as FragmentWithNavController).popToStart()
+            try {
+                ((pager.adapter as FragmentViewPagerAdapter).listFragments[pager.currentItem] as FragmentWithNavController).popToStart()
+            } catch (e: Exception) {
+
+            }
         }
     }
 

@@ -20,7 +20,9 @@ class SearchNavHostFragment : BaseFragment(), FragmentWithNavController {
 
     override fun popToStart() {
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.searchFragment, true).build()
-        Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(R.id.searchFragment, null, navOptions)
+        activity?.let {
+            Navigation.findNavController(it, getNavControllerId()).navigate(R.id.searchFragment, null, navOptions)
+        }
     }
 
     private lateinit var binding: FragmentSearchNavHostBinding

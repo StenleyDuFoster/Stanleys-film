@@ -26,7 +26,9 @@ class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
 
     override fun popToStart() {
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.mainFragment, true).build()
-        Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(R.id.mainFragment, null, navOptions)
+            activity?.let {
+            Navigation.findNavController(it, getNavControllerId()).navigate(R.id.mainFragment, null, navOptions)
+        }
     }
 
     private lateinit var binding: FragmentMainNavHostBinding
