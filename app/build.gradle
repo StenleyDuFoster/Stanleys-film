@@ -15,7 +15,7 @@ android {
         applicationId "com.stenleone.stanleysfilm"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 6
+        versionCode 7
         versionName '1.4 alpha'
         project.archivesBaseName = ("Stanleys_film $versionName")
         multiDexEnabled true

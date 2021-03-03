@@ -58,4 +58,7 @@
     <string name="guest_title_message_list">Гостевой аккаунт</string>
     <string name="guest_sub_title_message_list">Тип вашего аккаунта "гостевой", из за этого он будет удалён после %s, данные в этом списке пропадут</string>
 
+    <string name="notification_channel_id" translatable="false">stanley_film_channel</string>
+    <string name="notification_channel_name" translatable="false">stanley_film</string>
+
 </resources>
