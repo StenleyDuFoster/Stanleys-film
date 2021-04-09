@@ -122,5 +122,5 @@ dependencies {
 
     implementation 'com.github.stfalcon:stfalcon-imageviewer:1.0.1'//-------------------------------ImageViewer
 
-    implementation "com.airbnb.android:lottie:3.4.0"//-------------------------------------Lottie animation
+    implementation "com.airbnb.android:lottie:3.4.0"//----------------------------------------------Lottie animation
 }

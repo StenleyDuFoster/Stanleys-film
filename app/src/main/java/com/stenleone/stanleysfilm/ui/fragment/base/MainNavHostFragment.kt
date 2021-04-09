@@ -5,18 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import com.goodbarber.sharjah.eventbus.MessageEventBus
-import com.goodbarber.sharjah.eventbus.eventmodels.OpenFilmEvent
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentMainNavHostBinding
 import com.stenleone.stanleysfilm.interfaces.FragmentWithNavController
+import com.stenleone.stanleysfilm.network.entity.movie.MovieUI
 import com.stenleone.stanleysfilm.ui.fragment.FilmFragmentDirections
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.launch
-
 
 class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
 
@@ -38,21 +33,13 @@ class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
         return binding.root
     }
 
-    override fun setup(savedInstanceState: Bundle?) {
-        binding.apply {
-            var subscription = MessageEventBus.asChannel()
+    override fun setup(savedInstanceState: Bundle?) {  }
 
-            lifecycleScope.launch {
-                subscription.consumeEach { event ->
-                    if (event is OpenFilmEvent) {
-                        Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(
-                            FilmFragmentDirections.actionGlobalFilmFragment(
-                                event.movieUI
-                            )
-                        )
-                    }
-                }
-            }
-        }
+    fun openFilm(movie: MovieUI) {
+        Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(
+            FilmFragmentDirections.actionGlobalFilmFragment(
+                movie
+            )
+        )
     }
 }

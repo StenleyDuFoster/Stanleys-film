@@ -150,7 +150,7 @@ class FilmFragment : BaseFragment() {
             }
         }
 
-        binding.apply {
+            binding.apply {
             genreRecycler.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             genreRecycler.adapter = genreAdapter
             recomendedMovieAdapterAdapter.listener = filmClickListener

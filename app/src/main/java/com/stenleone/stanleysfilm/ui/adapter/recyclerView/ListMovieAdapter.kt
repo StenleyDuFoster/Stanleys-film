@@ -63,6 +63,7 @@ class ListMovieAdapter @Inject constructor() : BaseRecyclerView() {
 
         override fun bind() {
             binding.apply {
+                executePendingBindings()
                 if (itemList.size > 0) {
                     movie = itemList[adapterPosition]
                     shimmerViewContainer.hideShimmer()

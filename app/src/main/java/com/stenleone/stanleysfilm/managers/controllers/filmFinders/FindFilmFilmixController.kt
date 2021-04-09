@@ -10,6 +10,8 @@ import android.webkit.WebViewClient
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.interfaces.parser.JavaScriptParserPage
 import com.stenleone.stanleysfilm.interfaces.parser.JavaScriptParserVideo
+import com.stenleone.stanleysfilm.managers.firebase.FirebaseRemoteConfigManager
+import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -21,7 +23,8 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 class FindFilmFilmixController @Inject constructor(
-    @ApplicationContext val context: Context
+    @ApplicationContext val context: Context,
+    private val firebaseRemoteConfigManager: FirebaseRemoteConfigManager
 ) : CallBackPageFromParser {
 
     private val controllerJob = Job()
@@ -30,8 +33,6 @@ class FindFilmFilmixController @Inject constructor(
     companion object {
         const val TAG = "FindFilmController"
         const val FAILED_FIND = -1
-        private const val FILM_IX_BASE_URL = "https://filmix.co/"
-        private const val FILM_IX_SEARCH = "${FILM_IX_BASE_URL}search/"
         private const val USER_AGENT_WEB_VIEW = "Chrome/41.0.2228.0 Safari/537.36"
         private const val MAX_FOUND_WITH_DATE_TRY = 3
         private const val MAX_TRY = 6
@@ -46,6 +47,13 @@ class FindFilmFilmixController @Inject constructor(
     private lateinit var dateMovie: String
     private lateinit var loadVideoCallBack: CallBackVideoFromParser
     private var webViewInProgress = false
+    private val FILM_IX_BASE_URL: String
+    private val FILM_IX_SEARCH: String
+
+    init {
+        FILM_IX_BASE_URL = firebaseRemoteConfigManager.getString(FirebaseConfigsEnum.FILM_IX_BASE_URL)
+        FILM_IX_SEARCH = "${FILM_IX_BASE_URL}search/"
+    }
 
     fun start(
         titleMovie: String,

@@ -1,10 +1,9 @@
 package com.stenleone.stanleysfilm.ui.activity
 
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.findFragment
 import androidx.navigation.Navigation
-import com.goodbarber.sharjah.eventbus.MessageEventBus
-import com.goodbarber.sharjah.eventbus.eventmodels.OpenFilmEvent
 import com.stenleone.stanleysfilm.BuildConfig
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.ActivityMainBinding
@@ -16,10 +15,9 @@ import com.stenleone.stanleysfilm.ui.activity.base.BaseActivity
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.FragmentViewPagerAdapter
 import com.stenleone.stanleysfilm.ui.dialog.UnSupportVersionDialog
 import com.stenleone.stanleysfilm.ui.fragment.ResizeVideoFragment
+import com.stenleone.stanleysfilm.ui.fragment.base.MainNavHostFragment
 import com.stenleone.stanleysfilm.util.bind.BindViewPager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,7 +34,6 @@ class MainActivity : BaseActivity() {
 
         setupViewPager()
         checkAppVersionFromConfig()
-        setupEventBus()
     }
 
     private fun setupViewPager() {
@@ -49,15 +46,9 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun setupEventBus() {
-        val subscription = MessageEventBus.asChannel()
-        lifecycleScope.launch {
-            subscription.consumeEach { event ->
-                if (event is OpenFilmEvent) {
-                    binding.fragmentPager.currentItem = 0
-                }
-            }
-        }
+    fun openFilmFromResizeFragment(movie: MovieUI) {
+        binding.fragmentPager.currentItem = 0
+        (binding.fragmentPager.findFragment<MainNavHostFragment>() as MainNavHostFragment).openFilm(movie)
     }
 
     fun openVideoFragment(videoUrl: String, movieUI: MovieUI) {

@@ -8,7 +8,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -18,8 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
-import com.goodbarber.sharjah.eventbus.MessageEventBus
-import com.goodbarber.sharjah.eventbus.eventmodels.OpenFilmEvent
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -38,10 +35,8 @@ import com.stenleone.stanleysfilm.viewModel.network.VideoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.ldralighieri.corbind.view.clicks
 import javax.inject.Inject
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class ResizeVideoFragment : BaseFragment() {
@@ -164,10 +159,7 @@ class ResizeVideoFragment : BaseFragment() {
         val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
                 if (item is MovieUI) {
-                    lifecycleScope.launch {
-                        MessageEventBus.send(OpenFilmEvent(item))
-                    }
-                    binding.videoMotionLayout.transitionToState(R.id.collapsed)
+                    (requireActivity() as MainActivity).openFilmFromResizeFragment(item)
                 }
             }
         }

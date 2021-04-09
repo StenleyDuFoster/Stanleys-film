@@ -66,6 +66,7 @@ fun View.throttleClicks(onEach: () -> Unit, scope: CoroutineScope, periodMillis:
         .launchIn(scope)
 }
 
+@Deprecated("not butter since")
 fun LifecycleOwner.throttleClicks(view: View, onEach: () -> Unit, periodMillis: Long = BindingConstant.SMALL_THROTTLE) {
     view.throttleClicks(onEach, this.lifecycleScope)
 }
