@@ -1,14 +1,14 @@
-package com.stenleone.stanleysfilm.interfaces.parser
+package com.stenleone.stanleysfilm.managers.filmControllers.filmix.parser
 
 import android.webkit.JavascriptInterface
-import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackPageFromParser
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.lang.Exception
 
-class JavaScriptParserPage(private val callBack: CallBackPageFromParser) {
+class JavaScriptParserHdRezkaPage(private val callBack: (url: String?) -> Unit) {
 
     companion object {
-        private const val BUTTON_WATCH_CLASS_NAME = "watch icon-play"
+        private const val BUTTON_WATCH_CLASS_NAME = "b-content__inline_item-cover"
     }
 
     @JavascriptInterface
@@ -23,15 +23,21 @@ class JavaScriptParserPage(private val callBack: CallBackPageFromParser) {
 
         // I don’t remember at all what kind of crap it is and how it works, I wrote it under something
 
-        if (parsePage.size > 4) {
-            val parse = parsePage[0].toString().split("\"")
-            callBack.onPageFind(parse[5])
+        if (parsePage.size > 0) {
+
+            try {
+                val parse = parsePage.toString().split("<").get(2)
+
+                callBack(parse.substring(8, parse.length - 3))
+            } catch (e: Exception) {
+                callBack(null)
+            }
         } else {
             if(!parsePage.isNullOrEmpty()) {
                 val parse = parsePage[0].toString().split("\"")
-                callBack.onPageFind(parse[5])
+                callBack(parse[5])
             } else {
-                callBack.onPageNotFound()
+                callBack(null)
             }
         }
     }

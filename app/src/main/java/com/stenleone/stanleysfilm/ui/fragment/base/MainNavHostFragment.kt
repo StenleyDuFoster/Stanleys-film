@@ -1,5 +1,7 @@
 package com.stenleone.stanleysfilm.ui.fragment.base
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,8 +37,9 @@ class MainNavHostFragment : BaseFragment(), FragmentWithNavController {
 
     override fun setup(savedInstanceState: Bundle?) {  }
 
-    fun openFilm(movie: MovieUI) {
-        Navigation.findNavController(requireActivity(), getNavControllerId()).navigate(
+    fun openFilm(movie: MovieUI, activity: Activity) {
+
+        Navigation.findNavController(activity, getNavControllerId()).navigate(
             FilmFragmentDirections.actionGlobalFilmFragment(
                 movie
             )

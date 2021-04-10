@@ -159,6 +159,9 @@ class ResizeVideoFragment : BaseFragment() {
         val filmClickListener = object : ItemClickParcelable {
             override fun click(item: Parcelable) {
                 if (item is MovieUI) {
+
+                    binding.videoMotionLayout.transitionToState(R.id.collapsed)
+
                     (requireActivity() as MainActivity).openFilmFromResizeFragment(item)
                 }
             }
@@ -270,7 +273,7 @@ class ResizeVideoFragment : BaseFragment() {
     fun updateVideoUrl(url: String, movieUI: MovieUI) {
         viewModel.getSimilarMovieList(movieUI.id, 1)
         binding.apply {
-            videoMotionLayout.transitionToState(R.id.collapsed)
+            videoMotionLayout.transitionToState(R.id.expanded)
             this@ResizeVideoFragment.movieUI = movieUI
             title.text = movieUI.title
             videoUrl = url

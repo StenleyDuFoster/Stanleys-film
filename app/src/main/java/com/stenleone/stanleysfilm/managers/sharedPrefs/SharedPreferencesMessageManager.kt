@@ -10,10 +10,11 @@ import javax.inject.Singleton
 class SharedPreferencesMessageManager @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
+        private const val SHARED_PREFERENCES_NAME = "stanley`s_film.message_sPref"
         private const val SHOW_GUEST_MESSAGE = "SHOW_GUEST_MESSAGE"
     }
 
-    private val sharedPreferences = context.getSharedPreferences(SharedPreferencesManager.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     var rateMessageGuestSessionShows: Boolean
         get() {

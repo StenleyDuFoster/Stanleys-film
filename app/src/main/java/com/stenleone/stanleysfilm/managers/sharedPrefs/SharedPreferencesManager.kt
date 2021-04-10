@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class SharedPreferencesManager @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
-        const val SHARED_PREFERENCES_NAME = "stanley`s_film.sPref"
+        private const val SHARED_PREFERENCES_NAME = "stanley`s_film.main_sPref"
 
         private const val LANGUAGE = "language"
         private const val GUEST_SESSION_TOKEN = "guest_session_token"

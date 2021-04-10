@@ -66,8 +66,11 @@ class YouTubeVideoFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.apply {
-            youtubePlayerView.release()
+
+        if (this::binding.isInitialized) {
+            binding.apply {
+                youtubePlayerView.release()
+            }
         }
     }
 }

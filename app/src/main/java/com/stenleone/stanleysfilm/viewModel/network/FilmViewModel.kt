@@ -2,6 +2,7 @@ package com.stenleone.stanleysfilm.viewModel.network
 
 import androidx.lifecycle.MutableLiveData
 import com.stenleone.stanleysfilm.managers.ConnectionManager
+import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FilmFilmManager
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesManager
 import com.stenleone.stanleysfilm.model.entity.RequestError
@@ -9,7 +10,7 @@ import com.stenleone.stanleysfilm.network.ApiService
 import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
-import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
+import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FindFilmFilmixController
 import com.stenleone.stanleysfilm.model.entity.DataState
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
 import com.stenleone.stanleysfilm.network.repository.MovieAdditionallyRepository
@@ -17,10 +18,6 @@ import com.stenleone.stanleysfilm.ui.model.VideosUI
 import com.stenleone.stanleysfilm.ui.model.general.FavoriteState
 import com.stenleone.stanleysfilm.viewModel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collect
-import lampa.test.tmdblib.model.viewmodel.repository.internet.parser.callBack.CallBackVideoFromParser
-import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,7 +26,7 @@ class FilmViewModel @Inject constructor(
     sharedPreferencesManager: SharedPreferencesManager,
     connectionManager: ConnectionManager,
     val additionallyRepository: MovieAdditionallyRepository,
-    val findFilmFilmixController: FindFilmFilmixController,
+    val filmFilmManager: FilmFilmManager,
     val firestoreManager: FirebaseCloudFirestoreManagers
 ) : BaseViewModel(apiService, sharedPreferencesManager, connectionManager) {
 
@@ -139,19 +136,17 @@ class FilmViewModel @Inject constructor(
     }
 
     private fun findByWebView(title: String, date: String?) {
-        findFilmFilmixController.start(
+        filmFilmManager.getFilmUrl(
             title,
             date ?: "0000",
-            object : CallBackVideoFromParser {
+             {
 
-                override fun onVideoFind(link: String) {
-                    movieUrl.postValue(link)
-                    firestoreManager.setMovieUrl(title, date ?: "0000", link)
-                }
-
-                override fun onVideoNotFind() {
-
-                }
+                 if (it != null) {
+                     movieUrl.postValue(it)
+                     firestoreManager.setMovieUrl(title, date ?: "0000", it)
+                 } else {
+                     // todo
+                 }
             })
     }
 
@@ -165,7 +160,7 @@ class FilmViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        findFilmFilmixController.onDestroy()
+        filmFilmManager.onDestroy()
         super.onCleared()
     }
 }

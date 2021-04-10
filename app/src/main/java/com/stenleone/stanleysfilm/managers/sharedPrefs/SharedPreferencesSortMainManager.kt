@@ -10,6 +10,8 @@ import javax.inject.Singleton
 class SharedPreferencesSortMainManager @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
+        private const val SHARED_PREFERENCES_NAME = "stanley`s_film.sort_sPref"
+
         private const val TOP_RATED = "top_rated_sort"
         private const val POPULAR = "popular_sort"
         private const val UPCOMING = "upcoming_sort"
@@ -17,7 +19,7 @@ class SharedPreferencesSortMainManager @Inject constructor(@ApplicationContext c
         private const val RECOMENDED = "recomended_sort"
     }
 
-    private val sharedPreferences = context.getSharedPreferences(SharedPreferencesManager.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     var topMovieSortSmall: Boolean
         get() {

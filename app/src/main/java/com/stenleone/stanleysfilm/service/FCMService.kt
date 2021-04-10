@@ -34,7 +34,7 @@ class FCMService : FirebaseMessagingService() {
 
     private fun showNotification(context: Context, remoteMessage: RemoteMessage) {
 
-        val channelId = context.getString(R.string.notification_channel_id)
+        val channelId = remoteMessage.data[CHANEL_ID] ?: context.getString(R.string.notification_channel_id)
         val channelName = context.getString(R.string.notification_channel_name)
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -50,7 +50,6 @@ class FCMService : FirebaseMessagingService() {
 
         val title = remoteMessage.data[TITLE]
         val body = remoteMessage.data[BODY]
-        val chanelId = remoteMessage.data[CHANEL_ID]
 
         val intent = Intent(context, MainActivity::class.java)
 

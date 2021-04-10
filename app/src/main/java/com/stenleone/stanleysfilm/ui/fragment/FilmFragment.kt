@@ -20,7 +20,8 @@ import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
-import com.stenleone.stanleysfilm.managers.controllers.filmFinders.FindFilmFilmixController
+import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FilmFilmManager.Companion.FAILED_FIND
+import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FindFilmFilmixController
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseAnalyticsManagers
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
@@ -33,7 +34,6 @@ import com.stenleone.stanleysfilm.ui.adapter.recyclerView.StudiosListRecycler
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.ImageViewPager
 import com.stenleone.stanleysfilm.ui.adapter.viewPager.YouTubeTrailersAdapter
 import com.stenleone.stanleysfilm.ui.dialog.RateMovieDialog
-import com.stenleone.stanleysfilm.ui.dialog.UnSupportVersionDialog
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
 import com.stenleone.stanleysfilm.util.anim.ButtonTextColorAnimator
 import com.stenleone.stanleysfilm.util.constant.BindingConstant
@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.ldralighieri.corbind.view.clicks
 import javax.inject.Inject
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class FilmFragment : BaseFragment() {
@@ -77,7 +78,7 @@ class FilmFragment : BaseFragment() {
     @Inject
     lateinit var imageViewPager: ImageViewPager
 
-    lateinit var youTubePlayersAdapter: YouTubeTrailersAdapter
+    private lateinit var youTubePlayersAdapter: YouTubeTrailersAdapter
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_film, container, false)
@@ -111,12 +112,12 @@ class FilmFragment : BaseFragment() {
 
     private fun setupToolbarViewPager() {
         binding.apply {
-            navArgs.movie?.backdropPath?.let {
+            navArgs.movie?.backdropPath?.let { bcPath ->
                 if (imageViewPager.listItems.size <= 1) {
                     navArgs.movie?.posterPath?.let {
                         imageViewPager.listItems.add(it)
                     }
-                    imageViewPager.listItems.add(it)
+                    imageViewPager.listItems.add(bcPath)
                 }
             }
 
@@ -128,7 +129,7 @@ class FilmFragment : BaseFragment() {
             }
 
             titlePager.adapter = imageViewPager
-            TabLayoutMediator(tabLayout, titlePager, { tabs, pager -> }).attach()
+            TabLayoutMediator(tabLayout, titlePager) { _, _ -> }.attach()
         }
     }
 
@@ -136,7 +137,7 @@ class FilmFragment : BaseFragment() {
         youTubePlayersAdapter = YouTubeTrailersAdapter(this)
         binding.apply {
             toolbarLay.youTubeVideoPager.adapter = youTubePlayersAdapter
-            TabLayoutMediator(toolbarLay.tabLayoutYouTubeVideoPager, toolbarLay.youTubeVideoPager, { tab, pager -> }).attach()
+            TabLayoutMediator(toolbarLay.tabLayoutYouTubeVideoPager, toolbarLay.youTubeVideoPager) { _, _ -> }.attach()
         }
     }
 
@@ -205,13 +206,13 @@ class FilmFragment : BaseFragment() {
                 }
             }
         })
-        viewModel.findFilmFilmixController.status.observe(viewLifecycleOwner, {
+        viewModel.filmFilmManager.getStatus().observe(viewLifecycleOwner, {
             if (viewModel.movieUrl.value == null) {
                 binding.watchButtonText.text = it
             }
         })
-        viewModel.findFilmFilmixController.progress.observe(viewLifecycleOwner, {
-            if (viewModel.movieUrl.value == null && it == FindFilmFilmixController.FAILED_FIND) {
+        viewModel.filmFilmManager.getProgress().observe(viewLifecycleOwner, {
+            if (viewModel.movieUrl.value == null && it == FAILED_FIND) {
                 binding.progressLoadUrl.visibility = View.GONE
             }
         })
@@ -238,7 +239,7 @@ class FilmFragment : BaseFragment() {
             binding.apply {
                 toolbarLay.addToFavorite.visibility = View.VISIBLE
 
-                if (it.get(FirebaseCloudFirestoreManagers.MOVIE)?.contains(navArgs.movie?.id?.toString()) ?: false) {
+                if (it[FirebaseCloudFirestoreManagers.MOVIE]?.contains(navArgs.movie?.id?.toString()) == true) {
                     toolbarLay.addToFavorite.progress = 1f
                 }
             }
@@ -327,7 +328,7 @@ class FilmFragment : BaseFragment() {
                         val animator = ValueAnimator.ofFloat(0f, 1f)
                         animator.duration = 1000
                         animator.addUpdateListener {
-                            toolbarLay.addToFavorite.progress = (Math.abs(it.getAnimatedValue() as Float))
+                            toolbarLay.addToFavorite.progress = (abs(it.animatedValue as Float))
                         }
                         animator.start()
                     } else {
@@ -335,7 +336,7 @@ class FilmFragment : BaseFragment() {
                         val animator = ValueAnimator.ofFloat(1f, 0f)
                         animator.duration = 1000
                         animator.addUpdateListener {
-                            toolbarLay.addToFavorite.progress = (Math.abs(it.getAnimatedValue() as Float))
+                            toolbarLay.addToFavorite.progress = (abs(it.animatedValue as Float))
                         }
                         animator.start()
                     }

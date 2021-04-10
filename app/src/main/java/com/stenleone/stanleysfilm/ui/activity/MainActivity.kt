@@ -48,7 +48,7 @@ class MainActivity : BaseActivity() {
 
     fun openFilmFromResizeFragment(movie: MovieUI) {
         binding.fragmentPager.currentItem = 0
-        (binding.fragmentPager.findFragment<MainNavHostFragment>() as MainNavHostFragment).openFilm(movie)
+        ((binding.fragmentPager.adapter as FragmentViewPagerAdapter).listFragments.firstOrNull() as? MainNavHostFragment?)?.openFilm(movie, this)
     }
 
     fun openVideoFragment(videoUrl: String, movieUI: MovieUI) {
