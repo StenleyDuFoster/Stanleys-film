@@ -61,4 +61,8 @@
     <string name="notification_channel_id" translatable="false">stanley_film_channel</string>
     <string name="notification_channel_name" translatable="false">stanley_film</string>
 
+    <string name="filmix">FILMIX</string>
+    <string name="hd_rezka">HD REZKA</string>
+    <string name="load_films_from">Загружать фильмы с</string>
+
 </resources>

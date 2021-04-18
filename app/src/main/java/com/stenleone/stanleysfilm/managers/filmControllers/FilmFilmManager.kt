@@ -6,6 +6,7 @@ import com.stenleone.stanleysfilm.managers.filmControllers.FilmControllerEnum
 import com.stenleone.stanleysfilm.managers.filmControllers.hdRezka.FindFilmHdRezkaController
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseRemoteConfigManager
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesFilmControllerManager
+import com.stenleone.stanleysfilm.model.entity.FilmUrlData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class FilmFilmManager @Inject constructor(
     fun getFilmUrl(
         titleMovie: String,
         dateMovie: String,
-        loadVideoCallBack: (url: String?) -> Unit
+        loadVideoCallBack: (url: FilmUrlData?) -> Unit
     ) {
 
         if (!this::findFilmController.isInitialized) {
@@ -43,6 +44,11 @@ class FilmFilmManager @Inject constructor(
 
     fun getStatus(): MutableLiveData<String> {
         return findFilmController.status
+    }
+
+    fun reSetupFilmController() {
+        onDestroy()
+        setupFilmController()
     }
 
     fun onDestroy() {

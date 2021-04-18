@@ -21,7 +21,6 @@ import com.stenleone.stanleysfilm.databinding.FragmentFilmBinding
 import com.stenleone.stanleysfilm.interfaces.ItemClick
 import com.stenleone.stanleysfilm.interfaces.ItemClickParcelable
 import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FilmFilmManager.Companion.FAILED_FIND
-import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FindFilmFilmixController
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseAnalyticsManagers
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseCloudFirestoreManagers
 import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesSortMainManager
@@ -64,7 +63,7 @@ class FilmFragment : BaseFragment() {
     lateinit var genreAdapter: GenreListRecycler
 
     @Inject
-    lateinit var recomendedMovieAdapterAdapter: ListMovieAdapter
+    lateinit var recomendedMovieAdapter: ListMovieAdapter
 
     @Inject
     lateinit var studioAdapter: StudiosListRecycler
@@ -154,13 +153,13 @@ class FilmFragment : BaseFragment() {
             binding.apply {
             genreRecycler.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             genreRecycler.adapter = genreAdapter
-            recomendedMovieAdapterAdapter.listener = filmClickListener
+            recomendedMovieAdapter.listener = filmClickListener
             recyclerRecomendedList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-            recyclerRecomendedList.adapter = recomendedMovieAdapterAdapter
+            recyclerRecomendedList.adapter = recomendedMovieAdapter
             recyclerStudioList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             recyclerStudioList.adapter = studioAdapter
 
-            recomendedMovieAdapterAdapter.typeHolder = if (sharedPreferencesSortMainManager.recomendedSortSmall) {
+            recomendedMovieAdapter.typeHolder = if (sharedPreferencesSortMainManager.recomendedSortSmall) {
                 ListMovieAdapter.TYPE_SMALL
             } else {
                 ListMovieAdapter.TYPE_LARGE
@@ -230,8 +229,8 @@ class FilmFragment : BaseFragment() {
         }
         viewModel.recomendedMovieList.observe(viewLifecycleOwner) {
 
-            recomendedMovieAdapterAdapter.itemList.clear()
-            recomendedMovieAdapterAdapter.itemList.addAll(it.movies)
+            recomendedMovieAdapter.itemList.clear()
+            recomendedMovieAdapter.itemList.addAll(it.movies)
             binding.recyclerRecomendedList.adapter?.notifyDataSetChanged()
             binding.genreRecycler.visibility = View.VISIBLE
         }
@@ -301,8 +300,8 @@ class FilmFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.recomendedSortSmall = true
-                    recomendedMovieAdapterAdapter.typeHolder = ListMovieAdapter.TYPE_SMALL
-                    recomendedMovieAdapterAdapter.notifyDataSetChanged()
+                    recomendedMovieAdapter.typeHolder = ListMovieAdapter.TYPE_SMALL
+                    recomendedMovieAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
 
@@ -310,8 +309,8 @@ class FilmFragment : BaseFragment() {
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
                     sharedPreferencesSortMainManager.recomendedSortSmall = false
-                    recomendedMovieAdapterAdapter.typeHolder = ListMovieAdapter.TYPE_LARGE
-                    recomendedMovieAdapterAdapter.notifyDataSetChanged()
+                    recomendedMovieAdapter.typeHolder = ListMovieAdapter.TYPE_LARGE
+                    recomendedMovieAdapter.notifyDataSetChanged()
                 }
                 .launchIn(lifecycleScope)
 

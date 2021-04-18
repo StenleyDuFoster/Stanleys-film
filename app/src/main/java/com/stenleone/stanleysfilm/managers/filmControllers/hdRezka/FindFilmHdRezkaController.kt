@@ -5,9 +5,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.webkit.DownloadListener
-import android.webkit.WebSettings
-import android.webkit.WebSettings.PluginState
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.lifecycle.MutableLiveData
@@ -18,8 +15,8 @@ import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FilmFilmManage
 import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FindFilmController
 import com.stenleone.stanleysfilm.managers.filmControllers.filmix.parser.JavaScriptParserHdRezkaBlopVideo
 import com.stenleone.stanleysfilm.managers.filmControllers.filmix.parser.JavaScriptParserHdRezkaPage
-import com.stenleone.stanleysfilm.managers.filmControllers.filmix.parser.JavaScriptParserHdRezkaVideo
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseRemoteConfigManager
+import com.stenleone.stanleysfilm.model.entity.FilmUrlData
 import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +25,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
-
 
 class FindFilmHdRezkaController @Inject constructor(
     @ApplicationContext val context: Context,
@@ -49,7 +45,7 @@ class FindFilmHdRezkaController @Inject constructor(
     private var countFoundTry = 1
     private lateinit var titleMovie: String
     private lateinit var dateMovie: String
-    private lateinit var loadVideoCallBack: (String?) -> Unit
+    private lateinit var loadVideoCallBack: (FilmUrlData?) -> Unit
     private var webViewInProgress = false
     private val hdRezkaBaseUrl: String = firebaseRemoteConfigManager.getString(FirebaseConfigsEnum.HD_REZKA_BASE_URL)
     private val hdRezkaSearchUrl: String = "${hdRezkaBaseUrl}search/?do=search&subaction=search&q="
@@ -57,7 +53,7 @@ class FindFilmHdRezkaController @Inject constructor(
     override fun start(
         titleMovie: String,
         dateMovie: String,
-        loadVideoCallBack: (String?) -> Unit
+        loadVideoCallBack: (FilmUrlData?) -> Unit
     ) {
         webView = WebView(context)
         this.titleMovie = titleMovie
@@ -123,11 +119,12 @@ class FindFilmHdRezkaController @Inject constructor(
             webView.settings.loadsImagesAutomatically = false
             webView.addJavascriptInterface(JavaScriptParserHdRezkaBlopVideo(
                 {
-                    if (it != null) {
-                        findVideoUrlWithWebView(it)
-                    } else {
-                        loadVideoCallBack(null)
-                    }
+                    loadVideoCallBack(it)
+//                    if (it != null) {
+//                        findVideoUrlWithWebView(it)
+//                    } else {
+//                        loadVideoCallBack(null)
+//                    }
                 }
             ), "BLOP")
             webView.webViewClient = object : WebViewClient() {
@@ -146,52 +143,6 @@ class FindFilmHdRezkaController @Inject constructor(
             webView.settings.userAgentString = USER_AGENT_WEB_VIEW
 
             webView.loadUrl(pageUrl)
-        }
-    }
-
-    private fun getBase64StringFromBlobUrl(blobUrl: String): String {
-        if(blobUrl.startsWith("blob")){
-            return "javascript: var xhr = new XMLHttpRequest();" +
-                    "xhr.open('GET', 'YOUR BLOB URL GOES HERE', true);" +
-                    "xhr.setRequestHeader('Content-type','application/pdf');" +
-                    "xhr.responseType = 'blob';" +
-                    "xhr.onload = function(e) {" +
-                    "    if (this.status == 200) {" +
-                    "        var blobPdf = this.response;" +
-                    "        var reader = new FileReader();" +
-                    "        reader.readAsDataURL(blobPdf);" +
-                    "        reader.onloadend = function() {" +
-                    "            base64data = reader.result;" +
-                    "            Android.getBase64FromBlobData(base64data);" +
-                    "        }" +
-                    "    }" +
-                    "};" +
-                    "xhr.send();"
-        }
-        return "javascript: console.log('It is not a Blob URL');"
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    fun findVideoUrlWithWebView(blopVideoUrl: String) {
-        webViewInProgress = true
-        controllerScope.launch {
-
-            webView.getSettings().setJavaScriptEnabled(true)
-            webView.setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
-                webView.loadUrl(
-                    getBase64StringFromBlobUrl(blopVideoUrl)                )
-            })
-            webView.getSettings().setAppCachePath(context.getCacheDir().getAbsolutePath())
-            webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT)
-            webView.getSettings().setDatabaseEnabled(true)
-            webView.getSettings().setDomStorageEnabled(true)
-            webView.getSettings().setUseWideViewPort(true)
-            webView.getSettings().setLoadWithOverviewMode(true)
-            webView.addJavascriptInterface(JavaScriptParserHdRezkaVideo(loadVideoCallBack), "Android")
-            webView.getSettings().setPluginState(PluginState.ON)
-
-
-            webView.loadUrl(getBase64StringFromBlobUrl(blopVideoUrl))
         }
     }
 

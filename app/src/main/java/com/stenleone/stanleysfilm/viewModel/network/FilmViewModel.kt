@@ -11,6 +11,7 @@ import com.stenleone.stanleysfilm.network.entity.movie.MovieDetailsEntityUI
 import com.stenleone.stanleysfilm.network.entity.movie.MoviesEntityUI
 import com.stenleone.stanleysfilm.util.extencial.successOrError
 import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FindFilmFilmixController
+import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesFilmControllerManager
 import com.stenleone.stanleysfilm.model.entity.DataState
 import com.stenleone.stanleysfilm.network.entity.images.ImagesEntityUI
 import com.stenleone.stanleysfilm.network.repository.MovieAdditionallyRepository
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class FilmViewModel @Inject constructor(
     apiService: ApiService,
     sharedPreferencesManager: SharedPreferencesManager,
+    val sharedPreferencesFilmControllerManager: SharedPreferencesFilmControllerManager,
     connectionManager: ConnectionManager,
     val additionallyRepository: MovieAdditionallyRepository,
     val filmFilmManager: FilmFilmManager,
@@ -138,20 +140,20 @@ class FilmViewModel @Inject constructor(
     private fun findByWebView(title: String, date: String?) {
         filmFilmManager.getFilmUrl(
             title,
-            date ?: "0000",
-             {
+            date ?: "0000"
+        ) {
 
-                 if (it != null) {
-                     movieUrl.postValue(it)
-                     firestoreManager.setMovieUrl(title, date ?: "0000", it)
-                 } else {
-                     // todo
-                 }
-            })
+            if (it != null) {
+                movieUrl.postValue(it.getNonNullUrlOrNull())
+                firestoreManager.setMovieUrl(title, date ?: "0000", it)
+            } else {
+                // todo
+            }
+        }
     }
 
     private fun findByFireStore(title: String, date: String?) {
-        firestoreManager.getMovieUrl(title, date ?: "0000") {
+        firestoreManager.getMovieUrl(title, date ?: "0000", sharedPreferencesFilmControllerManager.selectedFilmController) {
 
             if (movieUrl.value == null) {
                 movieUrl.postValue(it)

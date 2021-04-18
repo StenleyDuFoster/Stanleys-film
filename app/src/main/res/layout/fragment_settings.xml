@@ -74,7 +74,6 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="50dp"
                 app:cardCornerRadius="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/favoriteButton">
@@ -91,6 +90,89 @@
                     android:padding="10dp"
                     android:singleLine="true"
                     android:text='@string/rate_button_list'
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/loadFilmFrom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:fontFamily='sans-serif'
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:maxLines="3"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:text='@string/load_films_from'
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rateButton" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/filmixProviderButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="50dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/hdRezkaProviderButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loadFilmFrom">
+
+                <TextView
+                    android:id="@+id/filmixProviderText"
+                    android:background="@drawable/in_active_drawable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily='sans-serif'
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center"
+                    android:maxLines="3"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:text='@string/filmix'
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/hdRezkaProviderButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="50dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/filmixProviderButton"
+                app:layout_constraintTop_toBottomOf="@+id/loadFilmFrom">
+
+                <TextView
+                    android:id="@+id/hdRezkaProviderText"
+                    android:background="@drawable/in_active_drawable"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily='sans-serif'
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center"
+                    android:maxLines="3"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:text='@string/hd_rezka'
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 

@@ -15,8 +15,8 @@ android {
         applicationId "com.stenleone.stanleysfilm"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName '1.4 alpha'
+        versionCode 8
+        versionName '1.5 alpha'
         project.archivesBaseName = ("Stanleys_film $versionName")
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

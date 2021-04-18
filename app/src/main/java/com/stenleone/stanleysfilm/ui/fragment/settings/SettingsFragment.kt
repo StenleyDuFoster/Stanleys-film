@@ -10,8 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stenleone.stanleysfilm.R
 import com.stenleone.stanleysfilm.databinding.FragmentSettingsBinding
+import com.stenleone.stanleysfilm.managers.filmControllers.FilmControllerEnum
+import com.stenleone.stanleysfilm.managers.sharedPrefs.SharedPreferencesFilmControllerManager
 import com.stenleone.stanleysfilm.ui.adapter.recyclerView.ListMovieAdapter
 import com.stenleone.stanleysfilm.ui.fragment.base.BaseFragment
+import com.stenleone.stanleysfilm.util.anim.ButtonTextColorAnimator
 import com.stenleone.stanleysfilm.util.extencial.throttleClicks
 import com.stenleone.stanleysfilm.viewModel.network.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +27,9 @@ class SettingsFragment : BaseFragment() {
     private val viewModel: FavoriteViewModel by viewModels()
 
     @Inject
-    lateinit var favoriteMovieAdapter: ListMovieAdapter
+    lateinit var sharedPreferencesFilmControllerManager: SharedPreferencesFilmControllerManager
+
+    private lateinit var buttonColorAnim: ButtonTextColorAnimator
 
     override fun setupBinding(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
@@ -32,7 +37,24 @@ class SettingsFragment : BaseFragment() {
     }
 
     override fun setup(savedInstanceState: Bundle?) {
+        setupDefaultValues()
         setupClicks()
+    }
+
+    private fun setupDefaultValues() {
+        binding.apply {
+
+            buttonColorAnim = ButtonTextColorAnimator(requireContext(), arrayListOf())
+
+            when (sharedPreferencesFilmControllerManager.selectedFilmController) {
+                FilmControllerEnum.HD_REZKA -> {
+                    buttonColorAnim.click(hdRezkaProviderText, false)
+                }
+                FilmControllerEnum.FILMIX -> {
+                    buttonColorAnim.click(filmixProviderText, false)
+                }
+            }
+        }
     }
 
     private fun setupClicks() {
@@ -42,6 +64,18 @@ class SettingsFragment : BaseFragment() {
             )
             rateButton.throttleClicks(
                 { findNavController().navigate(R.id.rateFragment) }, lifecycleScope
+            )
+            hdRezkaProviderButton.throttleClicks(
+                {
+                    buttonColorAnim.clickAndInActiveOther(hdRezkaProviderText, false)
+                    sharedPreferencesFilmControllerManager.selectedFilmController = FilmControllerEnum.HD_REZKA
+                }, lifecycleScope
+            )
+            filmixProviderButton.throttleClicks(
+                {
+                    buttonColorAnim.clickAndInActiveOther(filmixProviderText, false)
+                    sharedPreferencesFilmControllerManager.selectedFilmController = FilmControllerEnum.FILMIX
+                }, lifecycleScope
             )
         }
     }

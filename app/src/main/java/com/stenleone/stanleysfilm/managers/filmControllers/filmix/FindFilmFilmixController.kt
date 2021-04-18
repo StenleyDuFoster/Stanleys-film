@@ -15,6 +15,7 @@ import com.stenleone.stanleysfilm.managers.filmControllers.filmix.FilmFilmManage
 import com.stenleone.stanleysfilm.managers.filmControllers.filmix.parser.JavaScriptParserFilmixPage
 import com.stenleone.stanleysfilm.managers.filmControllers.filmix.parser.JavaScriptParserFilmixVideo
 import com.stenleone.stanleysfilm.managers.firebase.FirebaseRemoteConfigManager
+import com.stenleone.stanleysfilm.model.entity.FilmUrlData
 import com.stenleone.stanleysfilm.model.entity.FirebaseConfigsEnum
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +44,7 @@ class FindFilmFilmixController @Inject constructor(
     private var countFoundTry = 1
     private lateinit var titleMovie: String
     private lateinit var dateMovie: String
-    private lateinit var loadVideoCallBack: (String?) -> Unit
+    private lateinit var loadVideoCallBack: (FilmUrlData?) -> Unit
     private var webViewInProgress = false
     private val filmixBaseUrl: String = firebaseRemoteConfigManager.getString(FirebaseConfigsEnum.FILM_IX_BASE_URL)
     private val filmixSearchUrl: String = "${filmixBaseUrl}search/"
@@ -51,7 +52,7 @@ class FindFilmFilmixController @Inject constructor(
     override fun start(
         titleMovie: String,
         dateMovie: String,
-        loadVideoCallBack: (String?) -> Unit
+        loadVideoCallBack: (FilmUrlData?) -> Unit
     ) {
         webView = WebView(context)
         this.titleMovie = titleMovie

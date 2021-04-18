@@ -43,12 +43,13 @@ class ButtonTextColorAnimator(
     }
 
     fun clickAndInActiveOther(view: View, withText: Boolean = false) {
-        buttons.add(view)
-        toActive(view, withText)
-
         buttons.forEach { button ->
             toInActive(button, withText)
+            buttons.remove(button)
         }
+
+        buttons.add(view)
+        toActive(view, withText)
     }
 
     fun toActive(view: View, withText: Boolean = false) {

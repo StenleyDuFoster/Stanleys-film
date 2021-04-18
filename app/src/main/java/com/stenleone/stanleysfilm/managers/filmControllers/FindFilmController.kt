@@ -1,6 +1,7 @@
 package com.stenleone.stanleysfilm.managers.filmControllers.filmix
 
 import androidx.lifecycle.MutableLiveData
+import com.stenleone.stanleysfilm.model.entity.FilmUrlData
 
 interface FindFilmController {
 
@@ -10,7 +11,7 @@ interface FindFilmController {
     fun start(
         titleMovie: String,
         dateMovie: String,
-        loadVideoCallBack: (url: String?) -> Unit
+        loadVideoCallBack: (url: FilmUrlData?) -> Unit
     )
 
     fun onDestroy()
