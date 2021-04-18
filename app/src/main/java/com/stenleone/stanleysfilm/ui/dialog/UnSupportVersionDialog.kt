@@ -60,7 +60,7 @@ class UnSupportVersionDialog : DialogFragment() {
             buttonCancelCard.clicks()
                 .throttleFirst(BindingConstant.SMALL_THROTTLE)
                 .onEach {
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/stanleys_film")).also {
+                    Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_telegram_link))).also {
                         startActivity(it)
                     }
                 }

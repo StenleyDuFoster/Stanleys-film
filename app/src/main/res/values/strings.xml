@@ -32,6 +32,8 @@
     <string name="version_app_sub_title">Ваша версия приложения больше не поддерживается!</string>
     <string name="ok">Окей</string>
     <string name="version_update">Обновить</string>
+    <string name="close">Закрыть</string>
+    <string name="version_update_aviable">Доступно обновление для вашей варсии приложения</string>
 
     <string name="recomended_listtitle">Похожие на</string>
 
@@ -64,5 +66,7 @@
     <string name="filmix">FILMIX</string>
     <string name="hd_rezka">HD REZKA</string>
     <string name="load_films_from">Загружать фильмы с</string>
+
+    <string name="app_telegram_link" translatable="false">https://t.me/stanleys_film</string>
 
 </resources>

@@ -12,6 +12,7 @@ class SharedPreferencesMessageManager @Inject constructor(@ApplicationContext co
     companion object {
         private const val SHARED_PREFERENCES_NAME = "stanley`s_film.message_sPref"
         private const val SHOW_GUEST_MESSAGE = "SHOW_GUEST_MESSAGE"
+        private const val SHOW_APP_UPDATE_MESSAGE = "SHOW_APP_UPDATE_MESSAGE"
     }
 
     private val sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -26,5 +27,14 @@ class SharedPreferencesMessageManager @Inject constructor(@ApplicationContext co
             }
         }
 
+    fun getAppUpdateVersionShows(version: Int): Boolean {
+        return sharedPreferences.getBoolean(SHOW_GUEST_MESSAGE + version, true)
+    }
+
+    fun setAppUpdateVersionShows(version: Int, value: Boolean) {
+        sharedPreferences.edit {
+            putBoolean(SHOW_GUEST_MESSAGE + version, value)
+        }
+    }
 
 }
